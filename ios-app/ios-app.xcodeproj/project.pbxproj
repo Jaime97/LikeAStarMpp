@@ -21,7 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		287627FF1F319065007FA12B /* mokoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mokoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		287627FF1F319065007FA12B /* LikeAStarApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LikeAStarApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		363BA6BFAA3FA87230445070 /* Pods_ios_app.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ios_app.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		451D7B19235845B100095112 /* AppComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppComponent.swift; sourceTree = "<group>"; };
 		4539A7B2235437660081362B /* NewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
@@ -81,7 +81,7 @@
 		287628001F319065007FA12B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				287627FF1F319065007FA12B /* mokoApp.app */,
+				287627FF1F319065007FA12B /* LikeAStarApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -89,8 +89,7 @@
 		451D7B1B235845D400095112 /* view */ = {
 			isa = PBXGroup;
 			children = (
-				4539A7B42354376F0081362B /* ConfigViewController.swift */,
-				4539A7B2235437660081362B /* NewsViewController.swift */,
+				4539A7B42354376F0081362B /* FilmListViewController.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -98,9 +97,6 @@
 		451D7B1C235845E500095112 /* units */ = {
 			isa = PBXGroup;
 			children = (
-				4539A7BD2354471C0081362B /* NewsTableViewCell.swift */,
-				4539A7BF2354472A0081362B /* NewsTableViewCell.xib */,
-				4539A7B623543B1C0081362B /* NewsListUnitsFactory.swift */,
 			);
 			path = units;
 			sourceTree = "<group>";
@@ -155,7 +151,7 @@
 			);
 			name = "ios-app";
 			productName = IosApp;
-			productReference = 287627FF1F319065007FA12B /* mokoApp.app */;
+			productReference = 287627FF1F319065007FA12B /* LikeAStarApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -309,8 +305,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = src/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				PRODUCT_BUNDLE_IDENTIFIER = org.example.app;
-				PRODUCT_NAME = mokoApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jaa.likeastarappmpp;
+				PRODUCT_NAME = LikeAStarApp;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 			};
@@ -323,8 +319,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = src/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				PRODUCT_BUNDLE_IDENTIFIER = org.example.app;
-				PRODUCT_NAME = mokoApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jaa.likeastarappmpp;
+				PRODUCT_NAME = LikeAStarApp;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 			};

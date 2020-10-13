@@ -9,33 +9,25 @@ object Deps {
     private const val materialVersion = "1.2.1"
     private const val recyclerViewVersion = "1.1.0"
     private const val swipeRefreshLayoutVersion = "1.1.0"
-    private const val constraintLayoutVersion = "2.0.0"
     private const val lifecycleVersion = "2.2.0"
-    private const val glideVersion = "4.9.0"
     private const val androidAppCompatVersion = "1.1.0"
     private const val espressoCoreVersion = "3.2.0"
     private const val testRunnerVersion = "1.2.0"
     private const val testExtJunitVersion = "1.1.1"
 
     private const val kotlinxSerializationVersion = "1.0.0-RC"
-    private const val kotlinxDateTimeVersion = "0.1.0"
     private const val coroutinesVersion = "1.3.9-native-mt"
     private const val ktorClientVersion = "1.4.0"
 
     private const val detektVersion = "1.12.0"
 
-    private const val mokoGraphicsVersion = "0.4.0"
     private const val mokoParcelizeVersion = "0.4.0"
     private const val mokoResourcesVersion = "0.13.1"
     private const val mokoMvvmVersion = "0.8.0"
-    private const val mokoErrorsVersion = "0.3.0"
     private const val mokoNetworkVersion = "0.8.0"
     private const val mokoUnitsVersion = "0.4.1"
     private const val mokoPermissionsVersion = "0.6.0"
-    private const val mokoMediaVersion = "0.5.0"
-    private const val mokoFieldsVersion = "0.5.0"
 
-    private const val multiplatformSettingsVersion = "0.6.1"
     private const val napierVersion = "1.4.1"
 
     object Android {
@@ -91,14 +83,8 @@ object Deps {
                 "androidx.recyclerview:recyclerview:$recyclerViewVersion"
             const val swipeRefreshLayout =
                 "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshLayoutVersion"
-            const val constraintLayout =
-                "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
-            val glide =
-                "com.github.bumptech.glide:glide:$glideVersion"
             val lifecycle =
                 "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
-            val ktorClientOkHttp =
-                "io.ktor:ktor-client-okhttp:$ktorClientVersion"
 
             object Tests {
                 const val espressoCore =
@@ -121,8 +107,6 @@ object Deps {
         object MultiPlatform {
             const val kotlinSerialization =
                 "org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxSerializationVersion"
-            const val kotlinxDateTime =
-                "org.jetbrains.kotlinx:kotlinx-datetime:$kotlinxDateTimeVersion"
             const val coroutines =
                 "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
             const val ktorClient =
@@ -133,26 +117,14 @@ object Deps {
                 "dev.icerock.moko:resources:$mokoResourcesVersion".mpl
             val mokoParcelize =
                 "dev.icerock.moko:parcelize:$mokoParcelizeVersion".mpl
-            val mokoGraphics =
-                "dev.icerock.moko:graphics:$mokoGraphicsVersion".mpl
             val mokoMvvm =
                 "dev.icerock.moko:mvvm:$mokoMvvmVersion".mpl
-            val mokoErrors =
-                "dev.icerock.moko:errors:$mokoErrorsVersion".mpl
             val mokoNetwork =
                 "dev.icerock.moko:network:$mokoNetworkVersion".mpl
-            val mokoNetworkErrors =
-                "dev.icerock.moko:network-errors:$mokoNetworkVersion".mpl
             val mokoPermissions =
                 "dev.icerock.moko:permissions:$mokoPermissionsVersion".mpl
-            val mokoMedia =
-                "dev.icerock.moko:media:$mokoMediaVersion".mpl
             val mokoUnits =
                 "dev.icerock.moko:units:$mokoUnitsVersion".mpl
-            val mokoFields =
-                "dev.icerock.moko:fields:$mokoFieldsVersion".mpl
-            val multiplatformSettings =
-                "com.russhwolf:multiplatform-settings:$multiplatformSettingsVersion".mpl
             val napier =
                 "com.github.aakira:napier:$napierVersion".mpl
 
@@ -177,12 +149,8 @@ object Deps {
         )
 
         object Feature {
-            val config = MultiPlatformModule(
-                name = ":mpp-library:feature:config",
-                exported = true
-            )
-            val list = MultiPlatformModule(
-                name = ":mpp-library:feature:list",
+            val film_list = MultiPlatformModule(
+                name = ":mpp-library:feature:film_list",
                 exported = true
             )
         }

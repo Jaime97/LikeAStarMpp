@@ -5,5 +5,4 @@
 include(":android-app")
 include(":mpp-library")
 include(":mpp-library:domain")
-include(":mpp-library:feature:config")
-include(":mpp-library:feature:list")
+include(":mpp-library:feature:film_list")

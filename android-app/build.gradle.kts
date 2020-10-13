@@ -22,15 +22,13 @@ android {
         minSdkVersion(Deps.Android.minSdk)
         targetSdkVersion(Deps.Android.targetSdk)
 
-        applicationId = "org.example.app"
+        applicationId = "com.jaa.likeastarappmpp"
 
         versionCode = 1
         versionName = "0.1.0"
 
         vectorDrawables.useSupportLibrary = true
 
-        val url = "https://newsapi.org/v2/"
-        buildConfigField("String", "BASE_URL", "\"$url\"")
     }
 
     buildTypes {
@@ -59,7 +57,7 @@ dependencies {
 }
 
 multiplatformUnits {
-    classesPackage = "org.example.app"
-    dataBindingPackage = "org.example.app"
+    classesPackage = "com.jaa.likeastarappmpp"
+    dataBindingPackage = "com.jaa.likeastarappmpp"
     layoutsSourceSet = "main"
 }

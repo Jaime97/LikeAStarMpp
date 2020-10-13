@@ -11,18 +11,15 @@ plugins {
 }
 
 val mppLibs = listOf(
-    Deps.Libs.MultiPlatform.multiplatformSettings,
     Deps.Libs.MultiPlatform.napier,
     Deps.Libs.MultiPlatform.mokoParcelize,
     Deps.Libs.MultiPlatform.mokoResources,
     Deps.Libs.MultiPlatform.mokoMvvm,
-    Deps.Libs.MultiPlatform.mokoUnits,
-    Deps.Libs.MultiPlatform.mokoFields
+    Deps.Libs.MultiPlatform.mokoUnits
 )
 val mppModules = listOf(
     Deps.Modules.domain,
-    Deps.Modules.Feature.config,
-    Deps.Modules.Feature.list
+    Deps.Modules.Feature.film_list
 )
 
 dependencies {
@@ -38,7 +35,7 @@ dependencies {
 }
 
 multiplatformResources {
-    multiplatformResourcesPackage = "org.example.library"
+    multiplatformResourcesPackage = "com.jaa.library"
 }
 
 framework {
