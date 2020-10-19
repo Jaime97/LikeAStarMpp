@@ -1,3 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
+    <string name="search">Search</string>
+    <string name="settings">Settings</string>
+    <string name="favourites">Favourites</string>
+    <string name="all_elements">All elements</string>
 </resources>

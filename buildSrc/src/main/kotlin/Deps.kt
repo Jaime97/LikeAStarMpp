@@ -33,7 +33,7 @@ object Deps {
     object Android {
         const val compileSdk = 29
         const val targetSdk = 29
-        const val minSdk = 16
+        const val minSdk = 19
     }
 
     object Plugins {
