@@ -2,7 +2,6 @@
 package com.jaa.likeastarappmpp.view
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
@@ -29,11 +28,16 @@ class FilmListActivity :
         )
     }
 
-    fun addTabToTabLayout(tabText:String, position: Int) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.onViewCreated()
+    }
+
+    override fun addTabToTabLayout(tabText: String, position: Int) {
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText(tabText), position)
     }
 
-    fun configureOnTabSelectedListener(listener: (position: Int) -> Unit) {
+    override fun configureOnTabSelectedListener(listener: (position: Int) -> Unit) {
         binding.tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 listener(tab?.position ?: 0)
@@ -48,5 +52,10 @@ class FilmListActivity :
             }
 
         })
+    }
+
+    override fun getString(key: String): String {
+        val resId = resources.getIdentifier( key,"string", packageName)
+        return resources.getString(resId)
     }
 }

@@ -4,4 +4,7 @@
     <string name="settings">Settings</string>
     <string name="favourites">Favourites</string>
     <string name="all_elements">All elements</string>
+    <string name="favourite_btn_content_desc">Favourite button</string>
+    <string name="visited_img_content_desc">Location visited</string>
+    <string name="film_img_content_desc">Film image</string>
 </resources>

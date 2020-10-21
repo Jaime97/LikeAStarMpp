@@ -49,12 +49,12 @@
                 android:contentDescription="@string/settings" />
         </RelativeLayout>
 
-
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/film_recycler_view"
-            android:scrollbars="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            app:bindValue="@{viewModel.items}"
+            app:adapter="@{`dev.icerock.moko.units.adapter.UnitsRecyclerViewAdapter`}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
     </LinearLayout>
 </layout>
