@@ -1,14 +1,20 @@
 
 package com.jaa.likeastarappmpp.view
 
+import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import com.jaa.library.feature.filmList.presentation.FilmListViewModel
+import com.jaa.likeastarappmpp.AppComponent
+import com.jaa.likeastarappmpp.R
+import com.jaa.likeastarappmpp.databinding.ActivityFilmListBinding
 import dev.icerock.moko.mvvm.MvvmEventsActivity
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
-import com.jaa.likeastarappmpp.AppComponent
-import com.jaa.likeastarappmpp.R
-import com.jaa.library.feature.filmList.presentation.FilmListViewModel
-import com.jaa.likeastarappmpp.databinding.ActivityFilmListBinding
+
 
 class FilmListActivity :
     MvvmEventsActivity<ActivityFilmListBinding, FilmListViewModel, FilmListViewModel.EventsListener>(),
@@ -22,5 +28,53 @@ class FilmListActivity :
         AppComponent.factory.filmListFactory.createFilmListViewModel(
             eventsDispatcher = eventsDispatcherOnMain()
         )
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.onViewCreated()
+    }
+
+    override fun addTabToTabLayout(tabText: String, position: Int) {
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(tabText), position)
+    }
+
+    override fun configureOnTabSelectedListener(listener: (position: Int) -> Unit) {
+        binding.tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                listener(tab?.position ?: 0)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+
+        })
+    }
+
+    override fun setOnSearchBarTextChangedListener(listener: (text:String) -> Unit) {
+        binding.searchBar.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                listener(s.toString())
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+        })
+    }
+
+    override fun getString(key: String): String {
+        val resId = resources.getIdentifier( key,"string", packageName)
+        return resources.getString(resId)
     }
 }

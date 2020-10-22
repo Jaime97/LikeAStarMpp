@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.jaa.library.feature.filmList.presentation.FilmListViewModel" />
@@ -13,6 +12,49 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:background="@drawable/background_gradient">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorDark"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="@color/colorPrimaryDark"
+            android:background="?attr/colorPrimary"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/search_bar"
+                style="@style/inputTextStyle"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="70dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:hint="@string/search"
+                android:imeOptions="actionDone"
+                android:autofillHints="auto" />
+
+            <ImageButton
+                android:id="@+id/settingsButton"
+                style="@style/imageButtonStyle"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+                android:layout_marginEnd="16dp"
+                android:onClick="@{() -> viewModel.onSettingsButtonPressed()}"
+                android:background="@drawable/options"
+                android:contentDescription="@string/settings" />
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:bindValue="@{viewModel.items}"
+            app:adapter="@{`dev.icerock.moko.units.adapter.UnitsRecyclerViewAdapter`}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
     </LinearLayout>
 </layout>

@@ -7,6 +7,7 @@ plugins {
     plugin(Deps.Plugins.kotlinAndroid)
     plugin(Deps.Plugins.kotlinKapt)
     plugin(Deps.Plugins.mokoUnits)
+    plugin(Deps.Plugins.kotlinAndroidExtensions)
 }
 
 android {
