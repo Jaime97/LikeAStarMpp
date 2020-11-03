@@ -26,4 +26,5 @@ dependencies {
 openApiGenerate {
     inputSpec.set(file("src/openapi.yml").path)
     generatorName.set("kotlin-ktor-client")
+    additionalProperties.set(mutableMapOf("nonPublicApi" to "false"))
 }

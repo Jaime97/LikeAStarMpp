@@ -15,7 +15,8 @@ class MainApplication : Application() {
 
         AppComponent.factory = SharedFactory(
             antilog = DebugAntilog(),
-            filmTableDataFactoryInterface = FilmTableDataFactory()
+            filmTableDataFactoryInterface = FilmTableDataFactory(),
+            baseUrl = "https://data.sfgov.org"
         )
     }
 }

@@ -1,14 +1,18 @@
 
 package com.jaa.library.feature.filmList.presentation
 
+import com.jaa.library.feature.filmList.model.Film
+import com.jaa.library.feature.filmList.useCase.GetFilmListUseCaseInterface
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcherOwner
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import kotlinx.coroutines.launch
 
 class FilmListViewModel(
     override val eventsDispatcher: EventsDispatcher<EventsListener>,
-    val filmTableDataFactoryInterface: FilmTableDataFactoryInterface
+    val filmTableDataFactoryInterface: FilmTableDataFactoryInterface,
+    val getFilmListUseCase: GetFilmListUseCaseInterface
 ) : ViewModel(), EventsDispatcherOwner<FilmListViewModel.EventsListener> {
 
     val items = listOf(
@@ -33,6 +37,15 @@ class FilmListViewModel(
             configureOnTabSelectedListener {
                 onTabSelected(position = it)
             }
+        }
+
+        viewModelScope.launch {
+            getFilmListUseCase.execute(object : GetFilmListUseCaseInterface.GetFilmListModelListener {
+                override fun onSuccess(films: List<Film>) {
+                    print(films)
+                }
+
+            })
         }
     }
 
