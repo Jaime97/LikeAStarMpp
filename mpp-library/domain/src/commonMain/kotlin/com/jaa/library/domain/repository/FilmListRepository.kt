@@ -1,15 +1,15 @@
 
 package com.jaa.library.domain.repository
 
-import dev.icerock.moko.network.generated.apis.FilmApi
+import com.jaa.library.domain.service.FilmService
 import dev.icerock.moko.network.generated.models.FilmData
 
 class FilmListRepository internal constructor(
-    private val filmApi: FilmApi
+    private val filmService: FilmService
 ) {
 
     internal suspend fun getFilmList():List<FilmData> {
-        return filmApi.resourceWwmuGmzcJsonGet()
+        return filmService.getFilmList()
     }
 
 }

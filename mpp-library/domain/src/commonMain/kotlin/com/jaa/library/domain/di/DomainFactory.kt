@@ -3,6 +3,7 @@ package com.jaa.library.domain.di
 
 import com.github.aakira.napier.Napier
 import com.jaa.library.domain.repository.FilmListRepository
+import com.jaa.library.domain.service.FilmService
 import dev.icerock.moko.network.exceptionfactory.HttpExceptionFactory
 import dev.icerock.moko.network.exceptionfactory.parser.ErrorExceptionParser
 import dev.icerock.moko.network.exceptionfactory.parser.ValidationExceptionParser
@@ -51,7 +52,11 @@ class DomainFactory(
         FilmApi(baseUrl, httpClient, json)
     }
 
+    private val filmService: FilmService by lazy {
+        FilmService(filmApi)
+    }
+
     val filmListRepository: FilmListRepository by lazy {
-        FilmListRepository(filmApi)
+        FilmListRepository(filmService)
     }
 }
