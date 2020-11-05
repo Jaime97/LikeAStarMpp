@@ -14,6 +14,7 @@ import com.jaa.likeastarappmpp.databinding.ActivityFilmListBinding
 import dev.icerock.moko.mvvm.MvvmEventsActivity
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
+import dev.icerock.moko.resources.desc.StringDesc
 
 
 class FilmListActivity :
@@ -35,8 +36,8 @@ class FilmListActivity :
         viewModel.onViewCreated()
     }
 
-    override fun addTabToTabLayout(tabText: String, position: Int) {
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(tabText), position)
+    override fun addTabToTabLayout(tabText: StringDesc, position: Int) {
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(tabText.toString(this)), position)
     }
 
     override fun configureOnTabSelectedListener(listener: (position: Int) -> Unit) {
@@ -71,10 +72,5 @@ class FilmListActivity :
             }
 
         })
-    }
-
-    override fun getString(key: String): String {
-        val resId = resources.getIdentifier( key,"string", packageName)
-        return resources.getString(resId)
     }
 }

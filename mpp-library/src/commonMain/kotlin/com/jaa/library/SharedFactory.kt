@@ -7,17 +7,46 @@ package com.jaa.library
 import com.github.aakira.napier.Antilog
 import com.github.aakira.napier.Napier
 import com.jaa.library.feature.filmList.di.FilmListFactory
+import com.jaa.library.feature.filmList.model.Film
+import com.jaa.library.feature.filmList.presentation.FilmListViewModel
 import com.jaa.library.feature.filmList.presentation.FilmTableDataFactoryInterface
+import com.jaa.library.feature.filmList.useCase.GetFilmListUseCaseInterface
+import dev.icerock.moko.network.generated.models.FilmData
+import dev.icerock.moko.resources.StringResource
 
 class SharedFactory(
     antilog: Antilog,
     filmTableDataFactoryInterface: FilmTableDataFactoryInterface
 ) {
     val filmListFactory = FilmListFactory(
-        filmTableDataFactoryInterface = filmTableDataFactoryInterface
+        filmTableDataFactoryInterface = filmTableDataFactoryInterface,
+        strings = object : FilmListViewModel.Strings {
+            override val allElements: StringResource = MR.strings.all_elements
+            override val favourites: StringResource = MR.strings.favourites
+        }
     )
 
     init {
         Napier.base(antilog)
+    }
+
+    fun getFilmListUseCase():GetFilmListUseCaseInterface {
+        MR.strings.search
+        return mapFilmListUseCase(GetFilmListUseCase(domainFactory.filmListRepository))
+    }
+
+    private fun mapFilmListUseCase(
+        getFilmListUseCase: GetFilmListUseCase
+    ) : GetFilmListUseCaseInterface {
+        return object : GetFilmListUseCaseInterface {
+            override suspend fun execute(listener: GetFilmListUseCaseInterface.GetFilmListModelListener) {
+                getFilmListUseCase.execute(object:GetFilmListUseCase.GetFilmListListener {
+                    override fun onSuccess(films: List<FilmData>) {
+                        listener.onSuccess(films.map { Film(it.title, it.actor1?:"", it.director?:"", it.locations?:"", it.productionCompany?:"") })
+                    }
+
+                })
+            }
+        }
     }
 }
