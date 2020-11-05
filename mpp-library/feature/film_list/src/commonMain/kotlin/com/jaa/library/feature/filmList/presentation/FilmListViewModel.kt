@@ -5,13 +5,20 @@ import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcherOwner
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import dev.icerock.moko.resources.StringResource
+import dev.icerock.moko.resources.desc.Resource
+import dev.icerock.moko.resources.desc.StringDesc
+import dev.icerock.moko.resources.desc.desc
+import kotlinx.coroutines.launch
 
 class FilmListViewModel(
     override val eventsDispatcher: EventsDispatcher<EventsListener>,
-    val filmTableDataFactoryInterface: FilmTableDataFactoryInterface
+    private val filmTableDataFactoryInterface: FilmTableDataFactoryInterface,
+    private val getFilmListUseCase: GetFilmListUseCaseInterface,
+    private val strings: Strings,
 ) : ViewModel(), EventsDispatcherOwner<FilmListViewModel.EventsListener> {
 
-    val items = listOf(
+    var items = listOf(
         filmTableDataFactoryInterface.createFilmRow("title", "director", true, true)
     )
 
@@ -23,17 +30,29 @@ class FilmListViewModel(
 
     }
 
+    private fun getFilmList() {
+        viewModelScope.launch {
+            getFilmListUseCase.execute(object : GetFilmListUseCaseInterface.GetFilmListModelListener {
+                override fun onSuccess(films: List<Film>) {
+                    items = films.map { filmTableDataFactoryInterface.createFilmRow(it.title, it.director, it.favourite, it.visited) }
+                }
+
+            })
+        }
+    }
+
     fun onViewCreated() {
         eventsDispatcher.dispatchEvent {
             setOnSearchBarTextChangedListener {
                 onSearchTextChanged(text = it)
             }
-            addTabToTabLayout(getString("all_elements"), 0)
-            addTabToTabLayout(getString("favourites"), 1)
+            addTabToTabLayout(StringDesc.Resource(strings.allElements), 0)
+            addTabToTabLayout(StringDesc.Resource(strings.favourites), 1)
             configureOnTabSelectedListener {
                 onTabSelected(position = it)
             }
         }
+        getFilmList()
     }
 
     fun onSettingsButtonPressed() {
@@ -45,9 +64,13 @@ class FilmListViewModel(
     }
 
     interface EventsListener {
-        fun addTabToTabLayout(tabText:String, position: Int)
+        fun addTabToTabLayout(tabText:StringDesc, position: Int)
         fun configureOnTabSelectedListener(listener: (position: Int) -> Unit)
-        fun getString(key:String):String
         fun setOnSearchBarTextChangedListener(listener: (text:String) -> Unit)
+    }
+
+    interface Strings {
+        val allElements: StringResource
+        val favourites: StringResource
     }
 }
