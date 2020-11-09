@@ -18,6 +18,7 @@ object Deps {
     private const val kotlinxSerializationVersion = "1.0.0-RC"
     private const val coroutinesVersion = "1.3.9-native-mt"
     private const val ktorClientVersion = "1.4.0"
+    private const val sqlDelightVersion = "1.4.3"
 
     private const val detektVersion = "1.12.0"
 
@@ -50,6 +51,9 @@ object Deps {
             id = "org.jetbrains.kotlin.plugin.serialization",
             module = "org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion"
         )
+        val sqlDelight = GradlePlugin(
+            id = "com.squareup.sqldelight",
+            module = "com.squareup.sqldelight:gradle-plugin:$sqlDelightVersion")
 
         val mobileMultiplatform = GradlePlugin(id = "dev.icerock.mobile.multiplatform")
         val iosFramework = GradlePlugin(id = "dev.icerock.mobile.multiplatform.ios-framework")

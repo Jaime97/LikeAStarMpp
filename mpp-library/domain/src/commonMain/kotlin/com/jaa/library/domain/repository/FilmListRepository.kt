@@ -1,15 +1,24 @@
 
 package com.jaa.library.domain.repository
 
-import com.jaa.library.domain.service.FilmService
 import dev.icerock.moko.network.generated.models.FilmData
 
 class FilmListRepository internal constructor(
-    private val filmService: FilmService
+    private val filmService: FilmDataSource,
+    private val filmDatabase: FilmDataSource
 ) {
 
     internal suspend fun getFilmList():List<FilmData> {
-        return filmService.getFilmList()
+        val databaseFilms = filmDatabase.getFilmList()
+        return if(databaseFilms.isNotEmpty()) databaseFilms else downloadFilmList()
+    }
+
+    private suspend fun downloadFilmList():List<FilmData> {
+        val films = filmService.getFilmList()
+        if(films.isNotEmpty()) {
+            filmDatabase.saveFilmList(films)
+        }
+        return films
     }
 
 }

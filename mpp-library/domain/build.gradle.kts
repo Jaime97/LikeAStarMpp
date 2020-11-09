@@ -9,6 +9,7 @@ plugins {
     plugin(Deps.Plugins.kotlinSerialization)
     plugin(Deps.Plugins.mobileMultiplatform)
     plugin(Deps.Plugins.mokoNetwork)
+    plugin(Deps.Plugins.sqlDelight)
 }
 
 dependencies {
@@ -16,15 +17,22 @@ dependencies {
     commonMainImplementation(Deps.Libs.MultiPlatform.kotlinSerialization)
     commonMainImplementation(Deps.Libs.MultiPlatform.ktorClient)
     commonMainImplementation(Deps.Libs.MultiPlatform.ktorClientLogging)
-
     commonMainImplementation(Deps.Libs.MultiPlatform.mokoParcelize.common)
     commonMainImplementation(Deps.Libs.MultiPlatform.mokoNetwork.common)
-
     commonMainImplementation(Deps.Libs.MultiPlatform.napier.common)
 }
+
+sqldelight {
+    database("FilmSqlDatabase") {
+        packageName = "com.jaa.library.domain.storage"
+    }
+    linkSqlite = false
+}
+
 
 openApiGenerate {
     inputSpec.set(file("src/openapi.yml").path)
     generatorName.set("kotlin-ktor-client")
     additionalProperties.set(mutableMapOf("nonPublicApi" to "false"))
 }
+

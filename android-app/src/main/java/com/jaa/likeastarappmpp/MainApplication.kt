@@ -7,7 +7,9 @@ package com.jaa.likeastarappmpp
 import android.app.Application
 import com.github.aakira.napier.DebugAntilog
 import com.jaa.library.SharedFactory
+import com.jaa.library.domain.storage.FilmSqlDatabase
 import com.jaa.likeastarappmpp.units.FilmTableDataFactory
+import com.squareup.sqldelight.android.AndroidSqliteDriver
 
 class MainApplication : Application() {
     override fun onCreate() {
@@ -16,7 +18,8 @@ class MainApplication : Application() {
         AppComponent.factory = SharedFactory(
             antilog = DebugAntilog(),
             filmTableDataFactoryInterface = FilmTableDataFactory(),
-            baseUrl = "https://data.sfgov.org"
+            baseUrl = "https://data.sfgov.org",
+            sqlDriver = AndroidSqliteDriver(FilmSqlDatabase.Schema, applicationContext, "FilmSqlDatabase.db")
         )
     }
 }

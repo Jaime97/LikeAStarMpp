@@ -4,11 +4,13 @@ package com.jaa.library.domain.di
 import com.github.aakira.napier.Napier
 import com.jaa.library.domain.repository.FilmListRepository
 import com.jaa.library.domain.service.FilmService
+import com.jaa.library.domain.storage.FilmDatabase
+import com.jaa.library.domain.storage.FilmSqlDatabase
+import com.squareup.sqldelight.db.SqlDriver
 import dev.icerock.moko.network.exceptionfactory.HttpExceptionFactory
 import dev.icerock.moko.network.exceptionfactory.parser.ErrorExceptionParser
 import dev.icerock.moko.network.exceptionfactory.parser.ValidationExceptionParser
 import dev.icerock.moko.network.features.ExceptionFeature
-import dev.icerock.moko.network.features.TokenFeature
 import dev.icerock.moko.network.generated.apis.FilmApi
 import io.ktor.client.*
 import io.ktor.client.features.logging.*
@@ -16,7 +18,8 @@ import io.ktor.http.*
 import kotlinx.serialization.json.Json
 
 class DomainFactory(
-    private val baseUrl: String
+    private val baseUrl: String,
+    private val sqlDriver: SqlDriver
 ) {
     private val json: Json by lazy {
         Json {
@@ -56,7 +59,15 @@ class DomainFactory(
         FilmService(filmApi)
     }
 
+    private val filmSqlDatabase: FilmSqlDatabase by lazy {
+        FilmSqlDatabase(sqlDriver)
+    }
+
+    private val filmDatabase: FilmDatabase by lazy {
+        FilmDatabase(filmSqlDatabase)
+    }
+
     val filmListRepository: FilmListRepository by lazy {
-        FilmListRepository(filmService)
+        FilmListRepository(filmService, filmDatabase)
     }
 }

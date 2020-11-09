@@ -1,0 +1,28 @@
+
+CREATE TABLE FilmDb (
+	title TEXT NOT NULL DEFAULT '',
+	actor_1 TEXT DEFAULT '',
+	actor_2 TEXT DEFAULT '',
+	actor_3 TEXT DEFAULT '',
+	director TEXT DEFAULT '',
+	release_year INTEGER DEFAULT NULL,
+	locations TEXT DEFAULT '',
+	fun_facts TEXT DEFAULT '',
+	production_company TEXT DEFAULT '',
+	distributor TEXT DEFAULT '',
+	writer TEXT DEFAULT '',
+	favourite INTEGER AS Boolean NOT NULL DEFAULT 0,
+	visited INTEGER AS Boolean NOT NULL DEFAULT 0
+);
+
+CREATE INDEX title_index ON FilmDb(title);
+
+insertFilm:
+INSERT OR REPLACE INTO FilmDb
+VALUES ?;
+
+selectAllFilms:
+SELECT * FROM FilmDb;
+
+selectFilmByTitle:
+SELECT * FROM FilmDb WHERE title = ?;
