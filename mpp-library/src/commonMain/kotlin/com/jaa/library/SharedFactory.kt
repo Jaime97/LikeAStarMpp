@@ -6,6 +6,8 @@ package com.jaa.library
 
 import com.github.aakira.napier.Antilog
 import com.github.aakira.napier.Napier
+import com.jaa.library.domain.di.DomainFactory
+import com.jaa.library.domain.useCases.GetFilmListUseCase
 import com.jaa.library.feature.filmList.di.FilmListFactory
 import com.jaa.library.feature.filmList.model.Film
 import com.jaa.library.feature.filmList.presentation.FilmListViewModel
@@ -13,11 +15,19 @@ import com.jaa.library.feature.filmList.presentation.FilmTableDataFactoryInterfa
 import com.jaa.library.feature.filmList.useCase.GetFilmListUseCaseInterface
 import dev.icerock.moko.network.generated.models.FilmData
 import dev.icerock.moko.resources.StringResource
+import com.squareup.sqldelight.db.SqlDriver
 
 class SharedFactory(
     antilog: Antilog,
-    filmTableDataFactoryInterface: FilmTableDataFactoryInterface
+    baseUrl: String,
+    filmTableDataFactoryInterface: FilmTableDataFactoryInterface,
+    sqlDriver: SqlDriver
 ) {
+    private val domainFactory = DomainFactory(
+        baseUrl = baseUrl,
+        sqlDriver = sqlDriver
+    )
+
     val filmListFactory = FilmListFactory(
         filmTableDataFactoryInterface = filmTableDataFactoryInterface,
         strings = object : FilmListViewModel.Strings {
@@ -31,7 +41,6 @@ class SharedFactory(
     }
 
     fun getFilmListUseCase():GetFilmListUseCaseInterface {
-        MR.strings.search
         return mapFilmListUseCase(GetFilmListUseCase(domainFactory.filmListRepository))
     }
 

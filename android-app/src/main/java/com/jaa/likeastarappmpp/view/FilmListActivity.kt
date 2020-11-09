@@ -27,7 +27,8 @@ class FilmListActivity :
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
         AppComponent.factory.filmListFactory.createFilmListViewModel(
-            eventsDispatcher = eventsDispatcherOnMain()
+            eventsDispatcher = eventsDispatcherOnMain(),
+            getFilmListUseCase = AppComponent.factory.getFilmListUseCase()
         )
     }
 

@@ -1,6 +1,8 @@
 
 package com.jaa.library.feature.filmList.presentation
 
+import com.jaa.library.feature.filmList.model.Film
+import com.jaa.library.feature.filmList.useCase.GetFilmListUseCaseInterface
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcherOwner
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
