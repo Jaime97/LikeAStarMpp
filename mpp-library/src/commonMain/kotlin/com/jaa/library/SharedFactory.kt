@@ -33,6 +33,7 @@ class SharedFactory(
         strings = object : FilmListViewModel.Strings {
             override val allElements: StringResource = MR.strings.all_elements
             override val favourites: StringResource = MR.strings.favourites
+            override val unknownError: StringResource = MR.strings.unknown_error
         }
     )
 

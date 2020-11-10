@@ -4,6 +4,7 @@ package com.jaa.likeastarappmpp.view
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
@@ -38,7 +39,10 @@ class FilmListActivity :
     }
 
     override fun addTabToTabLayout(tabText: StringDesc, position: Int) {
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(tabText.toString(this)), position)
+        binding.tabLayout.addTab(
+            binding.tabLayout.newTab().setText(tabText.toString(this)),
+            position
+        )
     }
 
     override fun configureOnTabSelectedListener(listener: (position: Int) -> Unit) {
@@ -58,8 +62,8 @@ class FilmListActivity :
         })
     }
 
-    override fun setOnSearchBarTextChangedListener(listener: (text:String) -> Unit) {
-        binding.searchBar.addTextChangedListener(object: TextWatcher {
+    override fun setOnSearchBarTextChangedListener(listener: (text: String) -> Unit) {
+        binding.searchBar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
             }
