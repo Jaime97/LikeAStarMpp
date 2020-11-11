@@ -7,7 +7,7 @@ package com.jaa.likeastarappmpp
 import android.app.Application
 import com.github.aakira.napier.DebugAntilog
 import com.jaa.library.SharedFactory
-import com.jaa.library.domain.storage.FilmSqlDatabase
+import com.jaa.library.domain.dataSource.storage.FilmSqlDatabase
 import com.jaa.likeastarappmpp.units.FilmTableDataFactory
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 

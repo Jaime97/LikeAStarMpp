@@ -1,6 +1,6 @@
-package com.jaa.library.domain.service
+package com.jaa.library.domain.dataSource.service
 
-import com.jaa.library.domain.repository.FilmDataSource
+import com.jaa.library.domain.dataSource.FilmDataSource
 import dev.icerock.moko.network.generated.apis.FilmApi
 import dev.icerock.moko.network.generated.models.FilmData
 

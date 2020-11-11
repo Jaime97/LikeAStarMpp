@@ -24,7 +24,7 @@ dependencies {
 
 sqldelight {
     database("FilmSqlDatabase") {
-        packageName = "com.jaa.library.domain.storage"
+        packageName = "com.jaa.library.domain.dataSource.storage"
     }
     linkSqlite = false
 }

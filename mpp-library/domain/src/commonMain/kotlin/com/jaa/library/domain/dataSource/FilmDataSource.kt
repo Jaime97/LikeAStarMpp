@@ -1,4 +1,4 @@
-package com.jaa.library.domain.repository
+package com.jaa.library.domain.dataSource
 
 import dev.icerock.moko.network.generated.models.FilmData
 

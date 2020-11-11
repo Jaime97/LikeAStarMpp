@@ -2,10 +2,11 @@
 package com.jaa.library.domain.di
 
 import com.github.aakira.napier.Napier
+import com.jaa.library.domain.dataSource.memory.FilmMemoryStorage
 import com.jaa.library.domain.repository.FilmListRepository
-import com.jaa.library.domain.service.FilmService
-import com.jaa.library.domain.storage.FilmDatabase
-import com.jaa.library.domain.storage.FilmSqlDatabase
+import com.jaa.library.domain.dataSource.service.FilmService
+import com.jaa.library.domain.dataSource.storage.FilmDatabase
+import com.jaa.library.domain.dataSource.storage.FilmSqlDatabase
 import com.squareup.sqldelight.db.SqlDriver
 import dev.icerock.moko.network.exceptionfactory.HttpExceptionFactory
 import dev.icerock.moko.network.exceptionfactory.parser.ErrorExceptionParser
@@ -67,7 +68,11 @@ class DomainFactory(
         FilmDatabase(filmSqlDatabase)
     }
 
+    private val filmMemoryStorage: FilmMemoryStorage by lazy {
+        FilmMemoryStorage()
+    }
+
     val filmListRepository: FilmListRepository by lazy {
-        FilmListRepository(filmService, filmDatabase)
+        FilmListRepository(filmService, filmDatabase, filmMemoryStorage)
     }
 }
