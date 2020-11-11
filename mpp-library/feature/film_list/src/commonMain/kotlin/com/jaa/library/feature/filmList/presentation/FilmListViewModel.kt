@@ -30,7 +30,15 @@ class FilmListViewModel(
         .dataTransform {
             map { films ->
                 films.map {
-                    filmTableDataFactoryInterface.createFilmRow(it.title.hashCode().toLong(), it.title, it.director, it.favourite, it.visited)
+                    filmTableDataFactoryInterface.createFilmRow(it.title.hashCode().toLong(), it.title, it.director, it.favourite, it.visited, films.indexOf(it), object : ListRowTappedListener {
+                        override fun onRowTapped(position: Int) {
+                        }
+
+                        override fun onFavouriteButtonTapped(position: Int) {
+
+                        }
+
+                    })
                 }
             }
         }
@@ -40,10 +48,6 @@ class FilmListViewModel(
                 it.message?.desc() ?: strings.unknownError.desc()
             }
         }
-
-    private fun onTabSelected(position: Int) {
-
-    }
 
     private fun onSearchTextChanged(text: String) {
 
@@ -72,9 +76,6 @@ class FilmListViewModel(
             }
             addTabToTabLayout(StringDesc.Resource(strings.allElements), 0)
             addTabToTabLayout(StringDesc.Resource(strings.favourites), 1)
-            configureOnTabSelectedListener {
-                onTabSelected(position = it)
-            }
         }
         getFilmList()
     }
@@ -89,7 +90,6 @@ class FilmListViewModel(
 
     interface EventsListener {
         fun addTabToTabLayout(tabText:StringDesc, position: Int)
-        fun configureOnTabSelectedListener(listener: (position: Int) -> Unit)
         fun setOnSearchBarTextChangedListener(listener: (text:String) -> Unit)
     }
 

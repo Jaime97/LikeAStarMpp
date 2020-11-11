@@ -4,10 +4,7 @@ package com.jaa.likeastarappmpp.view
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.jaa.library.feature.filmList.presentation.FilmListViewModel
 import com.jaa.likeastarappmpp.AppComponent
 import com.jaa.likeastarappmpp.R
@@ -43,23 +40,6 @@ class FilmListActivity :
             binding.tabLayout.newTab().setText(tabText.toString(this)),
             position
         )
-    }
-
-    override fun configureOnTabSelectedListener(listener: (position: Int) -> Unit) {
-        binding.tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                listener(tab?.position ?: 0)
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-
-            }
-
-        })
     }
 
     override fun setOnSearchBarTextChangedListener(listener: (text: String) -> Unit) {
