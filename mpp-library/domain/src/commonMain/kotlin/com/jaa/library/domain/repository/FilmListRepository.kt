@@ -11,30 +11,26 @@ class FilmListRepository internal constructor(
 ) {
 
     internal suspend fun getFilmList():List<FilmData> {
-        val filmsInMemory = filmMemoryStorage.getFilmList()
-        return if(filmsInMemory.isNotEmpty())  {
-            filmsInMemory
-        } else {
-            val filmsInDatabase = updateFilmListFromDatabase()
-            if(filmsInDatabase.isNotEmpty()) filmsInDatabase else updateFilmListFromService()
-        }
+        syncronizeDataSources()
+        return filmMemoryStorage.getFilmList()
     }
 
-    private suspend fun updateFilmListFromDatabase():List<FilmData> {
-        val films = filmDatabase.getFilmList()
-        if(films.isNotEmpty()) {
-            filmMemoryStorage.saveFilmList(films)
-        }
-        return films
+    internal suspend fun updateFilm(film:FilmData) {
+        syncronizeDataSources()
+        filmMemoryStorage.updateFilm(film)
+        filmDatabase.updateFilm(film)
     }
 
-    private suspend fun updateFilmListFromService():List<FilmData> {
-        val films = groupFilmsByTitle(filmService.getFilmList())
-        if(films.isNotEmpty()) {
-            filmDatabase.saveFilmList(films)
+    private suspend fun syncronizeDataSources() {
+        var films = filmMemoryStorage.getFilmList()
+        if(films.isEmpty())  {
+            films = filmDatabase.getFilmList().sortedBy { it.title }
+            if(films.isEmpty()) {
+                films = groupFilmsByTitle(filmService.getFilmList()).sortedBy { it.title }
+                filmDatabase.saveFilmList(films)
+            }
             filmMemoryStorage.saveFilmList(films)
         }
-        return films
     }
 
     private fun groupFilmsByTitle(films: List<FilmData>):List<FilmData> {

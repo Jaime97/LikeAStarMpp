@@ -72,5 +72,13 @@ components:
           type: string
           description: The third actor of the film
           example: Andrew Robinson
+        visited:
+          type: boolean
+          description: If the film is saved as favourite, only for app purposes
+          example: false
+        favourite:
+          type: boolean
+          description: If the film has been visited by the user, only for app purposes
+          example: false
       required:
         - title

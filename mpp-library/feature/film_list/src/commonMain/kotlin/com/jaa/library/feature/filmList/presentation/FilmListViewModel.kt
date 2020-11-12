@@ -2,6 +2,7 @@
 package com.jaa.library.feature.filmList.presentation
 
 import com.jaa.library.feature.filmList.model.Film
+import com.jaa.library.feature.filmList.useCase.ChangeFavouriteStateUseCaseInterface
 import com.jaa.library.feature.filmList.useCase.GetFilmListUseCaseInterface
 import dev.icerock.moko.mvvm.State
 import dev.icerock.moko.mvvm.asState
@@ -20,6 +21,7 @@ class FilmListViewModel(
     override val eventsDispatcher: EventsDispatcher<EventsListener>,
     private val filmTableDataFactoryInterface: FilmTableDataFactoryInterface,
     private val getFilmListUseCase: GetFilmListUseCaseInterface,
+    private val changeFavouriteStateUseCaseInterface: ChangeFavouriteStateUseCaseInterface,
     private val strings: Strings,
 ) : ViewModel(), EventsDispatcherOwner<FilmListViewModel.EventsListener> {
 
@@ -35,7 +37,7 @@ class FilmListViewModel(
                         }
 
                         override fun onFavouriteButtonTapped(position: Int) {
-
+                            onFilmFavouriteButtonTapped(position)
                         }
 
                     })
@@ -51,6 +53,16 @@ class FilmListViewModel(
 
     private fun onSearchTextChanged(text: String) {
 
+    }
+
+    private fun onFilmFavouriteButtonTapped(position: Int) {
+        viewModelScope.launch {
+            changeFavouriteStateUseCaseInterface.execute(position, object:ChangeFavouriteStateUseCaseInterface.ChangeFavouriteStateModelListener {
+                override fun onSuccess(filmsUpdated: List<Film>) {
+                    _state.value = filmsUpdated.asState()
+                }
+            })
+        }
     }
 
     private fun getFilmList() {

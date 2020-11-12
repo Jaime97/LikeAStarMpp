@@ -6,5 +6,6 @@ interface FilmDataSource  {
 
     suspend fun getFilmList():List<FilmData>
     suspend fun saveFilmList(films: List<FilmData>)
+    suspend fun updateFilm(film:FilmData)
 
 }

@@ -7,11 +7,13 @@ package com.jaa.library
 import com.github.aakira.napier.Antilog
 import com.github.aakira.napier.Napier
 import com.jaa.library.domain.di.DomainFactory
+import com.jaa.library.domain.useCases.ChangeFavouriteStateUseCase
 import com.jaa.library.domain.useCases.GetFilmListUseCase
 import com.jaa.library.feature.filmList.di.FilmListFactory
 import com.jaa.library.feature.filmList.model.Film
 import com.jaa.library.feature.filmList.presentation.FilmListViewModel
 import com.jaa.library.feature.filmList.presentation.FilmTableDataFactoryInterface
+import com.jaa.library.feature.filmList.useCase.ChangeFavouriteStateUseCaseInterface
 import com.jaa.library.feature.filmList.useCase.GetFilmListUseCaseInterface
 import dev.icerock.moko.network.generated.models.FilmData
 import dev.icerock.moko.resources.StringResource
@@ -52,7 +54,31 @@ class SharedFactory(
             override suspend fun execute(listener: GetFilmListUseCaseInterface.GetFilmListModelListener) {
                 getFilmListUseCase.execute(object:GetFilmListUseCase.GetFilmListListener {
                     override fun onSuccess(films: List<FilmData>) {
-                        listener.onSuccess(films.map { Film(it.title, it.actor1?:"", it.director?:"", it.locations?:"", it.productionCompany?:"") })
+                        listener.onSuccess(films.map { Film(it.title, it.actor1?:"", it.director?:"", it.locations?:"",
+                            it.productionCompany?:"", it.favourite?:false, it.visited?:false) })
+                    }
+
+                })
+            }
+        }
+    }
+
+    fun changeFavouriteStateUseCase():ChangeFavouriteStateUseCaseInterface {
+        return mapChangeFavouriteStateUseCase(ChangeFavouriteStateUseCase(domainFactory.filmListRepository))
+    }
+
+    private fun mapChangeFavouriteStateUseCase(
+        changeFavouriteStateUseCase: ChangeFavouriteStateUseCase
+    ) : ChangeFavouriteStateUseCaseInterface {
+        return object : ChangeFavouriteStateUseCaseInterface {
+            override suspend fun execute(
+                position: Int,
+                listener: ChangeFavouriteStateUseCaseInterface.ChangeFavouriteStateModelListener
+            ) {
+                changeFavouriteStateUseCase.execute(position, object:ChangeFavouriteStateUseCase.ChangeFavouriteStateListener {
+                    override fun onSuccess(filmsUpdated: List<FilmData>) {
+                        listener.onSuccess(filmsUpdated.map { Film(it.title, it.actor1?:"", it.director?:"", it.locations?:"",
+                            it.productionCompany?:"", it.favourite?:false, it.visited?:false) })
                     }
 
                 })

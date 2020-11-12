@@ -16,4 +16,8 @@ class FilmService internal constructor(
         print("No update needed in service")
     }
 
+    override suspend fun updateFilm(film: FilmData) {
+        print("No update needed in service")
+    }
+
 }
