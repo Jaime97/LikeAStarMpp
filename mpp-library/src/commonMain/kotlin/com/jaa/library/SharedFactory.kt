@@ -8,12 +8,14 @@ import com.github.aakira.napier.Antilog
 import com.github.aakira.napier.Napier
 import com.jaa.library.domain.di.DomainFactory
 import com.jaa.library.domain.useCases.ChangeFavouriteStateUseCase
+import com.jaa.library.domain.useCases.FilterByFavouriteUseCase
 import com.jaa.library.domain.useCases.GetFilmListUseCase
 import com.jaa.library.feature.filmList.di.FilmListFactory
 import com.jaa.library.feature.filmList.model.Film
 import com.jaa.library.feature.filmList.presentation.FilmListViewModel
 import com.jaa.library.feature.filmList.presentation.FilmTableDataFactoryInterface
 import com.jaa.library.feature.filmList.useCase.ChangeFavouriteStateUseCaseInterface
+import com.jaa.library.feature.filmList.useCase.FilterByFavouriteUseCaseInterface
 import com.jaa.library.feature.filmList.useCase.GetFilmListUseCaseInterface
 import dev.icerock.moko.network.generated.models.FilmData
 import dev.icerock.moko.resources.StringResource
@@ -54,8 +56,7 @@ class SharedFactory(
             override suspend fun execute(listener: GetFilmListUseCaseInterface.GetFilmListModelListener) {
                 getFilmListUseCase.execute(object:GetFilmListUseCase.GetFilmListListener {
                     override fun onSuccess(films: List<FilmData>) {
-                        listener.onSuccess(films.map { Film(it.title, it.actor1?:"", it.director?:"", it.locations?:"",
-                            it.productionCompany?:"", it.favourite?:false, it.visited?:false) })
+                        listener.onSuccess(films.map { it.toFilm() })
                     }
 
                 })
@@ -77,12 +78,38 @@ class SharedFactory(
             ) {
                 changeFavouriteStateUseCase.execute(position, object:ChangeFavouriteStateUseCase.ChangeFavouriteStateListener {
                     override fun onSuccess(filmsUpdated: List<FilmData>) {
-                        listener.onSuccess(filmsUpdated.map { Film(it.title, it.actor1?:"", it.director?:"", it.locations?:"",
-                            it.productionCompany?:"", it.favourite?:false, it.visited?:false) })
+                        listener.onSuccess(filmsUpdated.map { it.toFilm() })
                     }
 
                 })
             }
         }
+    }
+
+    fun filterByFavouriteUseCase():FilterByFavouriteUseCaseInterface {
+        return mapFilterByFavouriteUseCase(FilterByFavouriteUseCase(domainFactory.filmListRepository))
+    }
+
+    private fun mapFilterByFavouriteUseCase(
+        filterByFavouriteUseCase: FilterByFavouriteUseCase
+    ) : FilterByFavouriteUseCaseInterface {
+        return object : FilterByFavouriteUseCaseInterface {
+            override suspend fun execute(
+                filter: Boolean,
+                listener: FilterByFavouriteUseCaseInterface.FilterByFavouriteModelListener
+            ) {
+                filterByFavouriteUseCase.execute(filter, object:FilterByFavouriteUseCase.FilterByFavouriteListener {
+                    override fun onSuccess(filmList: List<FilmData>) {
+                        listener.onSuccess(filmList = filmList.map { it.toFilm() })
+                    }
+                })
+            }
+
+        }
+    }
+
+    fun FilmData.toFilm() : Film {
+        return Film(title, actor1?:"", director?:"", locations?:"",
+            productionCompany?:"", favourite?:false, visited?:false)
     }
 }

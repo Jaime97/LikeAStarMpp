@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.tabs.TabLayout
 import com.jaa.library.feature.filmList.presentation.FilmListViewModel
 import com.jaa.likeastarappmpp.AppComponent
 import com.jaa.likeastarappmpp.R
@@ -27,7 +28,8 @@ class FilmListActivity :
         AppComponent.factory.filmListFactory.createFilmListViewModel(
             eventsDispatcher = eventsDispatcherOnMain(),
             getFilmListUseCase = AppComponent.factory.getFilmListUseCase(),
-            changeFavouriteStateUseCaseInterface = AppComponent.factory.changeFavouriteStateUseCase()
+            changeFavouriteStateUseCase = AppComponent.factory.changeFavouriteStateUseCase(),
+            filterByFavouriteUseCase = AppComponent.factory.filterByFavouriteUseCase()
         )
     }
 
@@ -43,10 +45,27 @@ class FilmListActivity :
         )
     }
 
+    override fun addOnTabLayoutChangedListener(listener: (position: Int) -> Unit) {
+        binding.tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                listener(tab?.position?:0)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                // Without functionality
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                // Without functionality
+            }
+
+        })
+    }
+
     override fun setOnSearchBarTextChangedListener(listener: (text: String) -> Unit) {
         binding.searchBar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
+                // Without functionality
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -54,7 +73,7 @@ class FilmListActivity :
             }
 
             override fun afterTextChanged(p0: Editable?) {
-
+                // Without functionality
             }
 
         })

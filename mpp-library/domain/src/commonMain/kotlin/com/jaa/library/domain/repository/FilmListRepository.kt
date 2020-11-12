@@ -10,9 +10,11 @@ class FilmListRepository internal constructor(
     private val filmMemoryStorage: FilmDataSource
 ) {
 
+    private var favouriteFilter:Boolean = false
+
     internal suspend fun getFilmList():List<FilmData> {
         syncronizeDataSources()
-        return filmMemoryStorage.getFilmList()
+        return if(favouriteFilter)filmMemoryStorage.getFilmList().filter { it.favourite == true } else filmMemoryStorage.getFilmList()
     }
 
     internal suspend fun updateFilm(film:FilmData) {
@@ -31,6 +33,10 @@ class FilmListRepository internal constructor(
             }
             filmMemoryStorage.saveFilmList(films)
         }
+    }
+
+    internal fun changeFavouriteFilterState(filter:Boolean) {
+        favouriteFilter = filter
     }
 
     private fun groupFilmsByTitle(films: List<FilmData>):List<FilmData> {

@@ -3,6 +3,7 @@ package com.jaa.library.feature.filmList.presentation
 
 import com.jaa.library.feature.filmList.model.Film
 import com.jaa.library.feature.filmList.useCase.ChangeFavouriteStateUseCaseInterface
+import com.jaa.library.feature.filmList.useCase.FilterByFavouriteUseCaseInterface
 import com.jaa.library.feature.filmList.useCase.GetFilmListUseCaseInterface
 import dev.icerock.moko.mvvm.State
 import dev.icerock.moko.mvvm.asState
@@ -21,7 +22,8 @@ class FilmListViewModel(
     override val eventsDispatcher: EventsDispatcher<EventsListener>,
     private val filmTableDataFactoryInterface: FilmTableDataFactoryInterface,
     private val getFilmListUseCase: GetFilmListUseCaseInterface,
-    private val changeFavouriteStateUseCaseInterface: ChangeFavouriteStateUseCaseInterface,
+    private val changeFavouriteStateUseCase: ChangeFavouriteStateUseCaseInterface,
+    private val filterByFavouriteUseCase: FilterByFavouriteUseCaseInterface,
     private val strings: Strings,
 ) : ViewModel(), EventsDispatcherOwner<FilmListViewModel.EventsListener> {
 
@@ -57,7 +59,7 @@ class FilmListViewModel(
 
     private fun onFilmFavouriteButtonTapped(position: Int) {
         viewModelScope.launch {
-            changeFavouriteStateUseCaseInterface.execute(position, object:ChangeFavouriteStateUseCaseInterface.ChangeFavouriteStateModelListener {
+            changeFavouriteStateUseCase.execute(position, object:ChangeFavouriteStateUseCaseInterface.ChangeFavouriteStateModelListener {
                 override fun onSuccess(filmsUpdated: List<Film>) {
                     _state.value = filmsUpdated.asState()
                 }
@@ -81,6 +83,18 @@ class FilmListViewModel(
         }
     }
 
+    private fun onTabChanged(position:Int) {
+        viewModelScope.launch {
+            filterByFavouriteUseCase.execute(
+                position == 1,
+                object : FilterByFavouriteUseCaseInterface.FilterByFavouriteModelListener {
+                    override fun onSuccess(filmList: List<Film>) {
+                        _state.value = filmList.asState()
+                    }
+                })
+        }
+    }
+
     fun onViewCreated() {
         eventsDispatcher.dispatchEvent {
             setOnSearchBarTextChangedListener {
@@ -88,6 +102,9 @@ class FilmListViewModel(
             }
             addTabToTabLayout(StringDesc.Resource(strings.allElements), 0)
             addTabToTabLayout(StringDesc.Resource(strings.favourites), 1)
+            addOnTabLayoutChangedListener {
+                onTabChanged(position = it)
+            }
         }
         getFilmList()
     }
@@ -96,13 +113,10 @@ class FilmListViewModel(
 
     }
 
-    fun onTabChanged(position:Int) {
-
-    }
-
     interface EventsListener {
         fun addTabToTabLayout(tabText:StringDesc, position: Int)
         fun setOnSearchBarTextChangedListener(listener: (text:String) -> Unit)
+        fun addOnTabLayoutChangedListener(listener: (position: Int) -> Unit)
     }
 
     interface Strings {

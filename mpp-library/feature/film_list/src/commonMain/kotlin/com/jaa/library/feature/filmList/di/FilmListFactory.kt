@@ -5,6 +5,7 @@ import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
 import com.jaa.library.feature.filmList.presentation.FilmListViewModel
 import com.jaa.library.feature.filmList.presentation.FilmTableDataFactoryInterface
 import com.jaa.library.feature.filmList.useCase.ChangeFavouriteStateUseCaseInterface
+import com.jaa.library.feature.filmList.useCase.FilterByFavouriteUseCaseInterface
 import com.jaa.library.feature.filmList.useCase.GetFilmListUseCaseInterface
 
 class FilmListFactory(
@@ -14,12 +15,14 @@ class FilmListFactory(
     fun createFilmListViewModel(
         eventsDispatcher: EventsDispatcher<FilmListViewModel.EventsListener>,
         getFilmListUseCase: GetFilmListUseCaseInterface,
-        changeFavouriteStateUseCaseInterface: ChangeFavouriteStateUseCaseInterface
+        changeFavouriteStateUseCase: ChangeFavouriteStateUseCaseInterface,
+        filterByFavouriteUseCase: FilterByFavouriteUseCaseInterface
     ) = FilmListViewModel(
         eventsDispatcher = eventsDispatcher,
         filmTableDataFactoryInterface = filmTableDataFactoryInterface,
         getFilmListUseCase = getFilmListUseCase,
-        changeFavouriteStateUseCaseInterface = changeFavouriteStateUseCaseInterface,
+        changeFavouriteStateUseCase = changeFavouriteStateUseCase,
+        filterByFavouriteUseCase = filterByFavouriteUseCase,
         strings = strings
     )
 }
