@@ -31,7 +31,8 @@ class FilmListActivity :
             eventsDispatcher = eventsDispatcherOnMain(),
             getNextPageInFilmListUseCase = AppComponent.factory.getNextPageInFilmListUseCase(),
             changeFavouriteStateUseCase = AppComponent.factory.changeFavouriteStateUseCase(),
-            filterByFavouriteUseCase = AppComponent.factory.filterByFavouriteUseCase()
+            filterByFavouriteUseCase = AppComponent.factory.filterByFavouriteUseCase(),
+            filterByTitleUseCase = AppComponent.factory.filterByTitleUseCase()
         )
     }
 

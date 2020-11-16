@@ -4,6 +4,7 @@ package com.jaa.library.feature.filmList.presentation
 import com.jaa.library.feature.filmList.model.Film
 import com.jaa.library.feature.filmList.useCase.ChangeFavouriteStateUseCaseInterface
 import com.jaa.library.feature.filmList.useCase.FilterByFavouriteUseCaseInterface
+import com.jaa.library.feature.filmList.useCase.FilterByTitleUseCaseInterface
 import com.jaa.library.feature.filmList.useCase.GetNextPageInFilmListUseCaseInterface
 import dev.icerock.moko.mvvm.State
 import dev.icerock.moko.mvvm.asState
@@ -24,6 +25,7 @@ class FilmListViewModel(
     private val getNextPageInFilmListUseCase: GetNextPageInFilmListUseCaseInterface,
     private val changeFavouriteStateUseCase: ChangeFavouriteStateUseCaseInterface,
     private val filterByFavouriteUseCase: FilterByFavouriteUseCaseInterface,
+    private val filterByTitleUseCase: FilterByTitleUseCaseInterface,
     private val strings: Strings,
 ) : ViewModel(), EventsDispatcherOwner<FilmListViewModel.EventsListener> {
 
@@ -81,7 +83,13 @@ class FilmListViewModel(
     }
 
     private fun onSearchTextChanged(text: String) {
-
+        viewModelScope.launch {
+            filterByTitleUseCase.execute(text, object : FilterByTitleUseCaseInterface.FilterByTitleModelListener {
+                override fun onSuccess(filmList: List<Film>) {
+                    _state.value = filmList.asState()
+                }
+            })
+        }
     }
 
     private fun onEndOfListReached() {

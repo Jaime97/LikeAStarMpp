@@ -18,10 +18,12 @@ class FilmListRepository internal constructor(
     }
 
     private var favouriteFilter:Boolean = false
+    private var titleFilter:String = ""
 
     internal fun getFilmList():List<FilmData> {
         synchronizeLocalDataSources()
-        return if(favouriteFilter)filmMemoryStorage.getFilmList().filter { it.favourite == true } else filmMemoryStorage.getFilmList()
+        return if(favouriteFilter)filmMemoryStorage.getFilmList().filter { it.favourite == true && if(titleFilter != "")it.title.contains(titleFilter, true)else true }
+        else filmMemoryStorage.getFilmList().filter { if(titleFilter != "")it.title.contains(titleFilter, true)else true }
     }
 
     internal suspend fun getFilmListWithPage(offset:Int, limit:Int, order:String):List<FilmData> {
@@ -37,6 +39,10 @@ class FilmListRepository internal constructor(
 
     internal fun changeFavouriteFilterState(filter:Boolean) {
         favouriteFilter = filter
+    }
+
+    internal fun changeTitleFilter(filter:String) {
+        titleFilter = filter
     }
 
     private suspend fun synchronizePagesInDataSources(offset:Int, limit:Int, order:String) {

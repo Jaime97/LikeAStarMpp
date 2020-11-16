@@ -9,6 +9,7 @@ import com.github.aakira.napier.Napier
 import com.jaa.library.domain.di.DomainFactory
 import com.jaa.library.domain.useCases.ChangeFavouriteStateUseCase
 import com.jaa.library.domain.useCases.FilterByFavouriteUseCase
+import com.jaa.library.domain.useCases.FilterByTitleUseCase
 import com.jaa.library.domain.useCases.GetNextPageInFilmListUseCase
 import com.jaa.library.feature.filmList.di.FilmListFactory
 import com.jaa.library.feature.filmList.model.Film
@@ -16,6 +17,7 @@ import com.jaa.library.feature.filmList.presentation.FilmListViewModel
 import com.jaa.library.feature.filmList.presentation.FilmTableDataFactoryInterface
 import com.jaa.library.feature.filmList.useCase.ChangeFavouriteStateUseCaseInterface
 import com.jaa.library.feature.filmList.useCase.FilterByFavouriteUseCaseInterface
+import com.jaa.library.feature.filmList.useCase.FilterByTitleUseCaseInterface
 import com.jaa.library.feature.filmList.useCase.GetNextPageInFilmListUseCaseInterface
 import dev.icerock.moko.network.generated.models.FilmData
 import dev.icerock.moko.resources.StringResource
@@ -80,7 +82,27 @@ class SharedFactory(
                     override fun onSuccess(filmsUpdated: List<FilmData>) {
                         listener.onSuccess(filmsUpdated.map { it.toFilm() })
                     }
+                })
+            }
+        }
+    }
 
+    fun filterByTitleUseCase():FilterByTitleUseCaseInterface {
+        return  mapFilterByTitleUseCase(FilterByTitleUseCase(domainFactory.filmListRepository))
+    }
+
+    private fun mapFilterByTitleUseCase(
+        filterByTitleUseCase: FilterByTitleUseCase
+    ) : FilterByTitleUseCaseInterface {
+        return object : FilterByTitleUseCaseInterface {
+            override suspend fun execute(
+                title: String,
+                listener: FilterByTitleUseCaseInterface.FilterByTitleModelListener
+            ) {
+                filterByTitleUseCase.execute(title, object:FilterByTitleUseCase.FilterByTitleListener {
+                    override fun onSuccess(filmList: List<FilmData>) {
+                        listener.onSuccess(filmList.map { it.toFilm() })
+                    }
                 })
             }
         }

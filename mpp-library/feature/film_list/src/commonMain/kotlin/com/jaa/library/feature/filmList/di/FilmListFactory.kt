@@ -6,6 +6,7 @@ import com.jaa.library.feature.filmList.presentation.FilmListViewModel
 import com.jaa.library.feature.filmList.presentation.FilmTableDataFactoryInterface
 import com.jaa.library.feature.filmList.useCase.ChangeFavouriteStateUseCaseInterface
 import com.jaa.library.feature.filmList.useCase.FilterByFavouriteUseCaseInterface
+import com.jaa.library.feature.filmList.useCase.FilterByTitleUseCaseInterface
 import com.jaa.library.feature.filmList.useCase.GetNextPageInFilmListUseCaseInterface
 
 class FilmListFactory(
@@ -16,6 +17,7 @@ class FilmListFactory(
         eventsDispatcher: EventsDispatcher<FilmListViewModel.EventsListener>,
         getNextPageInFilmListUseCase: GetNextPageInFilmListUseCaseInterface,
         changeFavouriteStateUseCase: ChangeFavouriteStateUseCaseInterface,
+        filterByTitleUseCase: FilterByTitleUseCaseInterface,
         filterByFavouriteUseCase: FilterByFavouriteUseCaseInterface
     ) = FilmListViewModel(
         eventsDispatcher = eventsDispatcher,
@@ -23,6 +25,7 @@ class FilmListFactory(
         getNextPageInFilmListUseCase = getNextPageInFilmListUseCase,
         changeFavouriteStateUseCase = changeFavouriteStateUseCase,
         filterByFavouriteUseCase = filterByFavouriteUseCase,
+        filterByTitleUseCase = filterByTitleUseCase,
         strings = strings
     )
 }
