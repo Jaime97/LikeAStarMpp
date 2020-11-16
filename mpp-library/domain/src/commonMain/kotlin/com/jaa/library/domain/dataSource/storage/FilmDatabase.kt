@@ -1,24 +1,28 @@
 package com.jaa.library.domain.dataSource.storage
 
-import com.jaa.library.domain.dataSource.FilmDataSource
 import com.jaa.library.domain.storage.FilmDb
 import dev.icerock.moko.network.generated.models.FilmData
 
 class FilmDatabase(
     private val filmSqlDatabase: FilmSqlDatabase
-) : FilmDataSource {
+) {
 
-    override suspend fun getFilmList():List<FilmData> {
+    fun getFilmList(): List<FilmData> {
         return filmSqlDatabase.filmSqlDatabaseQueries.selectAllFilms().executeAsList().map { it.toFilmData() }
     }
 
-    override suspend fun saveFilmList(films: List<FilmData>) {
+    fun getFilmListWithOffset(offset: Int, limit: Int): List<FilmData> {
+        //TODO: CHANGE DATA MODEL TO HAVE THE SAME OFFSET AND LIMITS AS THE ONLINE DATA SOURCE
+        return filmSqlDatabase.filmSqlDatabaseQueries.selectFilmsWithOffset(limit.toLong()/10, offset.toLong()/10).executeAsList().map { it.toFilmData() }
+    }
+
+    fun saveFilmList(films: List<FilmData>) {
         for(film in films) {
             filmSqlDatabase.filmSqlDatabaseQueries.insertFilm(film.toFilmDb())
         }
     }
 
-    override suspend fun updateFilm(film: FilmData) {
+    fun updateFilm(film: FilmData) {
         filmSqlDatabase.filmSqlDatabaseQueries.insertFilm(film.toFilmDb())
     }
 

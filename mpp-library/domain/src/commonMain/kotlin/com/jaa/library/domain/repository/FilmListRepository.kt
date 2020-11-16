@@ -1,46 +1,66 @@
 
 package com.jaa.library.domain.repository
 
-import com.jaa.library.domain.dataSource.FilmDataSource
+import com.jaa.library.domain.dataSource.memory.FilmMemoryStorage
+import com.jaa.library.domain.dataSource.service.FilmService
+import com.jaa.library.domain.dataSource.storage.FilmDatabase
 import dev.icerock.moko.network.generated.models.FilmData
 
 class FilmListRepository internal constructor(
-    private val filmService: FilmDataSource,
-    private val filmDatabase: FilmDataSource,
-    private val filmMemoryStorage: FilmDataSource
+    private val filmService: FilmService,
+    private val filmDatabase: FilmDatabase,
+    private val filmMemoryStorage: FilmMemoryStorage
 ) {
+
+    companion object {
+        const val DATA_SOURCE_ROW_TITLE = "title"
+        const val DATA_SOURCE_ROW_LIMIT = 80
+    }
 
     private var favouriteFilter:Boolean = false
 
-    internal suspend fun getFilmList():List<FilmData> {
-        syncronizeDataSources()
+    internal fun getFilmList():List<FilmData> {
+        synchronizeLocalDataSources()
         return if(favouriteFilter)filmMemoryStorage.getFilmList().filter { it.favourite == true } else filmMemoryStorage.getFilmList()
     }
 
-    internal suspend fun updateFilm(film:FilmData) {
-        syncronizeDataSources()
-        filmMemoryStorage.updateFilm(film)
-        filmDatabase.updateFilm(film)
+    internal suspend fun getFilmListWithPage(offset:Int, limit:Int, order:String):List<FilmData> {
+        synchronizePagesInDataSources(offset, limit, order)
+        return filmMemoryStorage.getFilmList()
     }
 
-    private suspend fun syncronizeDataSources() {
-        var films = filmMemoryStorage.getFilmList()
-        if(films.isEmpty())  {
-            films = filmDatabase.getFilmList().sortedBy { it.title }
-            if(films.isEmpty()) {
-                films = groupFilmsByTitle(filmService.getFilmList()).sortedBy { it.title }
-                filmDatabase.saveFilmList(films)
-            }
-            filmMemoryStorage.saveFilmList(films)
-        }
+    internal fun updateFilm(film:FilmData) {
+        synchronizeLocalDataSources()
+        filmMemoryStorage.updateFilm(film)
+        filmDatabase.updateFilm(film)
     }
 
     internal fun changeFavouriteFilterState(filter:Boolean) {
         favouriteFilter = filter
     }
 
+    private suspend fun synchronizePagesInDataSources(offset:Int, limit:Int, order:String) {
+        var films = filmMemoryStorage.getFilmListWithOffset(offset)
+        if(films.isEmpty())  {
+            films = filmDatabase.getFilmListWithOffset(offset, limit)
+            if(films.isEmpty()) {
+                //TODO: COMPLETE LAST FILM
+                films = groupFilmsByTitle(filmService.getFilmListWithOffset(offset, limit, order))
+                filmDatabase.saveFilmList(films)
+            }
+            filmMemoryStorage.saveFilmList(films)
+        }
+    }
+
+    private fun synchronizeLocalDataSources() {
+        if(filmMemoryStorage.getFilmList().isEmpty()) {
+            filmMemoryStorage.saveFilmList(filmDatabase.getFilmList())
+        }
+    }
+
+
     private fun groupFilmsByTitle(films: List<FilmData>):List<FilmData> {
-        return films.groupBy { it.title }.map {
+        return films.groupBy { it.title.replace("\\s".toRegex(), "") }.map {
             it.value.reduce { acc, filmData -> FilmData(acc.title, acc.releaseYear, acc.locations + "," + filmData.locations,
                 acc.funFacts, acc.productionCompany, acc.distributor, acc.director, acc.writer, acc.actor1, acc.actor2, acc.actor3) }
         }

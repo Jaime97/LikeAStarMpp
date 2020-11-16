@@ -22,7 +22,14 @@ INSERT OR REPLACE INTO FilmDb
 VALUES ?;
 
 selectAllFilms:
-SELECT * FROM FilmDb;
+SELECT * FROM FilmDb
+ORDER BY title;
+
+selectFilmsWithOffset:
+SELECT *
+FROM FilmDb
+ORDER BY title
+LIMIT :limit OFFSET :offset;
 
 selectFilmByTitle:
 SELECT * FROM FilmDb WHERE title = ?;

@@ -9,14 +9,14 @@ import com.github.aakira.napier.Napier
 import com.jaa.library.domain.di.DomainFactory
 import com.jaa.library.domain.useCases.ChangeFavouriteStateUseCase
 import com.jaa.library.domain.useCases.FilterByFavouriteUseCase
-import com.jaa.library.domain.useCases.GetFilmListUseCase
+import com.jaa.library.domain.useCases.GetNextPageInFilmListUseCase
 import com.jaa.library.feature.filmList.di.FilmListFactory
 import com.jaa.library.feature.filmList.model.Film
 import com.jaa.library.feature.filmList.presentation.FilmListViewModel
 import com.jaa.library.feature.filmList.presentation.FilmTableDataFactoryInterface
 import com.jaa.library.feature.filmList.useCase.ChangeFavouriteStateUseCaseInterface
 import com.jaa.library.feature.filmList.useCase.FilterByFavouriteUseCaseInterface
-import com.jaa.library.feature.filmList.useCase.GetFilmListUseCaseInterface
+import com.jaa.library.feature.filmList.useCase.GetNextPageInFilmListUseCaseInterface
 import dev.icerock.moko.network.generated.models.FilmData
 import dev.icerock.moko.resources.StringResource
 import com.squareup.sqldelight.db.SqlDriver
@@ -45,16 +45,16 @@ class SharedFactory(
         Napier.base(antilog)
     }
 
-    fun getFilmListUseCase():GetFilmListUseCaseInterface {
-        return mapFilmListUseCase(GetFilmListUseCase(domainFactory.filmListRepository))
+    fun getNextPageInFilmListUseCase():GetNextPageInFilmListUseCaseInterface {
+        return mapGetNextPageInFilmListUseCase(GetNextPageInFilmListUseCase(domainFactory.filmListRepository))
     }
 
-    private fun mapFilmListUseCase(
-        getFilmListUseCase: GetFilmListUseCase
-    ) : GetFilmListUseCaseInterface {
-        return object : GetFilmListUseCaseInterface {
-            override suspend fun execute(listener: GetFilmListUseCaseInterface.GetFilmListModelListener) {
-                getFilmListUseCase.execute(object:GetFilmListUseCase.GetFilmListListener {
+    private fun mapGetNextPageInFilmListUseCase(
+        getNextPageInFilmListUseCase: GetNextPageInFilmListUseCase
+    ) : GetNextPageInFilmListUseCaseInterface {
+        return object : GetNextPageInFilmListUseCaseInterface {
+            override suspend fun execute(listener: GetNextPageInFilmListUseCaseInterface.GetNextPageInFilmListModelListener) {
+                getNextPageInFilmListUseCase.execute(object:GetNextPageInFilmListUseCase.GetNextPageInFilmListListener {
                     override fun onSuccess(films: List<FilmData>) {
                         listener.onSuccess(films.map { it.toFilm() })
                     }

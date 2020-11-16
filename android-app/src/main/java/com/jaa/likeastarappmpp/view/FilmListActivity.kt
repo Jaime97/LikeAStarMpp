@@ -4,7 +4,9 @@ package com.jaa.likeastarappmpp.view
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.jaa.library.feature.filmList.presentation.FilmListViewModel
 import com.jaa.likeastarappmpp.AppComponent
@@ -27,7 +29,7 @@ class FilmListActivity :
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
         AppComponent.factory.filmListFactory.createFilmListViewModel(
             eventsDispatcher = eventsDispatcherOnMain(),
-            getFilmListUseCase = AppComponent.factory.getFilmListUseCase(),
+            getNextPageInFilmListUseCase = AppComponent.factory.getNextPageInFilmListUseCase(),
             changeFavouriteStateUseCase = AppComponent.factory.changeFavouriteStateUseCase(),
             filterByFavouriteUseCase = AppComponent.factory.filterByFavouriteUseCase()
         )
@@ -46,9 +48,9 @@ class FilmListActivity :
     }
 
     override fun addOnTabLayoutChangedListener(listener: (position: Int) -> Unit) {
-        binding.tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                listener(tab?.position?:0)
+                listener(tab?.position ?: 0)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -59,6 +61,17 @@ class FilmListActivity :
                 // Without functionality
             }
 
+        })
+    }
+
+    override fun addOnEndOfListReachedListener(listener: () -> Unit) {
+        binding.filmListRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1)) {
+                    listener()
+                }
+            }
         })
     }
 
