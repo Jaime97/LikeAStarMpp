@@ -4,7 +4,10 @@ package com.jaa.library.feature.filmList.di
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
 import com.jaa.library.feature.filmList.presentation.FilmListViewModel
 import com.jaa.library.feature.filmList.presentation.FilmTableDataFactoryInterface
-import com.jaa.library.feature.filmList.useCase.GetFilmListUseCaseInterface
+import com.jaa.library.feature.filmList.useCase.ChangeFavouriteStateUseCaseInterface
+import com.jaa.library.feature.filmList.useCase.FilterByFavouriteUseCaseInterface
+import com.jaa.library.feature.filmList.useCase.FilterByTitleUseCaseInterface
+import com.jaa.library.feature.filmList.useCase.GetNextPageInFilmListUseCaseInterface
 
 class FilmListFactory(
     private val filmTableDataFactoryInterface: FilmTableDataFactoryInterface,
@@ -12,11 +15,17 @@ class FilmListFactory(
 ) {
     fun createFilmListViewModel(
         eventsDispatcher: EventsDispatcher<FilmListViewModel.EventsListener>,
-        getFilmListUseCase: GetFilmListUseCaseInterface
+        getNextPageInFilmListUseCase: GetNextPageInFilmListUseCaseInterface,
+        changeFavouriteStateUseCase: ChangeFavouriteStateUseCaseInterface,
+        filterByTitleUseCase: FilterByTitleUseCaseInterface,
+        filterByFavouriteUseCase: FilterByFavouriteUseCaseInterface
     ) = FilmListViewModel(
         eventsDispatcher = eventsDispatcher,
         filmTableDataFactoryInterface = filmTableDataFactoryInterface,
-        getFilmListUseCase = getFilmListUseCase,
+        getNextPageInFilmListUseCase = getNextPageInFilmListUseCase,
+        changeFavouriteStateUseCase = changeFavouriteStateUseCase,
+        filterByFavouriteUseCase = filterByFavouriteUseCase,
+        filterByTitleUseCase = filterByTitleUseCase,
         strings = strings
     )
 }

@@ -4,9 +4,10 @@ package com.jaa.likeastarappmpp.view
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.jaa.library.feature.filmList.presentation.FilmListViewModel
 import com.jaa.likeastarappmpp.AppComponent
 import com.jaa.likeastarappmpp.R
@@ -28,7 +29,10 @@ class FilmListActivity :
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
         AppComponent.factory.filmListFactory.createFilmListViewModel(
             eventsDispatcher = eventsDispatcherOnMain(),
-            getFilmListUseCase = AppComponent.factory.getFilmListUseCase()
+            getNextPageInFilmListUseCase = AppComponent.factory.getNextPageInFilmListUseCase(),
+            changeFavouriteStateUseCase = AppComponent.factory.changeFavouriteStateUseCase(),
+            filterByFavouriteUseCase = AppComponent.factory.filterByFavouriteUseCase(),
+            filterByTitleUseCase = AppComponent.factory.filterByTitleUseCase()
         )
     }
 
@@ -38,30 +42,44 @@ class FilmListActivity :
     }
 
     override fun addTabToTabLayout(tabText: StringDesc, position: Int) {
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(tabText.toString(this)), position)
+        binding.tabLayout.addTab(
+            binding.tabLayout.newTab().setText(tabText.toString(this)),
+            position
+        )
     }
 
-    override fun configureOnTabSelectedListener(listener: (position: Int) -> Unit) {
-        binding.tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
+    override fun addOnTabLayoutChangedListener(listener: (position: Int) -> Unit) {
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 listener(tab?.position ?: 0)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
-
+                // Without functionality
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
-
+                // Without functionality
             }
 
         })
     }
 
-    override fun setOnSearchBarTextChangedListener(listener: (text:String) -> Unit) {
-        binding.searchBar.addTextChangedListener(object: TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+    override fun addOnEndOfListReachedListener(listener: () -> Unit) {
+        binding.filmListRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1)) {
+                    listener()
+                }
+            }
+        })
+    }
 
+    override fun setOnSearchBarTextChangedListener(listener: (text: String) -> Unit) {
+        binding.searchBar.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                // Without functionality
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -69,7 +87,7 @@ class FilmListActivity :
             }
 
             override fun afterTextChanged(p0: Editable?) {
-
+                // Without functionality
             }
 
         })

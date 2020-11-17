@@ -50,9 +50,10 @@
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/filmListRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:bindValue="@{viewModel.items}"
+            app:bindValue="@{viewModel.state.ld.dataValue}"
             app:adapter="@{`dev.icerock.moko.units.adapter.UnitsRecyclerViewAdapter`}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 

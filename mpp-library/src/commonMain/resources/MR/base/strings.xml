@@ -7,4 +7,5 @@
     <string name="favourite_btn_content_desc">Favourite button</string>
     <string name="visited_img_content_desc">Location visited</string>
     <string name="film_img_content_desc">Film image</string>
+    <string name="unknown_error">Unknown error</string>
 </resources>

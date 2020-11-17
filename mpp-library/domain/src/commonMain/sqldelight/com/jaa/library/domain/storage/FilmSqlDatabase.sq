@@ -1,6 +1,6 @@
 
 CREATE TABLE FilmDb (
-	title TEXT NOT NULL DEFAULT '',
+	title TEXT PRIMARY KEY NOT NULL UNIQUE DEFAULT '',
 	actor_1 TEXT DEFAULT '',
 	actor_2 TEXT DEFAULT '',
 	actor_3 TEXT DEFAULT '',
@@ -22,7 +22,14 @@ INSERT OR REPLACE INTO FilmDb
 VALUES ?;
 
 selectAllFilms:
-SELECT * FROM FilmDb;
+SELECT * FROM FilmDb
+ORDER BY title;
+
+selectFilmsWithOffset:
+SELECT *
+FROM FilmDb
+ORDER BY title
+LIMIT :limit OFFSET :offset;
 
 selectFilmByTitle:
 SELECT * FROM FilmDb WHERE title = ?;
