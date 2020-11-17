@@ -53,7 +53,7 @@
                 android:layout_marginTop="20dp"
                 android:text="@{@string/directed(film.director)}"/>
             <TextView
-                android:id="@+id/productorTextView"
+                android:id="@+id/producerTextView"
                 style="@style/bodyTextView"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="20dp"
