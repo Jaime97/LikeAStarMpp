@@ -1,18 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+        <variable
+            name="film"
+            type="com.jaa.library.feature.filmList.model.Film" />
+
         <variable
             name="viewModel"
             type="com.jaa.library.feature.filmDetail.presentation.FilmDetailViewModel" />
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="@drawable/background_gradient">
+        <ImageView
+            android:id="@+id/filmImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/placeholder"/>
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/film_list_row_background"
+            android:layout_below="@id/filmImage"
+            android:orientation="vertical"
+            android:id="@+id/linearLayout">
+            <TextView
+                android:id="@+id/titleTextView"
+                style="@style/titleTextView"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="@{film.title}"/>
+
+            <TextView
+                android:id="@+id/actorTextView"
+                style="@style/bodyTextView"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="20dp"
+                android:text="@{@string/starring(film.actor_1)}"/>
+            <TextView
+                android:id="@+id/directorTextView"
+                style="@style/bodyTextView"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="20dp"
+                android:text="@{@string/directed(film.director)}"/>
+            <TextView
+                android:id="@+id/productorTextView"
+                style="@style/bodyTextView"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:text="@{@string/produced(film.production_company)}"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/visitedButton"
+            style="@style/textButtonStyle"
+            android:text="@{film.visited ? @string/visited : @string/unvisited}"
+            android:layout_alignBottom="@+id/zoneButton"
+            android:layout_alignStart="@+id/linearLayout"
+            android:layout_marginStart="10dp" />
+
+        <Button
+            android:id="@+id/zoneButton"
+            style="@style/textButtonStyle"
+            android:text="@string/see_locations"
+            android:layout_alignEnd="@+id/linearLayout"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="13dp"
+            android:layout_marginEnd="10dp" />
+
+    </RelativeLayout>
 </layout>
