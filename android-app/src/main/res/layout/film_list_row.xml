@@ -3,25 +3,14 @@
 
     <data>
         <import type="android.view.View"/>
-        <variable
-            name="title"
-            type="String" />
 
         <variable
-            name="director"
-            type="String" />
+            name="film"
+            type="com.jaa.library.feature.filmList.model.Film" />
 
         <variable
             name="position"
             type="Integer" />
-
-        <variable
-            name="isFavourite"
-            type="Boolean" />
-
-        <variable
-            name="isVisited"
-            type="Boolean" />
 
         <variable
             name="listener"
@@ -52,7 +41,7 @@
             android:id="@+id/titleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{title}"
+            android:text="@{film.title}"
             android:textSize="16sp"
             android:layout_alignParentTop="true"
             android:layout_marginStart="16dp"
@@ -70,7 +59,7 @@
             android:layout_alignStart="@+id/titleTextView"
             android:layout_below="@id/titleTextView"
             android:layout_marginEnd="70dp"
-            android:text="@{director}"
+            android:text="@{film.director}"
             android:textSize="14sp"/>
 
         <ImageButton
@@ -82,7 +71,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="15dp"
             android:onClick="@{() -> listener.onFavouriteButtonTapped(position)}"
-            android:background="@{isFavourite ? @drawable/star_selected :@drawable/star_unselected}"
+            android:background="@{film.favourite ? @drawable/star_selected :@drawable/star_unselected}"
             android:contentDescription="@string/favourite_btn_content_desc" />
 
         <ImageView
@@ -94,7 +83,7 @@
             android:layout_marginBottom="20dp"
             android:layout_marginEnd="15dp"
             android:layout_below="@id/favouriteButton"
-            android:visibility="@{isVisited ? View.VISIBLE : View.GONE}"
+            android:visibility="@{film.visited ? View.VISIBLE : View.GONE}"
             android:background="@drawable/check"
             android:contentDescription="@string/visited_img_content_desc" />
 
