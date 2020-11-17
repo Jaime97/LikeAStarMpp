@@ -11,6 +11,7 @@ import com.jaa.library.domain.useCases.ChangeFavouriteStateUseCase
 import com.jaa.library.domain.useCases.FilterByFavouriteUseCase
 import com.jaa.library.domain.useCases.FilterByTitleUseCase
 import com.jaa.library.domain.useCases.GetNextPageInFilmListUseCase
+import com.jaa.library.feature.filmDetail.di.FilmDetailFactory
 import com.jaa.library.feature.filmList.di.FilmListFactory
 import com.jaa.library.feature.filmList.model.Film
 import com.jaa.library.feature.filmList.presentation.FilmListViewModel
@@ -42,6 +43,8 @@ class SharedFactory(
             override val unknownError: StringResource = MR.strings.unknown_error
         }
     )
+
+    val filmDetailFactory = FilmDetailFactory()
 
     init {
         Napier.base(antilog)

@@ -19,7 +19,8 @@ val mppLibs = listOf(
 )
 val mppModules = listOf(
     Deps.Modules.domain,
-    Deps.Modules.Feature.film_list
+    Deps.Modules.Feature.film_list,
+    Deps.Modules.Feature.film_detail
 )
 
 dependencies {
