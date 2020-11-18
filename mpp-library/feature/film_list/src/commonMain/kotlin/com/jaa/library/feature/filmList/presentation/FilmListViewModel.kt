@@ -1,7 +1,7 @@
 
 package com.jaa.library.feature.filmList.presentation
 
-import com.jaa.library.feature.filmList.model.Film
+import com.jaa.library.feature.filmList.model.FilmRowData
 import com.jaa.library.feature.filmList.useCase.ChangeFavouriteStateUseCaseInterface
 import com.jaa.library.feature.filmList.useCase.FilterByFavouriteUseCaseInterface
 import com.jaa.library.feature.filmList.useCase.FilterByTitleUseCaseInterface
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 
 class FilmListViewModel(
     override val eventsDispatcher: EventsDispatcher<EventsListener>,
-    private val filmTableDataFactoryInterface: FilmTableDataFactoryInterface,
+    private val filmTableDataFactory: FilmTableDataFactoryInterface,
     private val getNextPageInFilmListUseCase: GetNextPageInFilmListUseCaseInterface,
     private val changeFavouriteStateUseCase: ChangeFavouriteStateUseCaseInterface,
     private val filterByFavouriteUseCase: FilterByFavouriteUseCaseInterface,
@@ -31,19 +31,21 @@ class FilmListViewModel(
 
     companion object {
         const val INDEX_OF_FAVOURITE_TAB = 1
+        const val ROW_POSITION_KEY = "position_key"
     }
 
     private var currentTabSelected = 0
 
-    private val _state: MutableLiveData<State<List<Film>, Throwable>> =
+    private val _state: MutableLiveData<State<List<FilmRowData>, Throwable>> =
         MutableLiveData(initialValue = State.Loading())
 
     val state: LiveData<State<List<TableUnitItem>, StringDesc>> = _state
         .dataTransform {
             map { films ->
                 films.map {
-                    filmTableDataFactoryInterface.createFilmRow(it.title.hashCode().toLong(), it, films.indexOf(it), object : ListRowTappedListener {
+                    filmTableDataFactory.createFilmRow(it.title.hashCode().toLong(), it, films.indexOf(it), object : ListRowTappedListener {
                         override fun onRowTapped(position: Int) {
+                            onListRowTapped(position)
                         }
 
                         override fun onFavouriteButtonTapped(position: Int) {
@@ -85,7 +87,7 @@ class FilmListViewModel(
     private fun onSearchTextChanged(text: String) {
         viewModelScope.launch {
             filterByTitleUseCase.execute(text, object : FilterByTitleUseCaseInterface.FilterByTitleModelListener {
-                override fun onSuccess(filmList: List<Film>) {
+                override fun onSuccess(filmList: List<FilmRowData>) {
                     _state.value = filmList.asState()
                 }
             })
@@ -98,10 +100,18 @@ class FilmListViewModel(
         }
     }
 
+    private fun onListRowTapped(position:Int) {
+        val dataMap = mutableMapOf<String, String>()
+        dataMap[ROW_POSITION_KEY] = position.toString()
+        eventsDispatcher.dispatchEvent {
+            presentFilmDetailView(dataMap)
+        }
+    }
+
     private fun onFilmFavouriteButtonTapped(position: Int) {
         viewModelScope.launch {
             changeFavouriteStateUseCase.execute(position, object:ChangeFavouriteStateUseCaseInterface.ChangeFavouriteStateModelListener {
-                override fun onSuccess(filmsUpdated: List<Film>) {
+                override fun onSuccess(filmsUpdated: List<FilmRowData>) {
                     _state.value = filmsUpdated.asState()
                 }
             })
@@ -112,7 +122,7 @@ class FilmListViewModel(
         viewModelScope.launch {
             try {
                 getNextPageInFilmListUseCase.execute(object : GetNextPageInFilmListUseCaseInterface.GetNextPageInFilmListModelListener {
-                    override fun onSuccess(films: List<Film>) {
+                    override fun onSuccess(films: List<FilmRowData>) {
                         _state.value = films.asState()
                     }
                 })
@@ -129,7 +139,7 @@ class FilmListViewModel(
             filterByFavouriteUseCase.execute(
                 position == INDEX_OF_FAVOURITE_TAB,
                 object : FilterByFavouriteUseCaseInterface.FilterByFavouriteModelListener {
-                    override fun onSuccess(filmList: List<Film>) {
+                    override fun onSuccess(filmList: List<FilmRowData>) {
                         _state.value = filmList.asState()
                     }
                 })
@@ -141,6 +151,7 @@ class FilmListViewModel(
         fun setOnSearchBarTextChangedListener(listener: (text:String) -> Unit)
         fun addOnTabLayoutChangedListener(listener: (position: Int) -> Unit)
         fun addOnEndOfListReachedListener(listener: () -> Unit)
+        fun presentFilmDetailView(data:Map<String, String>)
     }
 
     interface Strings {

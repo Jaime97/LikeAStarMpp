@@ -21,7 +21,7 @@ class FilmListFactory(
         filterByFavouriteUseCase: FilterByFavouriteUseCaseInterface
     ) = FilmListViewModel(
         eventsDispatcher = eventsDispatcher,
-        filmTableDataFactoryInterface = filmTableDataFactoryInterface,
+        filmTableDataFactory = filmTableDataFactoryInterface,
         getNextPageInFilmListUseCase = getNextPageInFilmListUseCase,
         changeFavouriteStateUseCase = changeFavouriteStateUseCase,
         filterByFavouriteUseCase = filterByFavouriteUseCase,

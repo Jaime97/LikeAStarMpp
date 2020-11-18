@@ -7,6 +7,7 @@ import com.jaa.library.domain.repository.FilmListRepository
 import com.jaa.library.domain.dataSource.service.FilmService
 import com.jaa.library.domain.dataSource.storage.FilmDatabase
 import com.jaa.library.domain.dataSource.storage.FilmSqlDatabase
+import com.jaa.library.domain.repository.FilmDetailRepository
 import com.squareup.sqldelight.db.SqlDriver
 import dev.icerock.moko.network.exceptionfactory.HttpExceptionFactory
 import dev.icerock.moko.network.exceptionfactory.parser.ErrorExceptionParser
@@ -74,5 +75,9 @@ class DomainFactory(
 
     val filmListRepository: FilmListRepository by lazy {
         FilmListRepository(filmService, filmDatabase, filmMemoryStorage)
+    }
+
+    val filmDetailRepository: FilmDetailRepository by lazy {
+        FilmDetailRepository(filmService, filmDatabase, filmMemoryStorage)
     }
 }

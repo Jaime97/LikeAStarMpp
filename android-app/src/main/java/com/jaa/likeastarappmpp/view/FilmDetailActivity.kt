@@ -2,6 +2,7 @@ package com.jaa.likeastarappmpp.view
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
+import com.jaa.library.feature.filmDetail.model.FilmDetail
 import com.jaa.library.feature.filmDetail.presentation.FilmDetailViewModel
 import com.jaa.likeastarappmpp.AppComponent
 import com.jaa.likeastarappmpp.R
@@ -14,19 +15,28 @@ class FilmDetailActivity :
     MvvmEventsActivity<ActivityFilmDetailBinding, FilmDetailViewModel, FilmDetailViewModel.EventsListener>(),
     FilmDetailViewModel.EventsListener {
 
-    override val layoutId: Int = R.layout.activity_film_list
+    override val layoutId: Int = R.layout.activity_film_detail
     override val viewModelClass: Class<FilmDetailViewModel> = FilmDetailViewModel::class.java
     override val viewModelVariableId: Int = com.jaa.likeastarappmpp.BR.viewModel
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
         AppComponent.factory.filmDetailFactory.createFilmDetailViewModel(
-            eventsDispatcher = eventsDispatcherOnMain()
+            eventsDispatcher = eventsDispatcherOnMain(),
+            getFilmDetailUseCase = AppComponent.factory.getFilmDetailUseCase()
         )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.onViewCreated()
+    }
+
+    override fun getEntryData(key:String): String? {
+        return intent.getStringExtra(key)
+    }
+
+    override fun updateFilmData(film: FilmDetail) {
+        binding.film = film
     }
 
 }

@@ -7,13 +7,12 @@ package com.jaa.library
 import com.github.aakira.napier.Antilog
 import com.github.aakira.napier.Napier
 import com.jaa.library.domain.di.DomainFactory
-import com.jaa.library.domain.useCases.ChangeFavouriteStateUseCase
-import com.jaa.library.domain.useCases.FilterByFavouriteUseCase
-import com.jaa.library.domain.useCases.FilterByTitleUseCase
-import com.jaa.library.domain.useCases.GetNextPageInFilmListUseCase
+import com.jaa.library.domain.useCases.*
 import com.jaa.library.feature.filmDetail.di.FilmDetailFactory
+import com.jaa.library.feature.filmDetail.model.FilmDetail
+import com.jaa.library.feature.filmDetail.useCase.GetFilmDetailUseCaseInterface
 import com.jaa.library.feature.filmList.di.FilmListFactory
-import com.jaa.library.feature.filmList.model.Film
+import com.jaa.library.feature.filmList.model.FilmRowData
 import com.jaa.library.feature.filmList.presentation.FilmListViewModel
 import com.jaa.library.feature.filmList.presentation.FilmTableDataFactoryInterface
 import com.jaa.library.feature.filmList.useCase.ChangeFavouriteStateUseCaseInterface
@@ -61,7 +60,7 @@ class SharedFactory(
             override suspend fun execute(listener: GetNextPageInFilmListUseCaseInterface.GetNextPageInFilmListModelListener) {
                 getNextPageInFilmListUseCase.execute(object:GetNextPageInFilmListUseCase.GetNextPageInFilmListListener {
                     override fun onSuccess(films: List<FilmData>) {
-                        listener.onSuccess(films.map { it.toFilm() })
+                        listener.onSuccess(films.map { it.toFilmRowData() })
                     }
 
                 })
@@ -83,7 +82,7 @@ class SharedFactory(
             ) {
                 changeFavouriteStateUseCase.execute(position, object:ChangeFavouriteStateUseCase.ChangeFavouriteStateListener {
                     override fun onSuccess(filmsUpdated: List<FilmData>) {
-                        listener.onSuccess(filmsUpdated.map { it.toFilm() })
+                        listener.onSuccess(filmsUpdated.map { it.toFilmRowData() })
                     }
                 })
             }
@@ -104,7 +103,7 @@ class SharedFactory(
             ) {
                 filterByTitleUseCase.execute(title, object:FilterByTitleUseCase.FilterByTitleListener {
                     override fun onSuccess(filmList: List<FilmData>) {
-                        listener.onSuccess(filmList.map { it.toFilm() })
+                        listener.onSuccess(filmList.map { it.toFilmRowData() })
                     }
                 })
             }
@@ -125,7 +124,7 @@ class SharedFactory(
             ) {
                 filterByFavouriteUseCase.execute(filter, object:FilterByFavouriteUseCase.FilterByFavouriteListener {
                     override fun onSuccess(filmList: List<FilmData>) {
-                        listener.onSuccess(filmList = filmList.map { it.toFilm() })
+                        listener.onSuccess(filmList = filmList.map { it.toFilmRowData() })
                     }
                 })
             }
@@ -133,8 +132,55 @@ class SharedFactory(
         }
     }
 
-    fun FilmData.toFilm() : Film {
-        return Film(title, actor1?:"", director?:"", locations?:"",
-            productionCompany?:"", favourite?:false, visited?:false)
+    fun getFilmDetailUseCase():GetFilmDetailUseCaseInterface {
+        return mapGetFilmDetailUseCase(GetFilmDetailUseCase(domainFactory.filmDetailRepository))
+    }
+
+    private fun mapGetFilmDetailUseCase(
+        getFilmDetailUseCase: GetFilmDetailUseCase
+    ) : GetFilmDetailUseCaseInterface {
+        return object : GetFilmDetailUseCaseInterface {
+            override suspend fun execute(
+                position: Int,
+                listener: GetFilmDetailUseCaseInterface.GetFilmDetailModelListener
+            ) {
+                getFilmDetailUseCase.execute(position, object:GetFilmDetailUseCase.GetFilmDetailListener {
+                    override fun onSuccess(film: FilmData) {
+                        listener.onSuccess(film = film.toFilmDetail())
+                    }
+                })
+            }
+
+        }
+    }
+
+    fun FilmData.toFilmRowData() : FilmRowData {
+        val titleValue = title
+        val directorValue = director
+        val favouriteValue = favourite
+        val visitedValue = visited
+        return object:FilmRowData {
+            override val title: String = titleValue
+            override val director: String = directorValue?:""
+            override var favourite: Boolean = favouriteValue?:false
+            override var visited: Boolean = visitedValue?:false
+        }
+    }
+
+    fun FilmData.toFilmDetail() : FilmDetail {
+        val titleValue = title
+        val directorValue = director
+        val locationsValue = locations
+        val productionCompanyValue = productionCompany
+        val actor1Value = actor1
+        val visitedValue = visited
+        return object:FilmDetail {
+            override val title: String = titleValue
+            override val director: String = directorValue?:""
+            override val locations: String = locationsValue?:""
+            override val productionCompany: String = productionCompanyValue?:""
+            override val actor1: String = actor1Value?:""
+            override var visited: Boolean = visitedValue?:false
+        }
     }
 }

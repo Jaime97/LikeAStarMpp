@@ -6,7 +6,7 @@
 
         <variable
             name="film"
-            type="com.jaa.library.feature.filmList.model.Film" />
+            type="com.jaa.library.feature.filmList.model.FilmRowData" />
 
         <variable
             name="position"

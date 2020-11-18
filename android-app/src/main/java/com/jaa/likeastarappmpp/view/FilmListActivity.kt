@@ -1,6 +1,7 @@
 
 package com.jaa.likeastarappmpp.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -75,6 +76,15 @@ class FilmListActivity :
         })
     }
 
+    override fun presentFilmDetailView(data: Map<String, String>) {
+        Intent(this, FilmDetailActivity::class.java).also {
+            for(dataObject in data.entries) {
+                it.putExtra(dataObject.key, dataObject.value)
+            }
+            startActivity(it)
+        }
+    }
+
     override fun setOnSearchBarTextChangedListener(listener: (text: String) -> Unit) {
         binding.searchBar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -88,7 +98,6 @@ class FilmListActivity :
             override fun afterTextChanged(p0: Editable?) {
                 // Without functionality
             }
-
         })
     }
 }

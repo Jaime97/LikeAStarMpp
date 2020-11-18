@@ -4,7 +4,7 @@
     <data>
         <variable
             name="film"
-            type="com.jaa.library.feature.filmList.model.Film" />
+            type="com.jaa.library.feature.filmDetail.model.FilmDetail" />
 
         <variable
             name="viewModel"
@@ -45,7 +45,7 @@
                 style="@style/bodyTextView"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="20dp"
-                android:text="@{@string/starring(film.actor_1)}"/>
+                android:text="@{@string/starring(film.actor1)}"/>
             <TextView
                 android:id="@+id/directorTextView"
                 style="@style/bodyTextView"
@@ -58,7 +58,7 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
-                android:text="@{@string/produced(film.production_company)}"/>
+                android:text="@{@string/produced(film.productionCompany)}"/>
         </LinearLayout>
 
         <Button
