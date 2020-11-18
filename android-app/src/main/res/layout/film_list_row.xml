@@ -9,10 +9,6 @@
             type="com.jaa.library.feature.filmList.model.FilmRowData" />
 
         <variable
-            name="position"
-            type="Integer" />
-
-        <variable
             name="listener"
             type="com.jaa.library.feature.filmList.presentation.ListRowTappedListener" />
     </data>
@@ -24,7 +20,7 @@
         android:layout_marginBottom="2dp"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
-        android:onClick="@{() -> listener.onRowTapped(position)}"
+        android:onClick="@{() -> listener.onRowTapped(film.title)}"
         android:background="@drawable/film_list_row_background">
 
         <ImageView
@@ -70,7 +66,7 @@
             android:layout_marginBottom="20dp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="15dp"
-            android:onClick="@{() -> listener.onFavouriteButtonTapped(position)}"
+            android:onClick="@{() -> listener.onFavouriteButtonTapped(film.title)}"
             android:background="@{film.favourite ? @drawable/star_selected :@drawable/star_unselected}"
             android:contentDescription="@string/favourite_btn_content_desc" />
 

@@ -3,10 +3,6 @@
 
     <data>
         <variable
-            name="film"
-            type="com.jaa.library.feature.filmDetail.model.FilmDetail" />
-
-        <variable
             name="viewModel"
             type="com.jaa.library.feature.filmDetail.presentation.FilmDetailViewModel" />
     </data>
@@ -38,36 +34,37 @@
                 style="@style/titleTextView"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:text="@{film.title}"/>
+                android:text="@{viewModel.state.ld.dataValue.title}"/>
 
             <TextView
                 android:id="@+id/actorTextView"
                 style="@style/bodyTextView"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="20dp"
-                android:text="@{@string/starring(film.actor1)}"/>
+                android:text="@{@string/starring(viewModel.state.ld.dataValue.actor1)}"/>
             <TextView
                 android:id="@+id/directorTextView"
                 style="@style/bodyTextView"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="20dp"
-                android:text="@{@string/directed(film.director)}"/>
+                android:text="@{@string/directed(viewModel.state.ld.dataValue.director)}"/>
             <TextView
                 android:id="@+id/producerTextView"
                 style="@style/bodyTextView"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
-                android:text="@{@string/produced(film.productionCompany)}"/>
+                android:text="@{@string/produced(viewModel.state.ld.dataValue.productionCompany)}"/>
         </LinearLayout>
 
         <Button
             android:id="@+id/visitedButton"
             style="@style/textButtonStyle"
-            android:text="@{film.visited ? @string/visited : @string/unvisited}"
+            android:text="@{viewModel.state.ld.dataValue.visited ? @string/visited : @string/unvisited}"
             android:layout_alignBottom="@+id/zoneButton"
             android:layout_alignStart="@+id/linearLayout"
-            android:layout_marginStart="10dp" />
+            android:layout_marginStart="10dp"
+            android:onClick="@{() -> viewModel.onChangeVisitedStateButtonTapped()}"/>
 
         <Button
             android:id="@+id/zoneButton"

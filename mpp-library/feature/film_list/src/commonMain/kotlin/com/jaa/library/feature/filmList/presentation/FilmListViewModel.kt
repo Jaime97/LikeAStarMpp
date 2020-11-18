@@ -27,11 +27,11 @@ class FilmListViewModel(
     private val filterByFavouriteUseCase: FilterByFavouriteUseCaseInterface,
     private val filterByTitleUseCase: FilterByTitleUseCaseInterface,
     private val strings: Strings,
+    private val constants: Constants
 ) : ViewModel(), EventsDispatcherOwner<FilmListViewModel.EventsListener> {
 
     companion object {
         const val INDEX_OF_FAVOURITE_TAB = 1
-        const val ROW_POSITION_KEY = "position_key"
     }
 
     private var currentTabSelected = 0
@@ -43,13 +43,13 @@ class FilmListViewModel(
         .dataTransform {
             map { films ->
                 films.map {
-                    filmTableDataFactory.createFilmRow(it.title.hashCode().toLong(), it, films.indexOf(it), object : ListRowTappedListener {
-                        override fun onRowTapped(position: Int) {
-                            onListRowTapped(position)
+                    filmTableDataFactory.createFilmRow(it.title.hashCode().toLong(), it, object : ListRowTappedListener {
+                        override fun onRowTapped(title: String) {
+                            onListRowTapped(title)
                         }
 
-                        override fun onFavouriteButtonTapped(position: Int) {
-                            onFilmFavouriteButtonTapped(position)
+                        override fun onFavouriteButtonTapped(title: String) {
+                            onFilmFavouriteButtonTapped(title)
                         }
 
                     })
@@ -77,6 +77,9 @@ class FilmListViewModel(
                 onEndOfListReached()
             }
         }
+    }
+
+    fun onViewPresented() {
         getNextPageInFilmList()
     }
 
@@ -100,17 +103,17 @@ class FilmListViewModel(
         }
     }
 
-    private fun onListRowTapped(position:Int) {
+    private fun onListRowTapped(title:String) {
         val dataMap = mutableMapOf<String, String>()
-        dataMap[ROW_POSITION_KEY] = position.toString()
+        dataMap[constants.selectedFilmTitleKey] = title
         eventsDispatcher.dispatchEvent {
             presentFilmDetailView(dataMap)
         }
     }
 
-    private fun onFilmFavouriteButtonTapped(position: Int) {
+    private fun onFilmFavouriteButtonTapped(title: String) {
         viewModelScope.launch {
-            changeFavouriteStateUseCase.execute(position, object:ChangeFavouriteStateUseCaseInterface.ChangeFavouriteStateModelListener {
+            changeFavouriteStateUseCase.execute(title, object:ChangeFavouriteStateUseCaseInterface.ChangeFavouriteStateModelListener {
                 override fun onSuccess(filmsUpdated: List<FilmRowData>) {
                     _state.value = filmsUpdated.asState()
                 }
@@ -158,5 +161,9 @@ class FilmListViewModel(
         val allElements: StringResource
         val favourites: StringResource
         val unknownError: StringResource
+    }
+
+    interface Constants {
+        val selectedFilmTitleKey:String
     }
 }

@@ -41,6 +41,11 @@ class FilmListActivity :
         viewModel.onViewCreated()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.onViewPresented()
+    }
+
     override fun addTabToTabLayout(tabText: StringDesc, position: Int) {
         binding.tabLayout.addTab(
             binding.tabLayout.newTab().setText(tabText.toString(this)),

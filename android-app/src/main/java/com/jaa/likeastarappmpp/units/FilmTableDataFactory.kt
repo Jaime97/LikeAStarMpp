@@ -11,13 +11,11 @@ class FilmTableDataFactory : FilmTableDataFactoryInterface {
     override fun createFilmRow(
         id: Long,
         film: FilmRowData,
-        position: Int,
         listener: ListRowTappedListener
     ): TableUnitItem {
         return FilmListRow().apply {
             itemId = id
             this.film = film
-            this.position = position
             this.listener = listener
         }
     }

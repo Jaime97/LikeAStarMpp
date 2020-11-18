@@ -10,7 +10,7 @@ class GetFilmDetailUseCase(
         fun onSuccess(film:FilmData)
     }
 
-    suspend fun execute(position:Int, listener:GetFilmDetailListener) {
-        listener.onSuccess(filmDetailRepository.getFilm(position))
+    suspend fun execute(title:String, listener:GetFilmDetailListener) {
+        listener.onSuccess(filmDetailRepository.getFilm(title))
     }
 }

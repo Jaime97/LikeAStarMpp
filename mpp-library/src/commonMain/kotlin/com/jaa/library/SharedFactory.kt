@@ -10,6 +10,8 @@ import com.jaa.library.domain.di.DomainFactory
 import com.jaa.library.domain.useCases.*
 import com.jaa.library.feature.filmDetail.di.FilmDetailFactory
 import com.jaa.library.feature.filmDetail.model.FilmDetail
+import com.jaa.library.feature.filmDetail.presentation.FilmDetailViewModel
+import com.jaa.library.feature.filmDetail.useCase.ChangeVisitedStateUseCaseInterface
 import com.jaa.library.feature.filmDetail.useCase.GetFilmDetailUseCaseInterface
 import com.jaa.library.feature.filmList.di.FilmListFactory
 import com.jaa.library.feature.filmList.model.FilmRowData
@@ -40,10 +42,20 @@ class SharedFactory(
             override val allElements: StringResource = MR.strings.all_elements
             override val favourites: StringResource = MR.strings.favourites
             override val unknownError: StringResource = MR.strings.unknown_error
+        },
+        constants = object : FilmListViewModel.Constants {
+            override val selectedFilmTitleKey: String = SELECTED_FILM_TITLE_KEY
         }
     )
 
-    val filmDetailFactory = FilmDetailFactory()
+    val filmDetailFactory = FilmDetailFactory(
+        strings = object : FilmDetailViewModel.Strings {
+            override val unknownError: StringResource = MR.strings.unknown_error
+        },
+        constants = object : FilmDetailViewModel.Constants {
+            override val selectedFilmTitleKey: String = SELECTED_FILM_TITLE_KEY
+        }
+    )
 
     init {
         Napier.base(antilog)
@@ -77,10 +89,10 @@ class SharedFactory(
     ) : ChangeFavouriteStateUseCaseInterface {
         return object : ChangeFavouriteStateUseCaseInterface {
             override suspend fun execute(
-                position: Int,
+                title: String,
                 listener: ChangeFavouriteStateUseCaseInterface.ChangeFavouriteStateModelListener
             ) {
-                changeFavouriteStateUseCase.execute(position, object:ChangeFavouriteStateUseCase.ChangeFavouriteStateListener {
+                changeFavouriteStateUseCase.execute(title, object:ChangeFavouriteStateUseCase.ChangeFavouriteStateListener {
                     override fun onSuccess(filmsUpdated: List<FilmData>) {
                         listener.onSuccess(filmsUpdated.map { it.toFilmRowData() })
                     }
@@ -141,16 +153,37 @@ class SharedFactory(
     ) : GetFilmDetailUseCaseInterface {
         return object : GetFilmDetailUseCaseInterface {
             override suspend fun execute(
-                position: Int,
+                title: String,
                 listener: GetFilmDetailUseCaseInterface.GetFilmDetailModelListener
             ) {
-                getFilmDetailUseCase.execute(position, object:GetFilmDetailUseCase.GetFilmDetailListener {
+                getFilmDetailUseCase.execute(title, object:GetFilmDetailUseCase.GetFilmDetailListener {
                     override fun onSuccess(film: FilmData) {
                         listener.onSuccess(film = film.toFilmDetail())
                     }
                 })
             }
 
+        }
+    }
+
+    fun changeVisitedStateUseCase():ChangeVisitedStateUseCaseInterface {
+        return mapChangeVisitedStateUseCase(ChangeVisitedStateUseCase(domainFactory.filmDetailRepository))
+    }
+
+    private fun mapChangeVisitedStateUseCase(
+        changeVisitedStateUseCase: ChangeVisitedStateUseCase
+    ) : ChangeVisitedStateUseCaseInterface {
+        return object : ChangeVisitedStateUseCaseInterface {
+            override suspend fun execute(
+                filmTitle: String,
+                listener: ChangeVisitedStateUseCaseInterface.ChangeVisitedStateModelListener
+            ) {
+                changeVisitedStateUseCase.execute(filmTitle, object:ChangeVisitedStateUseCase.ChangeVisitedStateListener {
+                    override fun onSuccess(filmUpdated: FilmData) {
+                        listener.onSuccess(filmUpdated = filmUpdated.toFilmDetail())
+                    }
+                })
+            }
         }
     }
 

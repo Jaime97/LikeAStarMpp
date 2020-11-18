@@ -22,7 +22,8 @@ class FilmDetailActivity :
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
         AppComponent.factory.filmDetailFactory.createFilmDetailViewModel(
             eventsDispatcher = eventsDispatcherOnMain(),
-            getFilmDetailUseCase = AppComponent.factory.getFilmDetailUseCase()
+            getFilmDetailUseCase = AppComponent.factory.getFilmDetailUseCase(),
+            changeVisitedStateUseCase = AppComponent.factory.changeVisitedStateUseCase()
         )
     }
 
@@ -33,10 +34,6 @@ class FilmDetailActivity :
 
     override fun getEntryData(key:String): String? {
         return intent.getStringExtra(key)
-    }
-
-    override fun updateFilmData(film: FilmDetail) {
-        binding.film = film
     }
 
 }

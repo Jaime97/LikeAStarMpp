@@ -7,5 +7,5 @@ interface GetFilmDetailUseCaseInterface {
         fun onSuccess(film:FilmDetail)
     }
 
-    suspend fun execute(position:Int, listener:GetFilmDetailModelListener)
+    suspend fun execute(title:String, listener:GetFilmDetailModelListener)
 }

@@ -8,6 +8,6 @@ interface ChangeFavouriteStateUseCaseInterface {
         fun onSuccess(filmsUpdated:List<FilmRowData>)
     }
 
-    suspend fun execute(position:Int, listener:ChangeFavouriteStateModelListener)
+    suspend fun execute(title:String, listener:ChangeFavouriteStateModelListener)
 
 }

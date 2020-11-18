@@ -11,12 +11,12 @@ class ChangeFavouriteStateUseCase (
         fun onSuccess(filmsUpdated:List<FilmData>)
     }
 
-    suspend fun execute(position:Int, listener:ChangeFavouriteStateListener) {
-        val filmList = filmListRepository.getFilmList()
-        val film = filmList[position]
+    suspend fun execute(title:String, listener:ChangeFavouriteStateListener) {
+        val film = filmListRepository.getFilm(title)
         val favouriteValue:Boolean = film.favourite?:false
-        filmListRepository.updateFilm(FilmData(film.title, film.releaseYear, film.locations, film.funFacts,
-            film.productionCompany, film.distributor, film.director, film.writer, film.actor1, film.actor2, film.actor3, film.visited, !favouriteValue))
+        val updatedFilm = FilmData(film.title, film.releaseYear, film.locations, film.funFacts,
+            film.productionCompany, film.distributor, film.director, film.writer, film.actor1, film.actor2, film.actor3, film.visited, !favouriteValue)
+        filmListRepository.updateFilm(updatedFilm)
         listener.onSuccess(filmListRepository.getFilmList())
     }
 
