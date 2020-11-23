@@ -4,6 +4,7 @@ package com.jaa.library.feature.filmDetail.presentation
 import com.jaa.library.feature.filmDetail.model.FilmDetail
 import com.jaa.library.feature.filmDetail.useCase.ChangeVisitedStateUseCaseInterface
 import com.jaa.library.feature.filmDetail.useCase.GetFilmDetailUseCaseInterface
+import com.jaa.library.feature.filmDetail.useCase.GetFilmImageUseCaseInterface
 import dev.icerock.moko.mvvm.State
 import dev.icerock.moko.mvvm.asState
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
@@ -19,6 +20,7 @@ class FilmDetailViewModel(
     override val eventsDispatcher: EventsDispatcher<EventsListener>,
     private val getFilmDetailUseCase: GetFilmDetailUseCaseInterface,
     private val changeVisitedStateUseCase: ChangeVisitedStateUseCaseInterface,
+    private val getFilmImageUseCase: GetFilmImageUseCaseInterface,
     private val constants: Constants,
     private val strings: Strings
 ) : ViewModel(), EventsDispatcherOwner<FilmDetailViewModel.EventsListener> {
@@ -43,6 +45,18 @@ class FilmDetailViewModel(
                         object : GetFilmDetailUseCaseInterface.GetFilmDetailModelListener {
                             override fun onSuccess(film: FilmDetail) {
                                 _state.value = film.asState()
+                                viewModelScope.launch {
+                                    getFilmImageUseCase.execute(film.title, object:GetFilmImageUseCaseInterface.GetFilmImageModelListener {
+                                        override fun onSuccess(imageUrl: String) {
+                                            loadFilmImage(imageUrl)
+                                        }
+
+                                        override fun onError() {
+                                            // Can't load image, leave placeholder
+                                        }
+
+                                    })
+                                }
                             }
                         })
                 }
@@ -66,6 +80,7 @@ class FilmDetailViewModel(
 
     interface EventsListener {
         fun getEntryData(key:String): String?
+        fun loadFilmImage(url:String)
     }
 
     interface Strings {

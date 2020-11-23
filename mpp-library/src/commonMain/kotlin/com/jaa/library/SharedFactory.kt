@@ -21,18 +21,21 @@ import com.jaa.library.feature.filmList.useCase.ChangeFavouriteStateUseCaseInter
 import com.jaa.library.feature.filmList.useCase.FilterByFavouriteUseCaseInterface
 import com.jaa.library.feature.filmList.useCase.FilterByTitleUseCaseInterface
 import com.jaa.library.feature.filmList.useCase.GetNextPageInFilmListUseCaseInterface
-import dev.icerock.moko.network.generated.models.FilmData
+import com.jaa.library.feature.filmDetail.useCase.GetFilmImageUseCaseInterface
 import dev.icerock.moko.resources.StringResource
 import com.squareup.sqldelight.db.SqlDriver
+import dev.icerock.moko.network.generated.models.FilmData
 
 class SharedFactory(
     antilog: Antilog,
-    baseUrl: String,
+    baseFilmUrl: String,
+    baseFilmImageUrl: String,
     filmTableDataFactoryInterface: FilmTableDataFactoryInterface,
     sqlDriver: SqlDriver
 ) {
     private val domainFactory = DomainFactory(
-        baseUrl = baseUrl,
+        baseFilmUrl = baseFilmUrl,
+        baseFilmImageUrl = baseFilmImageUrl,
         sqlDriver = sqlDriver
     )
 
@@ -181,6 +184,31 @@ class SharedFactory(
                 changeVisitedStateUseCase.execute(filmTitle, object:ChangeVisitedStateUseCase.ChangeVisitedStateListener {
                     override fun onSuccess(filmUpdated: FilmData) {
                         listener.onSuccess(filmUpdated = filmUpdated.toFilmDetail())
+                    }
+                })
+            }
+        }
+    }
+
+    fun getFilmImageUseCase():GetFilmImageUseCaseInterface {
+        return mapGetFilmImageUseCase(GetFilmImageUseCase(domainFactory.filmDetailRepository))
+    }
+
+    private fun mapGetFilmImageUseCase(
+        getFilmImageUseCase: GetFilmImageUseCase
+    ) : GetFilmImageUseCaseInterface {
+        return object : GetFilmImageUseCaseInterface {
+            override suspend fun execute(
+                title: String,
+                listener: GetFilmImageUseCaseInterface.GetFilmImageModelListener
+            ) {
+                getFilmImageUseCase.execute(title, object:GetFilmImageUseCase.GetFilmImageListener {
+                    override fun onSuccess(imageUrl: String) {
+                        listener.onSuccess(imageUrl = imageUrl)
+                    }
+
+                    override fun onError() {
+                        listener.onError()
                     }
                 })
             }

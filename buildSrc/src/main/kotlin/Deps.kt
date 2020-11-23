@@ -9,6 +9,7 @@ object Deps {
     private const val materialVersion = "1.2.1"
     private const val recyclerViewVersion = "1.1.0"
     private const val swipeRefreshLayoutVersion = "1.1.0"
+    private const val picassoVersion = "2.71828"
     private const val lifecycleVersion = "2.2.0"
     private const val androidAppCompatVersion = "1.1.0"
     private const val espressoCoreVersion = "3.2.0"
@@ -87,6 +88,10 @@ object Deps {
                 "androidx.recyclerview:recyclerview:$recyclerViewVersion"
             const val swipeRefreshLayout =
                 "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshLayoutVersion"
+            const val sqlDelightDriver =
+                "com.squareup.sqldelight:android-driver:$sqlDelightVersion"
+            const val picasso =
+                "com.squareup.picasso:picasso:$picassoVersion"
             val lifecycle =
                 "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
 

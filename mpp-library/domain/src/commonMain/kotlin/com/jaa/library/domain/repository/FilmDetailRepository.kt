@@ -1,15 +1,22 @@
 package com.jaa.library.domain.repository
 
 import com.jaa.library.domain.dataSource.memory.FilmMemoryStorage
+import com.jaa.library.domain.dataSource.service.FilmImageService
 import com.jaa.library.domain.dataSource.service.FilmService
 import com.jaa.library.domain.dataSource.storage.FilmDatabase
-import dev.icerock.moko.network.generated.models.FilmData
+import com.jaa.library.domain.useCases.GetFilmImageUseCase
 
 class FilmDetailRepository(
-    override val filmService: FilmService,
+    val filmService: FilmImageService,
     override val filmDatabase: FilmDatabase,
     override val filmMemoryStorage: FilmMemoryStorage
 ) : FilmRepository {
 
+    suspend fun getImageUrlOfFilm(title:String, listener: GetFilmImageUseCase.GetFilmImageListener) {
+        val filmData = filmService.getFilm(title)
+        return if(filmData.response.toBoolean() && !filmData.poster.isNullOrEmpty())
+            listener.onSuccess(filmData.poster) else
+            listener.onError()
+    }
 
 }

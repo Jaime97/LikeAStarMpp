@@ -7,7 +7,7 @@ class GetFilmDetailUseCase(
     private val filmDetailRepository : FilmDetailRepository
 ) {
     interface GetFilmDetailListener {
-        fun onSuccess(film:FilmData)
+        fun onSuccess(film: FilmData)
     }
 
     suspend fun execute(title:String, listener:GetFilmDetailListener) {

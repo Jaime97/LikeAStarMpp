@@ -8,14 +8,16 @@ class ChangeVisitedStateUseCase (
 ) {
 
     interface ChangeVisitedStateListener {
-        fun onSuccess(filmUpdated:FilmData)
+        fun onSuccess(filmUpdated: FilmData)
     }
 
     suspend fun execute(filmTitle:String, listener:ChangeVisitedStateListener) {
         val film = filmDetailRepository.getFilm(filmTitle)
         val visitedState = film.visited?:false
-        filmDetailRepository.updateFilm(FilmData(film.title, film.releaseYear, film.locations, film.funFacts,
-            film.productionCompany, film.distributor, film.director, film.writer, film.actor1, film.actor2, film.actor3, !visitedState, film.favourite))
+        filmDetailRepository.updateFilm(
+            FilmData(film.title, film.releaseYear, film.locations, film.funFacts,
+            film.productionCompany, film.distributor, film.director, film.writer, film.actor1, film.actor2, film.actor3, !visitedState, film.favourite)
+        )
         listener.onSuccess(filmDetailRepository.getFilm(filmTitle))
     }
 }

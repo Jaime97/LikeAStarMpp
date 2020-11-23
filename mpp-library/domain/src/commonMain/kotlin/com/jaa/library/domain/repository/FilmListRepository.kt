@@ -7,7 +7,7 @@ import com.jaa.library.domain.dataSource.storage.FilmDatabase
 import dev.icerock.moko.network.generated.models.FilmData
 
 class FilmListRepository(
-    override val filmService: FilmService,
+    val filmService: FilmService,
     override val filmDatabase: FilmDatabase,
     override val filmMemoryStorage: FilmMemoryStorage
 ) : FilmRepository {

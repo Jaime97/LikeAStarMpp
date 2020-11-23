@@ -18,7 +18,8 @@ class MainApplication : Application() {
         AppComponent.factory = SharedFactory(
             antilog = DebugAntilog(),
             filmTableDataFactoryInterface = FilmTableDataFactory(),
-            baseUrl = "https://data.sfgov.org",
+            baseFilmUrl = "https://data.sfgov.org",
+            baseFilmImageUrl = "https://www.omdbapi.com",
             sqlDriver = AndroidSqliteDriver(FilmSqlDatabase.Schema, applicationContext, "FilmSqlDatabase.db")
         )
     }

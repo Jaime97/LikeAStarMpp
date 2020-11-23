@@ -7,6 +7,7 @@ import com.jaa.library.feature.filmDetail.presentation.FilmDetailViewModel
 import com.jaa.likeastarappmpp.AppComponent
 import com.jaa.likeastarappmpp.R
 import com.jaa.likeastarappmpp.databinding.ActivityFilmDetailBinding
+import com.squareup.picasso.Picasso
 import dev.icerock.moko.mvvm.MvvmEventsActivity
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
@@ -23,7 +24,8 @@ class FilmDetailActivity :
         AppComponent.factory.filmDetailFactory.createFilmDetailViewModel(
             eventsDispatcher = eventsDispatcherOnMain(),
             getFilmDetailUseCase = AppComponent.factory.getFilmDetailUseCase(),
-            changeVisitedStateUseCase = AppComponent.factory.changeVisitedStateUseCase()
+            changeVisitedStateUseCase = AppComponent.factory.changeVisitedStateUseCase(),
+            getFilmImageUseCase = AppComponent.factory.getFilmImageUseCase()
         )
     }
 
@@ -34,6 +36,14 @@ class FilmDetailActivity :
 
     override fun getEntryData(key:String): String? {
         return intent.getStringExtra(key)
+    }
+
+    override fun loadFilmImage(url: String) {
+        Picasso.get()
+            .load(url)
+            .resize(binding.filmImage.width, binding.filmImage.height)
+            .placeholder(R.drawable.placeholder)
+            .into(binding.filmImage);
     }
 
 }

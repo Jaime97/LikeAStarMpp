@@ -3,8 +3,10 @@ package com.jaa.library.domain.di
 
 import com.github.aakira.napier.Napier
 import com.jaa.library.domain.dataSource.memory.FilmMemoryStorage
+import com.jaa.library.domain.dataSource.service.FilmImageService
 import com.jaa.library.domain.repository.FilmListRepository
 import com.jaa.library.domain.dataSource.service.FilmService
+import com.jaa.library.domain.dataSource.service.api.FilmImageApi
 import com.jaa.library.domain.dataSource.storage.FilmDatabase
 import com.jaa.library.domain.dataSource.storage.FilmSqlDatabase
 import com.jaa.library.domain.repository.FilmDetailRepository
@@ -20,7 +22,8 @@ import io.ktor.http.*
 import kotlinx.serialization.json.Json
 
 class DomainFactory(
-    private val baseUrl: String,
+    private val baseFilmUrl: String,
+    private val baseFilmImageUrl:String,
     private val sqlDriver: SqlDriver
 ) {
     private val json: Json by lazy {
@@ -45,7 +48,7 @@ class DomainFactory(
                         Napier.d(message = message)
                     }
                 }
-                level = LogLevel.HEADERS
+                level = LogLevel.ALL
             }
 
             // disable standard BadResponseStatus - exceptionfactory do it for us
@@ -54,11 +57,19 @@ class DomainFactory(
     }
 
     private val filmApi: FilmApi by lazy {
-        FilmApi(baseUrl, httpClient, json)
+        FilmApi(baseFilmUrl, httpClient, json)
     }
 
     private val filmService: FilmService by lazy {
         FilmService(filmApi)
+    }
+
+    private val filmImageApi: FilmImageApi by lazy {
+        FilmImageApi(baseFilmImageUrl, httpClient, json)
+    }
+
+    private val filmImageService: FilmImageService by lazy {
+        FilmImageService(filmImageApi)
     }
 
     private val filmSqlDatabase: FilmSqlDatabase by lazy {
@@ -78,6 +89,6 @@ class DomainFactory(
     }
 
     val filmDetailRepository: FilmDetailRepository by lazy {
-        FilmDetailRepository(filmService, filmDatabase, filmMemoryStorage)
+        FilmDetailRepository(filmImageService, filmDatabase, filmMemoryStorage)
     }
 }
