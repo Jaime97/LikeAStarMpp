@@ -49,16 +49,20 @@ class FilmListRepository(
             films = filmDatabase.getFilmListWithOffset(offset, limit)
             if(films.isEmpty()) {
                 //TODO: COMPLETE LAST FILM
-                films = groupFilmsByTitle(filmService.getFilmListWithOffset(offset, limit, order))
+                films = groupFilmsByTitle(filterFilmsWithNoLocation(filmService.getFilmListWithOffset(offset, limit, order)))
                 filmDatabase.saveFilmList(films)
             }
             filmMemoryStorage.saveFilmList(films)
         }
     }
 
+    private fun filterFilmsWithNoLocation(films: List<FilmData>):List<FilmData> {
+        return films.filter { it.locations != null }
+    }
+
     private fun groupFilmsByTitle(films: List<FilmData>):List<FilmData> {
         return films.groupBy { it.title.replace("\\s".toRegex(), "") }.map {
-            it.value.reduce { acc, filmData -> FilmData(acc.title, acc.releaseYear, acc.locations + "," + filmData.locations,
+            it.value.reduce { acc, filmData -> FilmData(acc.title, acc.releaseYear, acc.locations + ";" + filmData.locations,
                 acc.funFacts, acc.productionCompany, acc.distributor, acc.director, acc.writer, acc.actor1, acc.actor2, acc.actor3) }
         }
     }

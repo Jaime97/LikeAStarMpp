@@ -40,4 +40,8 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="ListAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/buttonColor</item>
+    </style>
+
 </resources>

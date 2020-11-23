@@ -54,6 +54,8 @@ class SharedFactory(
     val filmDetailFactory = FilmDetailFactory(
         strings = object : FilmDetailViewModel.Strings {
             override val unknownError: StringResource = MR.strings.unknown_error
+            override val selectLocation: StringResource = MR.strings.select_location
+            override val sanFranciscoLocationSpec: StringResource = MR.strings.san_francisco_location_spec
         },
         constants = object : FilmDetailViewModel.Constants {
             override val selectedFilmTitleKey: String = SELECTED_FILM_TITLE_KEY

@@ -14,9 +14,7 @@ class FilmDetailRepository(
 
     suspend fun getImageUrlOfFilm(title:String, listener: GetFilmImageUseCase.GetFilmImageListener) {
         val filmData = filmService.getFilm(title)
-        return if(filmData.response.toBoolean() && !filmData.poster.isNullOrEmpty())
-            listener.onSuccess(filmData.poster) else
-            listener.onError()
+        return if(filmData.response.toBoolean() && !filmData.poster.isNullOrEmpty()) listener.onSuccess(filmData.poster) else listener.onError()
     }
 
 }

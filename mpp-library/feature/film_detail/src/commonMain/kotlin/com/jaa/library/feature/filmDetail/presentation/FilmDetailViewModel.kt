@@ -30,12 +30,17 @@ class FilmDetailViewModel(
 
     val state: LiveData<State<FilmDetail, StringDesc>> = _state
         .errorTransform {
-            map<Throwable, StringDesc> {
+            map {
                 it.message?.desc() ?: strings.unknownError.desc()
             }
         }
 
+    private var splittedLocations:Array<String> = emptyArray()
+
     fun onViewCreated() {
+        state.addObserver {
+            splittedLocations = if(it.isSuccess())state.value.dataValue()!!.locations.split(";").toTypedArray() else emptyArray()
+        }
         eventsDispatcher.dispatchEvent {
             val currentFilmTitle = getEntryData(constants.selectedFilmTitleKey)
             if (currentFilmTitle != null) {
@@ -64,6 +69,14 @@ class FilmDetailViewModel(
         }
     }
 
+    fun onLocationsButtonTapped() {
+        eventsDispatcher.dispatchEvent {
+            showListInDialog(strings.selectLocation.desc(), splittedLocations, ) {
+                openMapWithLocation(splittedLocations[it], strings.sanFranciscoLocationSpec.desc())
+            }
+        }
+    }
+
     fun onChangeVisitedStateButtonTapped() {
         viewModelScope.launch {
             if(_state.value.dataValue() != null) {
@@ -81,10 +94,14 @@ class FilmDetailViewModel(
     interface EventsListener {
         fun getEntryData(key:String): String?
         fun loadFilmImage(url:String)
+        fun showListInDialog(title:StringDesc, elementList:Array<String>, onRowTappedListener:(position:Int) -> Unit)
+        fun openMapWithLocation(location:String, suffix:StringDesc)
     }
 
     interface Strings {
         val unknownError: StringResource
+        val selectLocation:StringResource
+        val sanFranciscoLocationSpec:StringResource
     }
 
     interface Constants {
