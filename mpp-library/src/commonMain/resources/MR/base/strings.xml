@@ -8,4 +8,13 @@
     <string name="visited_img_content_desc">Location visited</string>
     <string name="film_img_content_desc">Film image</string>
     <string name="unknown_error">Unknown error</string>
+    <string name="visited">Uncheck as visited</string>
+    <string name="unvisited">Check as visited</string>
+    <string name="see_locations">See locations</string>
+    <string name="starring">Starring by %s</string>
+    <string name="directed">Directed by %s</string>
+    <string name="produced">Produced by %s</string>
+    <string name="film_main_image_content_desc">Film main image</string>
+    <string name="select_location">Select a location:</string>
+    <string name="san_francisco_location_spec">, San Francisco</string>
 </resources>

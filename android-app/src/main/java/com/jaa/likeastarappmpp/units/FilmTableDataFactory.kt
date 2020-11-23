@@ -1,5 +1,6 @@
 package com.jaa.likeastarappmpp.units
 
+import com.jaa.library.feature.filmList.model.FilmRowData
 import com.jaa.library.feature.filmList.presentation.FilmTableDataFactoryInterface
 import com.jaa.library.feature.filmList.presentation.ListRowTappedListener
 import com.jaa.likeastarappmpp.FilmListRow
@@ -9,20 +10,12 @@ class FilmTableDataFactory : FilmTableDataFactoryInterface {
 
     override fun createFilmRow(
         id: Long,
-        title: String,
-        director: String,
-        isFavourite: Boolean,
-        isVisited: Boolean,
-        position: Int,
+        film: FilmRowData,
         listener: ListRowTappedListener
     ): TableUnitItem {
         return FilmListRow().apply {
             itemId = id
-            this.title = title
-            this.director = director
-            this.isFavourite = isFavourite
-            this.isVisited = isVisited
-            this.position = position
+            this.film = film
             this.listener = listener
         }
     }

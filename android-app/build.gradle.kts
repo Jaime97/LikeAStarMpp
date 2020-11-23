@@ -53,7 +53,8 @@ dependencies {
     implementation(Deps.Libs.Android.material)
     implementation(Deps.Libs.Android.recyclerView)
     implementation(Deps.Libs.Android.swipeRefreshLayout)
-    implementation("com.squareup.sqldelight:android-driver:1.4.3")
+    implementation(Deps.Libs.Android.sqlDelightDriver)
+    implementation(Deps.Libs.Android.picasso)
     implementation(project(":mpp-library"))
 }
 

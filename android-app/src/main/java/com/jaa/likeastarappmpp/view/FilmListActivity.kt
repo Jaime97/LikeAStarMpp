@@ -1,10 +1,10 @@
 
 package com.jaa.likeastarappmpp.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
@@ -39,6 +39,11 @@ class FilmListActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.onViewCreated()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onViewPresented()
     }
 
     override fun addTabToTabLayout(tabText: StringDesc, position: Int) {
@@ -76,6 +81,15 @@ class FilmListActivity :
         })
     }
 
+    override fun presentFilmDetailView(data: Map<String, String>) {
+        Intent(this, FilmDetailActivity::class.java).also {
+            for(dataObject in data.entries) {
+                it.putExtra(dataObject.key, dataObject.value)
+            }
+            startActivity(it)
+        }
+    }
+
     override fun setOnSearchBarTextChangedListener(listener: (text: String) -> Unit) {
         binding.searchBar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -89,7 +103,6 @@ class FilmListActivity :
             override fun afterTextChanged(p0: Editable?) {
                 // Without functionality
             }
-
         })
     }
 }

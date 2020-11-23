@@ -11,7 +11,8 @@ import com.jaa.library.feature.filmList.useCase.GetNextPageInFilmListUseCaseInte
 
 class FilmListFactory(
     private val filmTableDataFactoryInterface: FilmTableDataFactoryInterface,
-    private val strings: FilmListViewModel.Strings
+    private val strings: FilmListViewModel.Strings,
+    private val constants: FilmListViewModel.Constants
 ) {
     fun createFilmListViewModel(
         eventsDispatcher: EventsDispatcher<FilmListViewModel.EventsListener>,
@@ -21,11 +22,12 @@ class FilmListFactory(
         filterByFavouriteUseCase: FilterByFavouriteUseCaseInterface
     ) = FilmListViewModel(
         eventsDispatcher = eventsDispatcher,
-        filmTableDataFactoryInterface = filmTableDataFactoryInterface,
+        filmTableDataFactory = filmTableDataFactoryInterface,
         getNextPageInFilmListUseCase = getNextPageInFilmListUseCase,
         changeFavouriteStateUseCase = changeFavouriteStateUseCase,
         filterByFavouriteUseCase = filterByFavouriteUseCase,
         filterByTitleUseCase = filterByTitleUseCase,
-        strings = strings
+        strings = strings,
+        constants = constants
     )
 }

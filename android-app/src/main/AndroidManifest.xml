@@ -11,11 +11,16 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher">
 
-        <activity android:name=".view.FilmListActivity">
+        <activity android:name=".view.FilmListActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.FilmDetailActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
     </application>
 </manifest>
