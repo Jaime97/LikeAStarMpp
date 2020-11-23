@@ -84,7 +84,9 @@ class FilmListViewModel(
     }
 
     fun onSettingsButtonPressed() {
-
+        eventsDispatcher.dispatchEvent {
+            presentSettingsView()
+        }
     }
 
     private fun onSearchTextChanged(text: String) {
@@ -155,6 +157,7 @@ class FilmListViewModel(
         fun addOnTabLayoutChangedListener(listener: (position: Int) -> Unit)
         fun addOnEndOfListReachedListener(listener: () -> Unit)
         fun presentFilmDetailView(data:Map<String, String>)
+        fun presentSettingsView()
     }
 
     interface Strings {

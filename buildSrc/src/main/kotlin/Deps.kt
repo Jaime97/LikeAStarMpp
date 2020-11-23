@@ -166,6 +166,10 @@ object Deps {
                 name = ":mpp-library:feature:film_detail",
                 exported = true
             )
+            val settings = MultiPlatformModule(
+                name = ":mpp-library:feature:settings",
+                exported = true
+            )
         }
     }
 

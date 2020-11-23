@@ -22,5 +22,8 @@
         <activity android:name=".view.FilmDetailActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
+        <activity android:name=".view.SettingsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
     </application>
 </manifest>

@@ -9,8 +9,10 @@ import com.github.aakira.napier.Napier
 import com.jaa.library.domain.di.DomainFactory
 import com.jaa.library.domain.useCases.*
 import com.jaa.library.feature.filmDetail.di.FilmDetailFactory
+import com.jaa.library.feature.filmDetail.di.SettingsFactory
 import com.jaa.library.feature.filmDetail.model.FilmDetail
 import com.jaa.library.feature.filmDetail.presentation.FilmDetailViewModel
+import com.jaa.library.feature.filmDetail.presentation.SettingsViewModel
 import com.jaa.library.feature.filmDetail.useCase.ChangeVisitedStateUseCaseInterface
 import com.jaa.library.feature.filmDetail.useCase.GetFilmDetailUseCaseInterface
 import com.jaa.library.feature.filmList.di.FilmListFactory
@@ -59,6 +61,13 @@ class SharedFactory(
         },
         constants = object : FilmDetailViewModel.Constants {
             override val selectedFilmTitleKey: String = SELECTED_FILM_TITLE_KEY
+        }
+    )
+
+    val settingsFactory = SettingsFactory(
+        strings = object : SettingsViewModel.Strings {
+        },
+        constants = object : SettingsViewModel.Constants {
         }
     )
 
