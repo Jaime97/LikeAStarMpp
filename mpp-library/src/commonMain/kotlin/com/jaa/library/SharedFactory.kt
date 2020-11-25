@@ -9,8 +9,10 @@ import com.github.aakira.napier.Napier
 import com.jaa.library.domain.di.DomainFactory
 import com.jaa.library.domain.useCases.*
 import com.jaa.library.feature.filmDetail.di.FilmDetailFactory
+import com.jaa.library.feature.settings.di.SettingsFactory
 import com.jaa.library.feature.filmDetail.model.FilmDetail
 import com.jaa.library.feature.filmDetail.presentation.FilmDetailViewModel
+import com.jaa.library.feature.settings.presentation.SettingsViewModel
 import com.jaa.library.feature.filmDetail.useCase.ChangeVisitedStateUseCaseInterface
 import com.jaa.library.feature.filmDetail.useCase.GetFilmDetailUseCaseInterface
 import com.jaa.library.feature.filmList.di.FilmListFactory
@@ -22,6 +24,9 @@ import com.jaa.library.feature.filmList.useCase.FilterByFavouriteUseCaseInterfac
 import com.jaa.library.feature.filmList.useCase.FilterByTitleUseCaseInterface
 import com.jaa.library.feature.filmList.useCase.GetNextPageInFilmListUseCaseInterface
 import com.jaa.library.feature.filmDetail.useCase.GetFilmImageUseCaseInterface
+import com.jaa.library.feature.settings.presentation.SettingsTableDataFactoryInterface
+import com.jaa.library.feature.settings.useCase.GetBooleanPreferenceUseCaseInterface
+import com.jaa.library.feature.settings.useCase.ToggleBooleanPreferenceUseCaseInterface
 import dev.icerock.moko.resources.StringResource
 import com.squareup.sqldelight.db.SqlDriver
 import dev.icerock.moko.network.generated.models.FilmData
@@ -30,7 +35,8 @@ class SharedFactory(
     antilog: Antilog,
     baseFilmUrl: String,
     baseFilmImageUrl: String,
-    filmTableDataFactoryInterface: FilmTableDataFactoryInterface,
+    filmTableDataFactory: FilmTableDataFactoryInterface,
+    settingsTableDataFactory: SettingsTableDataFactoryInterface,
     sqlDriver: SqlDriver
 ) {
     private val domainFactory = DomainFactory(
@@ -40,7 +46,7 @@ class SharedFactory(
     )
 
     val filmListFactory = FilmListFactory(
-        filmTableDataFactoryInterface = filmTableDataFactoryInterface,
+        filmTableDataFactoryInterface = filmTableDataFactory,
         strings = object : FilmListViewModel.Strings {
             override val allElements: StringResource = MR.strings.all_elements
             override val favourites: StringResource = MR.strings.favourites
@@ -59,6 +65,21 @@ class SharedFactory(
         },
         constants = object : FilmDetailViewModel.Constants {
             override val selectedFilmTitleKey: String = SELECTED_FILM_TITLE_KEY
+        }
+    )
+
+    val settingsFactory = SettingsFactory(
+        settingsTableDataFactory = settingsTableDataFactory,
+        strings = object : SettingsViewModel.Strings {
+            override val onlyWifiSettingTitle: StringResource = MR.strings.only_wifi
+            override val onlyWifiSettingDescription: StringResource = MR.strings.only_wifi_desc
+            override val downloadAutomaticallySettingTitle: StringResource = MR.strings.download_automatically
+            override val downloadAutomaticallySettingDescription: StringResource = MR.strings.download_automatically_desc
+            override val unknownError: StringResource = MR.strings.unknown_error
+        },
+        constants = object : SettingsViewModel.Constants {
+            override val onlyWifiSettingKey: String = ONLY_WIFI_SETTING_KEY
+            override val downloadAutomaticallySettingKey: String = DOWNLOAD_AUTOMATICALLY_SETTING_KEY
         }
     )
 
@@ -214,6 +235,50 @@ class SharedFactory(
                     }
                 })
             }
+        }
+    }
+
+    fun getBooleanPreferenceUseCase():GetBooleanPreferenceUseCaseInterface {
+        return mapGetBooleanPreferenceUseCase(GetBooleanPreferenceUseCase(domainFactory.settingsRepository))
+    }
+
+    private fun mapGetBooleanPreferenceUseCase(
+        getBooleanPreferenceUseCase: GetBooleanPreferenceUseCase
+    ) : GetBooleanPreferenceUseCaseInterface {
+        return object : GetBooleanPreferenceUseCaseInterface {
+            override suspend fun execute(
+                key: String,
+                listener: GetBooleanPreferenceUseCaseInterface.GetBooleanPreferenceModelListener
+            ) {
+                getBooleanPreferenceUseCase.execute(key, object:GetBooleanPreferenceUseCase.GetBooleanPreferenceListener {
+                    override fun onSuccess(value: Boolean) {
+                        listener.onSuccess(value)
+                    }
+                })
+            }
+
+        }
+    }
+
+    fun toggleBooleanPreferenceUseCase(): ToggleBooleanPreferenceUseCaseInterface {
+        return mapToggleBooleanPreferenceUseCase(ToggleBooleanPreferenceUseCase(domainFactory.settingsRepository))
+    }
+
+    private fun mapToggleBooleanPreferenceUseCase(
+        toggleBooleanPreferenceUseCase: ToggleBooleanPreferenceUseCase
+    ) : ToggleBooleanPreferenceUseCaseInterface {
+        return object : ToggleBooleanPreferenceUseCaseInterface {
+            override suspend fun execute(
+                key: String,
+                listener: ToggleBooleanPreferenceUseCaseInterface.ToggleBooleanPreferenceModelListener
+            ) {
+                toggleBooleanPreferenceUseCase.execute(key, object:ToggleBooleanPreferenceUseCase.ToggleBooleanPreferenceListener {
+                    override fun onSuccess() {
+                        listener.onSuccess()
+                    }
+                })
+            }
+
         }
     }
 

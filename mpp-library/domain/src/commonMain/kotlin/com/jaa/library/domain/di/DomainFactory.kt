@@ -9,7 +9,10 @@ import com.jaa.library.domain.dataSource.service.FilmService
 import com.jaa.library.domain.dataSource.service.api.FilmImageApi
 import com.jaa.library.domain.dataSource.storage.FilmDatabase
 import com.jaa.library.domain.dataSource.storage.FilmSqlDatabase
+import com.jaa.library.domain.preferences.PreferenceManager
 import com.jaa.library.domain.repository.FilmDetailRepository
+import com.jaa.library.domain.repository.SettingsRepository
+import com.russhwolf.settings.Settings
 import com.squareup.sqldelight.db.SqlDriver
 import dev.icerock.moko.network.exceptionfactory.HttpExceptionFactory
 import dev.icerock.moko.network.exceptionfactory.parser.ErrorExceptionParser
@@ -80,6 +83,14 @@ class DomainFactory(
         FilmDatabase(filmSqlDatabase)
     }
 
+    private val settings: Settings by lazy {
+        Settings()
+    }
+
+    private val preferenceManager: PreferenceManager by lazy {
+        PreferenceManager(settings)
+    }
+
     private val filmMemoryStorage: FilmMemoryStorage by lazy {
         FilmMemoryStorage()
     }
@@ -90,5 +101,9 @@ class DomainFactory(
 
     val filmDetailRepository: FilmDetailRepository by lazy {
         FilmDetailRepository(filmImageService, filmDatabase, filmMemoryStorage)
+    }
+
+    val settingsRepository: SettingsRepository by lazy {
+        SettingsRepository(preferenceManager)
     }
 }

@@ -4,7 +4,7 @@ import com.jaa.library.domain.dataSource.memory.FilmMemoryStorage
 import com.jaa.library.domain.dataSource.storage.FilmDatabase
 import dev.icerock.moko.network.generated.models.FilmData
 
-interface FilmRepository {
+interface LocalDatabaseRepository {
     val filmDatabase: FilmDatabase
     val filmMemoryStorage: FilmMemoryStorage
 

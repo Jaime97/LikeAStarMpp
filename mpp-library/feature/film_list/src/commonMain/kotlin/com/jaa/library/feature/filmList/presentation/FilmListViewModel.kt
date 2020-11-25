@@ -43,7 +43,7 @@ class FilmListViewModel(
         .dataTransform {
             map { films ->
                 films.map {
-                    filmTableDataFactory.createFilmRow(it.title.hashCode().toLong(), it, object : ListRowTappedListener {
+                    filmTableDataFactory.createFilmRow(it.title.hashCode().toLong(), it, object : FilmTableDataFactoryInterface.ListRowTappedListener {
                         override fun onRowTapped(title: String) {
                             onListRowTapped(title)
                         }
@@ -84,7 +84,9 @@ class FilmListViewModel(
     }
 
     fun onSettingsButtonPressed() {
-
+        eventsDispatcher.dispatchEvent {
+            presentSettingsView()
+        }
     }
 
     private fun onSearchTextChanged(text: String) {
@@ -155,6 +157,7 @@ class FilmListViewModel(
         fun addOnTabLayoutChangedListener(listener: (position: Int) -> Unit)
         fun addOnEndOfListReachedListener(listener: () -> Unit)
         fun presentFilmDetailView(data:Map<String, String>)
+        fun presentSettingsView()
     }
 
     interface Strings {

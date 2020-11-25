@@ -20,6 +20,7 @@ dependencies {
     commonMainImplementation(Deps.Libs.MultiPlatform.mokoParcelize.common)
     commonMainImplementation(Deps.Libs.MultiPlatform.mokoNetwork.common)
     commonMainImplementation(Deps.Libs.MultiPlatform.napier.common)
+    commonMainImplementation(Deps.Libs.MultiPlatform.multiplatformSettings.common)
 }
 
 sqldelight {

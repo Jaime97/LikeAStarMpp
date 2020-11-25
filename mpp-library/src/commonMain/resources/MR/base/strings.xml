@@ -17,4 +17,8 @@
     <string name="film_main_image_content_desc">Film main image</string>
     <string name="select_location">Select a location:</string>
     <string name="san_francisco_location_spec">, San Francisco</string>
+    <string name="only_wifi">Download only with wifi</string>
+    <string name="only_wifi_desc">The list download will be made only with wifi connection</string>
+    <string name="download_automatically">Automatically update list</string>
+    <string name="download_automatically_desc">The list will be automatically update every minute</string>
 </resources>
