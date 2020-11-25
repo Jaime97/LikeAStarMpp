@@ -29,13 +29,14 @@ object Deps {
     private const val mokoNetworkVersion = "0.8.0"
     private const val mokoUnitsVersion = "0.4.1"
     private const val mokoPermissionsVersion = "0.6.0"
+    private const val multiplatformSettingsVersion = "0.6.3"
 
     private const val napierVersion = "1.4.1"
 
     object Android {
         const val compileSdk = 29
         const val targetSdk = 29
-        const val minSdk = 19
+        const val minSdk = 21
     }
 
     object Plugins {
@@ -134,6 +135,8 @@ object Deps {
                 "dev.icerock.moko:permissions:$mokoPermissionsVersion".mpl
             val mokoUnits =
                 "dev.icerock.moko:units:$mokoUnitsVersion".mpl
+            val multiplatformSettings =
+                "com.russhwolf:multiplatform-settings-no-arg:$multiplatformSettingsVersion".mpl
             val napier =
                 "com.github.aakira:napier:$napierVersion".mpl
 

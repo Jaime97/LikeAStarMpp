@@ -10,7 +10,7 @@
 
         <variable
             name="listener"
-            type="com.jaa.library.feature.filmList.presentation.ListRowTappedListener" />
+            type="com.jaa.library.feature.filmList.presentation.FilmTableDataFactoryInterface.ListRowTappedListener" />
     </data>
 
     <RelativeLayout

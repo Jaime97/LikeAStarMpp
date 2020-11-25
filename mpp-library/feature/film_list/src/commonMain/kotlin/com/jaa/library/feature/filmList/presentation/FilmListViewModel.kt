@@ -43,7 +43,7 @@ class FilmListViewModel(
         .dataTransform {
             map { films ->
                 films.map {
-                    filmTableDataFactory.createFilmRow(it.title.hashCode().toLong(), it, object : ListRowTappedListener {
+                    filmTableDataFactory.createFilmRow(it.title.hashCode().toLong(), it, object : FilmTableDataFactoryInterface.ListRowTappedListener {
                         override fun onRowTapped(title: String) {
                             onListRowTapped(title)
                         }

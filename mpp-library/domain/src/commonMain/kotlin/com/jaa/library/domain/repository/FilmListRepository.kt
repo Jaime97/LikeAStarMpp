@@ -10,7 +10,7 @@ class FilmListRepository(
     val filmService: FilmService,
     override val filmDatabase: FilmDatabase,
     override val filmMemoryStorage: FilmMemoryStorage
-) : FilmRepository {
+) : LocalDatabaseRepository {
 
     companion object {
         const val DATA_SOURCE_ROW_TITLE = "title"

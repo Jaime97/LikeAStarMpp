@@ -15,6 +15,7 @@ val mppLibs = listOf(
     Deps.Libs.MultiPlatform.mokoParcelize,
     Deps.Libs.MultiPlatform.mokoResources,
     Deps.Libs.MultiPlatform.mokoMvvm,
+    Deps.Libs.MultiPlatform.multiplatformSettings,
     Deps.Libs.MultiPlatform.mokoUnits
 )
 val mppModules = listOf(
