@@ -5,12 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.AbsListView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.jaa.library.feature.filmList.presentation.FilmListViewModel
 import com.jaa.likeastarappmpp.AppComponent
 import com.jaa.likeastarappmpp.R
+import com.jaa.likeastarappmpp.connectivity.ConnectionChecker
 import com.jaa.likeastarappmpp.databinding.ActivityFilmListBinding
 import dev.icerock.moko.mvvm.MvvmEventsActivity
 import dev.icerock.moko.mvvm.createViewModelFactory
@@ -32,7 +34,10 @@ class FilmListActivity :
             getNextPageInFilmListUseCase = AppComponent.factory.getNextPageInFilmListUseCase(),
             changeFavouriteStateUseCase = AppComponent.factory.changeFavouriteStateUseCase(),
             filterByFavouriteUseCase = AppComponent.factory.filterByFavouriteUseCase(),
-            filterByTitleUseCase = AppComponent.factory.filterByTitleUseCase()
+            filterByTitleUseCase = AppComponent.factory.filterByTitleUseCase(),
+            getBooleanPreferenceUseCase = AppComponent.factory.getBooleanPreferenceUseCaseForList(),
+            setDownloadOnlyWithWifiUseCase = AppComponent.factory.setDownloadOnlyWithWifiUseCase(),
+            getFilmListUseCase = AppComponent.factory.getFilmListUseCase()
         )
     }
 
@@ -71,10 +76,11 @@ class FilmListActivity :
     }
 
     override fun addOnEndOfListReachedListener(listener: () -> Unit) {
+
         binding.filmListRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1)) {
+                if (!recyclerView.canScrollVertically(1)  && newState == RecyclerView.SCROLL_STATE_IDLE) {
                     listener()
                 }
             }
@@ -94,6 +100,10 @@ class FilmListActivity :
         Intent(this, SettingsActivity::class.java).also {
             startActivity(it)
         }
+    }
+
+    override fun isWifiActive(): Boolean {
+        return ConnectionChecker().checkWifiConnection(this)
     }
 
     override fun setOnSearchBarTextChangedListener(listener: (text: String) -> Unit) {

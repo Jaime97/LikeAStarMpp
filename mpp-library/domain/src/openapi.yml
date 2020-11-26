@@ -41,7 +41,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BadRequest'
+                $ref: '#/components/schemas/BadResponse'
 
       servers:
         - url: 'https://data.sfgov.org'
@@ -102,9 +102,12 @@ components:
           type: boolean
           description: If the film has been visited by the user, only for app purposes
           example: false
+        numberOfLocations:
+          type: integer
+          description: Total number of locations for this title
       required:
         - title
-    BadRequest:
+    BadResponse:
       properties:
         message:
           description: A description of the error

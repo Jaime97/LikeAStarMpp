@@ -12,7 +12,8 @@ CREATE TABLE FilmDb (
 	distributor TEXT DEFAULT '',
 	writer TEXT DEFAULT '',
 	favourite INTEGER AS Boolean NOT NULL DEFAULT 0,
-	visited INTEGER AS Boolean NOT NULL DEFAULT 0
+	visited INTEGER AS Boolean NOT NULL DEFAULT 0,
+	numberOfLocations INTEGER DEFAULT 0
 );
 
 CREATE INDEX title_index ON FilmDb(title);
@@ -33,3 +34,32 @@ LIMIT :limit OFFSET :offset;
 
 selectFilmByTitle:
 SELECT * FROM FilmDb WHERE title = ?;
+
+
+CREATE TABLE ListOffsetMapper(
+    online_offset INTEGER PRIMARY KEY NOT NULL DEFAULT 0 UNIQUE,
+    local_offset INTEGER NOT NULL DEFAULT 0
+);
+
+selectListOffsetMapper:
+SELECT *
+FROM ListOffsetMapper
+ORDER BY online_offset;
+
+selectMaxOnlineOffset:
+SELECT MAX(online_offset)
+FROM ListOffsetMapper;
+
+selectMaxOfflineOffset:
+SELECT MAX(online_offset)
+FROM ListOffsetMapper;
+
+selectListOffsetMapperWithOffset:
+SELECT *
+FROM ListOffsetMapper
+ORDER BY online_offset
+LIMIT :limit OFFSET :offset;
+
+insertOffsetMapper:
+INSERT OR REPLACE INTO ListOffsetMapper
+VALUES ?;
