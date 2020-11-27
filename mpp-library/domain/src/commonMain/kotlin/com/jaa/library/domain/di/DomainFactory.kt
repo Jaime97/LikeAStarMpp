@@ -96,7 +96,7 @@ class DomainFactory(
     }
 
     val filmListRepository: FilmListRepository by lazy {
-        FilmListRepository(filmService, filmDatabase, filmMemoryStorage)
+        FilmListRepository(filmService, filmDatabase, filmMemoryStorage, preferenceManager)
     }
 
     val filmDetailRepository: FilmDetailRepository by lazy {

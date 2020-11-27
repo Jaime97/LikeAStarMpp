@@ -15,7 +15,9 @@ class FilmMemoryStorage {
     }
 
     fun saveFilmList(films: List<FilmData>) {
-        this.films = (this.films + films).distinctBy { it.title } as MutableList<FilmData>
+        if(films.isNotEmpty()) {
+            this.films = (this.films + films).distinctBy { it.title } as MutableList<FilmData>
+        }
     }
 
     fun updateFilm(film: FilmData) {

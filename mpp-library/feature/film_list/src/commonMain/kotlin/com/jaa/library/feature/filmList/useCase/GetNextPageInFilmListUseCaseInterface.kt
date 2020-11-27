@@ -6,5 +6,5 @@ interface GetNextPageInFilmListUseCaseInterface {
     interface GetNextPageInFilmListModelListener {
         fun onSuccess(films: List<FilmRowData>)
     }
-    suspend fun execute(listener:GetNextPageInFilmListModelListener)
+    suspend fun execute(wifiActive:Boolean, listener:GetNextPageInFilmListModelListener)
 }

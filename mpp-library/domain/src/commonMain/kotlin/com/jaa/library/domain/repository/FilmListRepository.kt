@@ -4,13 +4,15 @@ package com.jaa.library.domain.repository
 import com.jaa.library.domain.dataSource.memory.FilmMemoryStorage
 import com.jaa.library.domain.dataSource.service.FilmService
 import com.jaa.library.domain.dataSource.storage.FilmDatabase
+import com.jaa.library.domain.preferences.PreferenceManager
 import dev.icerock.moko.network.generated.models.FilmData
 
 class FilmListRepository(
     val filmService: FilmService,
     override val filmDatabase: FilmDatabase,
-    override val filmMemoryStorage: FilmMemoryStorage
-) : LocalDatabaseRepository {
+    override val filmMemoryStorage: FilmMemoryStorage,
+    override val preferenceManager: PreferenceManager
+) : LocalDatabaseManagerRepository, PreferenceManagerRepository {
 
     companion object {
         const val DATA_SOURCE_ROW_TITLE = "title"
@@ -19,15 +21,20 @@ class FilmListRepository(
 
     private var favouriteFilter:Boolean = false
     private var titleFilter:String = ""
+    private var downloadOnlyWithWifi = false
 
     internal fun getFilmList():List<FilmData> {
         synchronizeLocalDataSources()
-        return filterCurrentList()
+        return filterCurrentListWithFavouriteAndTitle()
     }
 
-    internal suspend fun getFilmListWithPage(offset:Int, limit:Int, order:String):List<FilmData> {
-        synchronizePagesInDataSources(offset, limit, order)
-        return filterCurrentList()
+    // Returns the list with the new page if it was not empty, an empty list otherwise
+    internal suspend fun getFilmListWithPage(offset:Int, limit:Int, order:String, wifiActive:Boolean):List<FilmData> {
+        return if(synchronizePagesInDataSources(offset, limit, order, wifiActive)) {
+            filterCurrentListWithFavouriteAndTitle()
+        } else {
+            emptyList()
+        }
     }
 
     internal fun changeFavouriteFilterState(filter:Boolean) {
@@ -38,22 +45,28 @@ class FilmListRepository(
         titleFilter = filter
     }
 
-    private fun filterCurrentList():List<FilmData> {
-        return if(favouriteFilter)filmMemoryStorage.getFilmList().filter { it.favourite == true && if(titleFilter != "")it.title.contains(titleFilter, true)else true }
-        else filmMemoryStorage.getFilmList().filter { if(titleFilter != "")it.title.contains(titleFilter, true)else true }
+    internal fun setDownloadOnlyWithWifi(active:Boolean) {
+        downloadOnlyWithWifi = active
     }
 
-    private suspend fun synchronizePagesInDataSources(offset:Int, limit:Int, order:String) {
+    private fun filterCurrentListWithFavouriteAndTitle():List<FilmData> {
+        return if(favouriteFilter)filterFilmsWithNoLocation(filmMemoryStorage.getFilmList()).filter { it.favourite == true && if(titleFilter != "")it.title.contains(titleFilter, true)else true }
+        else filterFilmsWithNoLocation(filmMemoryStorage.getFilmList()).filter { if(titleFilter != "")it.title.contains(titleFilter, true)else true }
+    }
+
+    private suspend fun synchronizePagesInDataSources(offset:Int, limit:Int, order:String, wifiActive: Boolean):Boolean {
         var films = filmMemoryStorage.getFilmListWithOffset(offset)
         if(films.isEmpty())  {
-            films = filmDatabase.getFilmListWithOffset(offset, limit)
-            if(films.isEmpty()) {
+            films = filmDatabase.getFilmListWithOnlineOffset(offset, limit)
+            // Check download only with wifi preference
+            if(films.isEmpty() && (wifiActive || (!wifiActive && !downloadOnlyWithWifi))) {
                 //TODO: COMPLETE LAST FILM
-                films = groupFilmsByTitle(filterFilmsWithNoLocation(filmService.getFilmListWithOffset(offset, limit, order)))
+                films = groupFilmsByTitle(filmService.getFilmListWithOffset(offset, limit, order))
                 filmDatabase.saveFilmList(films)
             }
             filmMemoryStorage.saveFilmList(films)
         }
+        return films.isNotEmpty()
     }
 
     private fun filterFilmsWithNoLocation(films: List<FilmData>):List<FilmData> {
@@ -63,8 +76,10 @@ class FilmListRepository(
     private fun groupFilmsByTitle(films: List<FilmData>):List<FilmData> {
         return films.groupBy { it.title.replace("\\s".toRegex(), "") }.map {
             it.value.reduce { acc, filmData -> FilmData(acc.title, acc.releaseYear, acc.locations + ";" + filmData.locations,
-                acc.funFacts, acc.productionCompany, acc.distributor, acc.director, acc.writer, acc.actor1, acc.actor2, acc.actor3) }
-        }
+                acc.funFacts, acc.productionCompany, acc.distributor, acc.director, acc.writer, acc.actor1, acc.actor2, acc.actor3,
+                visited = false, favourite = false, numberOfLocations = (filmData.numberOfLocations?:1 + (acc.numberOfLocations?:1)))
+            }
+        }.sortedBy { it.title }
     }
 
 }

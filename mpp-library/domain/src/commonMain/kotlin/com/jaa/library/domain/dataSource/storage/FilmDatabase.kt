@@ -1,24 +1,36 @@
 package com.jaa.library.domain.dataSource.storage
 
 import com.jaa.library.domain.storage.FilmDb
+import com.jaa.library.domain.storage.ListOffsetMapper
 import dev.icerock.moko.network.generated.models.FilmData
 
 class FilmDatabase(
     private val filmSqlDatabase: FilmSqlDatabase
 ) {
 
-    fun getFilmList(): List<FilmData> {
-        return filmSqlDatabase.filmSqlDatabaseQueries.selectAllFilms().executeAsList().map { it.toFilmData() }
+    fun getFilmListWithLocalOffset(offset: Int, limit: Int): List<FilmData> {
+        return filmSqlDatabase.filmSqlDatabaseQueries.selectFilmsWithOffset(offset.toLong(), limit.toLong()).executeAsList().map { it.toFilmData() }
     }
 
-    fun getFilmListWithOffset(offset: Int, limit: Int): List<FilmData> {
-        //TODO: CHANGE DATA MODEL TO HAVE THE SAME OFFSET AND LIMITS AS THE ONLINE DATA SOURCE
-        return filmSqlDatabase.filmSqlDatabaseQueries.selectFilmsWithOffset(limit.toLong()/10, offset.toLong()/10).executeAsList().map { it.toFilmData() }
+    fun getFilmListWithOnlineOffset(offset: Int, limit: Int): List<FilmData> {
+        val listOfOffsets = filmSqlDatabase.filmSqlDatabaseQueries.selectListOffsetMapperWithOffset(limit.toLong(), offset.toLong()).executeAsList()
+        return if(listOfOffsets.isNotEmpty()) {
+            filmSqlDatabase.filmSqlDatabaseQueries.selectFilmsWithOffset(listOfOffsets.last().local_offset, listOfOffsets[0].local_offset).executeAsList().map { it.toFilmData() }
+        } else {
+            emptyList()
+        }
     }
 
     fun saveFilmList(films: List<FilmData>) {
-        for(film in films) {
-            filmSqlDatabase.filmSqlDatabaseQueries.insertFilm(film.toFilmDb())
+        if(films.isNotEmpty()) {
+            val maxOfflineOffset = filmSqlDatabase.filmSqlDatabaseQueries.selectMaxOfflineOffset().executeAsOne()
+            for ((currentOfflineOffset, film) in films.withIndex()) {
+                val maxOnlineOffset = filmSqlDatabase.filmSqlDatabaseQueries.selectMaxOnlineOffset().executeAsOne()
+                for(i in 0..(film.numberOfLocations?:0)) {
+                    filmSqlDatabase.filmSqlDatabaseQueries.insertOffsetMapper(ListOffsetMapper((maxOnlineOffset.MAX?:0) + i, (maxOfflineOffset.MAX?:0) + currentOfflineOffset))
+                }
+                filmSqlDatabase.filmSqlDatabaseQueries.insertFilm(film.toFilmDb())
+            }
         }
     }
 
@@ -31,7 +43,7 @@ class FilmDatabase(
     }
 
     private fun FilmData.toFilmDb() : FilmDb {
-        return FilmDb(title, actor1, actor2, actor3, director, releaseYear?.toLong(), locations, funFacts, productionCompany, distributor, writer, favourite?:false, visited?:false)
+        return FilmDb(title, actor1, actor2, actor3, director, releaseYear?.toLong(), locations, funFacts, productionCompany, distributor, writer, favourite?:false, visited?:false, numberOfLocations?.toLong())
     }
 }
 

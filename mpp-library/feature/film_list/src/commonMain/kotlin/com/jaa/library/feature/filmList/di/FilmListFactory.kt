@@ -4,10 +4,7 @@ package com.jaa.library.feature.filmList.di
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
 import com.jaa.library.feature.filmList.presentation.FilmListViewModel
 import com.jaa.library.feature.filmList.presentation.FilmTableDataFactoryInterface
-import com.jaa.library.feature.filmList.useCase.ChangeFavouriteStateUseCaseInterface
-import com.jaa.library.feature.filmList.useCase.FilterByFavouriteUseCaseInterface
-import com.jaa.library.feature.filmList.useCase.FilterByTitleUseCaseInterface
-import com.jaa.library.feature.filmList.useCase.GetNextPageInFilmListUseCaseInterface
+import com.jaa.library.feature.filmList.useCase.*
 
 class FilmListFactory(
     private val filmTableDataFactoryInterface: FilmTableDataFactoryInterface,
@@ -19,7 +16,10 @@ class FilmListFactory(
         getNextPageInFilmListUseCase: GetNextPageInFilmListUseCaseInterface,
         changeFavouriteStateUseCase: ChangeFavouriteStateUseCaseInterface,
         filterByTitleUseCase: FilterByTitleUseCaseInterface,
-        filterByFavouriteUseCase: FilterByFavouriteUseCaseInterface
+        filterByFavouriteUseCase: FilterByFavouriteUseCaseInterface,
+        getBooleanPreferenceUseCase: GetBooleanPreferenceUseCaseInterface,
+        setDownloadOnlyWithWifiUseCase: SetDownloadOnlyWithWifiUseCaseInterface,
+        getFilmListUseCase: GetFilmListUseCaseInterface
     ) = FilmListViewModel(
         eventsDispatcher = eventsDispatcher,
         filmTableDataFactory = filmTableDataFactoryInterface,
@@ -27,6 +27,9 @@ class FilmListFactory(
         changeFavouriteStateUseCase = changeFavouriteStateUseCase,
         filterByFavouriteUseCase = filterByFavouriteUseCase,
         filterByTitleUseCase = filterByTitleUseCase,
+        getBooleanPreferenceUseCase = getBooleanPreferenceUseCase,
+        setDownloadOnlyWithWifiUseCase = setDownloadOnlyWithWifiUseCase,
+        getFilmListUseCase = getFilmListUseCase,
         strings = strings,
         constants = constants
     )

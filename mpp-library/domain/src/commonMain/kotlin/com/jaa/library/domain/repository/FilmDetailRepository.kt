@@ -9,7 +9,7 @@ class FilmDetailRepository(
     val filmService: FilmImageService,
     override val filmDatabase: FilmDatabase,
     override val filmMemoryStorage: FilmMemoryStorage
-) : LocalDatabaseRepository {
+) : LocalDatabaseManagerRepository {
 
     suspend fun getImageUrlOfFilm(title:String, listener: GetFilmImageUseCase.GetFilmImageListener) {
         val filmData = filmService.getFilm(title)

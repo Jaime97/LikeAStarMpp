@@ -20,5 +20,5 @@
     <string name="only_wifi">Download only with wifi</string>
     <string name="only_wifi_desc">The list download will be made only with wifi connection</string>
     <string name="download_automatically">Automatically update list</string>
-    <string name="download_automatically_desc">The list will be automatically update every minute</string>
+    <string name="download_automatically_desc">The list will be automatically updated every minute</string>
 </resources>

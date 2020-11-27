@@ -2,10 +2,7 @@
 package com.jaa.library.feature.filmList.presentation
 
 import com.jaa.library.feature.filmList.model.FilmRowData
-import com.jaa.library.feature.filmList.useCase.ChangeFavouriteStateUseCaseInterface
-import com.jaa.library.feature.filmList.useCase.FilterByFavouriteUseCaseInterface
-import com.jaa.library.feature.filmList.useCase.FilterByTitleUseCaseInterface
-import com.jaa.library.feature.filmList.useCase.GetNextPageInFilmListUseCaseInterface
+import com.jaa.library.feature.filmList.useCase.*
 import dev.icerock.moko.mvvm.State
 import dev.icerock.moko.mvvm.asState
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
@@ -26,6 +23,9 @@ class FilmListViewModel(
     private val changeFavouriteStateUseCase: ChangeFavouriteStateUseCaseInterface,
     private val filterByFavouriteUseCase: FilterByFavouriteUseCaseInterface,
     private val filterByTitleUseCase: FilterByTitleUseCaseInterface,
+    private val getBooleanPreferenceUseCase: GetBooleanPreferenceUseCaseInterface,
+    private val setDownloadOnlyWithWifiUseCase: SetDownloadOnlyWithWifiUseCaseInterface,
+    private val getFilmListUseCase: GetFilmListUseCaseInterface,
     private val strings: Strings,
     private val constants: Constants
 ) : ViewModel(), EventsDispatcherOwner<FilmListViewModel.EventsListener> {
@@ -51,7 +51,6 @@ class FilmListViewModel(
                         override fun onFavouriteButtonTapped(title: String) {
                             onFilmFavouriteButtonTapped(title)
                         }
-
                     })
                 }
             }
@@ -64,6 +63,21 @@ class FilmListViewModel(
         }
 
     fun onViewCreated() {
+        prepareView()
+    }
+
+    fun onViewPresented() {
+        updateFilmList()
+        manageCurrentSettings()
+    }
+
+    fun onSettingsButtonPressed() {
+        eventsDispatcher.dispatchEvent {
+            presentSettingsView()
+        }
+    }
+
+    private fun prepareView() {
         eventsDispatcher.dispatchEvent {
             setOnSearchBarTextChangedListener {
                 onSearchTextChanged(text = it)
@@ -79,13 +93,34 @@ class FilmListViewModel(
         }
     }
 
-    fun onViewPresented() {
-        getNextPageInFilmList()
+    private fun manageCurrentSettings() {
+        viewModelScope.launch {
+            getBooleanPreferenceUseCase.execute(constants.downloadAutomaticallySettingKey, object: GetBooleanPreferenceUseCaseInterface.GetBooleanPreferenceModelListener {
+                override fun onSuccess(value: Boolean) {
+                    downloadAutomatically(value)
+                    viewModelScope.launch {
+                        getBooleanPreferenceUseCase.execute(constants.onlyWifiSettingKey, object: GetBooleanPreferenceUseCaseInterface.GetBooleanPreferenceModelListener {
+                                override fun onSuccess(value: Boolean) {
+                                    downloadOnlyWithWifi(value)
+                                }
+                            })
+                    }
+                }
+            })
+        }
     }
 
-    fun onSettingsButtonPressed() {
-        eventsDispatcher.dispatchEvent {
-            presentSettingsView()
+    private fun downloadAutomatically(active:Boolean) {
+
+    }
+
+    private fun downloadOnlyWithWifi(active:Boolean) {
+        viewModelScope.launch {
+            setDownloadOnlyWithWifiUseCase.execute(active, object:SetDownloadOnlyWithWifiUseCaseInterface.SetDownloadOnlyWithWifiModelListener {
+                override fun onSuccess() {
+                    // Download only with wifi option set
+                }
+            })
         }
     }
 
@@ -123,18 +158,34 @@ class FilmListViewModel(
         }
     }
 
-    private fun getNextPageInFilmList() {
+    private fun updateFilmList() {
         viewModelScope.launch {
-            try {
-                getNextPageInFilmListUseCase.execute(object : GetNextPageInFilmListUseCaseInterface.GetNextPageInFilmListModelListener {
-                    override fun onSuccess(films: List<FilmRowData>) {
+            getFilmListUseCase.execute(object:GetFilmListUseCaseInterface.GetFilmListUseCaseModelListener {
+                override fun onSuccess(films: List<FilmRowData>) {
+                    if(films.isNotEmpty()) {
                         _state.value = films.asState()
+                    } else {
+                        getNextPageInFilmList()
                     }
-                })
-            } catch (error: Throwable) {
-                _state.value = State.Error(error)
-            }
+                }
+            })
+        }
+    }
 
+    private fun getNextPageInFilmList() {
+        eventsDispatcher.dispatchEvent {
+            viewModelScope.launch {
+                try {
+                    getNextPageInFilmListUseCase.execute(isWifiActive(), object :
+                        GetNextPageInFilmListUseCaseInterface.GetNextPageInFilmListModelListener {
+                        override fun onSuccess(films: List<FilmRowData>) {
+                            _state.value = films.asState()
+                        }
+                    })
+                } catch (error: Throwable) {
+                    _state.value = State.Error(error)
+                }
+            }
         }
     }
 
@@ -158,6 +209,7 @@ class FilmListViewModel(
         fun addOnEndOfListReachedListener(listener: () -> Unit)
         fun presentFilmDetailView(data:Map<String, String>)
         fun presentSettingsView()
+        fun isWifiActive():Boolean
     }
 
     interface Strings {
@@ -168,5 +220,7 @@ class FilmListViewModel(
 
     interface Constants {
         val selectedFilmTitleKey:String
+        val onlyWifiSettingKey: String
+        val downloadAutomaticallySettingKey:String
     }
 }

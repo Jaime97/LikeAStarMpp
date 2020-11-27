@@ -6,6 +6,9 @@ package com.jaa.library
 
 import com.github.aakira.napier.Antilog
 import com.github.aakira.napier.Napier
+import com.jaa.library.constants.DOWNLOAD_AUTOMATICALLY_SETTING_KEY
+import com.jaa.library.constants.ONLY_WIFI_SETTING_KEY
+import com.jaa.library.constants.SELECTED_FILM_TITLE_KEY
 import com.jaa.library.domain.di.DomainFactory
 import com.jaa.library.domain.useCases.*
 import com.jaa.library.feature.filmDetail.di.FilmDetailFactory
@@ -19,11 +22,8 @@ import com.jaa.library.feature.filmList.di.FilmListFactory
 import com.jaa.library.feature.filmList.model.FilmRowData
 import com.jaa.library.feature.filmList.presentation.FilmListViewModel
 import com.jaa.library.feature.filmList.presentation.FilmTableDataFactoryInterface
-import com.jaa.library.feature.filmList.useCase.ChangeFavouriteStateUseCaseInterface
-import com.jaa.library.feature.filmList.useCase.FilterByFavouriteUseCaseInterface
-import com.jaa.library.feature.filmList.useCase.FilterByTitleUseCaseInterface
-import com.jaa.library.feature.filmList.useCase.GetNextPageInFilmListUseCaseInterface
 import com.jaa.library.feature.filmDetail.useCase.GetFilmImageUseCaseInterface
+import com.jaa.library.feature.filmList.useCase.*
 import com.jaa.library.feature.settings.presentation.SettingsTableDataFactoryInterface
 import com.jaa.library.feature.settings.useCase.GetBooleanPreferenceUseCaseInterface
 import com.jaa.library.feature.settings.useCase.ToggleBooleanPreferenceUseCaseInterface
@@ -54,6 +54,8 @@ class SharedFactory(
         },
         constants = object : FilmListViewModel.Constants {
             override val selectedFilmTitleKey: String = SELECTED_FILM_TITLE_KEY
+            override val onlyWifiSettingKey: String = ONLY_WIFI_SETTING_KEY
+            override val downloadAutomaticallySettingKey: String = DOWNLOAD_AUTOMATICALLY_SETTING_KEY
         }
     )
 
@@ -95,12 +97,11 @@ class SharedFactory(
         getNextPageInFilmListUseCase: GetNextPageInFilmListUseCase
     ) : GetNextPageInFilmListUseCaseInterface {
         return object : GetNextPageInFilmListUseCaseInterface {
-            override suspend fun execute(listener: GetNextPageInFilmListUseCaseInterface.GetNextPageInFilmListModelListener) {
-                getNextPageInFilmListUseCase.execute(object:GetNextPageInFilmListUseCase.GetNextPageInFilmListListener {
+            override suspend fun execute(wifiActive:Boolean, listener: GetNextPageInFilmListUseCaseInterface.GetNextPageInFilmListModelListener) {
+                getNextPageInFilmListUseCase.execute(wifiActive, object:GetNextPageInFilmListUseCase.GetNextPageInFilmListListener {
                     override fun onSuccess(films: List<FilmData>) {
                         listener.onSuccess(films.map { it.toFilmRowData() })
                     }
-
                 })
             }
         }
@@ -188,7 +189,6 @@ class SharedFactory(
                     }
                 })
             }
-
         }
     }
 
@@ -256,7 +256,27 @@ class SharedFactory(
                     }
                 })
             }
+        }
+    }
 
+    fun getBooleanPreferenceUseCaseForList():com.jaa.library.feature.filmList.useCase.GetBooleanPreferenceUseCaseInterface {
+        return mapGetBooleanPreferenceUseCaseForList(GetBooleanPreferenceUseCase(domainFactory.settingsRepository))
+    }
+
+    private fun mapGetBooleanPreferenceUseCaseForList(
+        getBooleanPreferenceUseCase: GetBooleanPreferenceUseCase
+    ) : com.jaa.library.feature.filmList.useCase.GetBooleanPreferenceUseCaseInterface {
+        return object : com.jaa.library.feature.filmList.useCase.GetBooleanPreferenceUseCaseInterface {
+            override suspend fun execute(
+                key: String,
+                listener: com.jaa.library.feature.filmList.useCase.GetBooleanPreferenceUseCaseInterface.GetBooleanPreferenceModelListener
+            ) {
+                getBooleanPreferenceUseCase.execute(key, object:GetBooleanPreferenceUseCase.GetBooleanPreferenceListener {
+                    override fun onSuccess(value: Boolean) {
+                        listener.onSuccess(value)
+                    }
+                })
+            }
         }
     }
 
@@ -279,6 +299,48 @@ class SharedFactory(
                 })
             }
 
+        }
+    }
+
+    fun setDownloadOnlyWithWifiUseCase():SetDownloadOnlyWithWifiUseCaseInterface {
+        return mapSetDownloadOnlyWithWifiUseCase(SetDownloadOnlyWithWifiUseCase(domainFactory.filmListRepository))
+    }
+
+    private fun mapSetDownloadOnlyWithWifiUseCase(
+        setDownloadOnlyWithWifiUseCase: SetDownloadOnlyWithWifiUseCase
+    ) : SetDownloadOnlyWithWifiUseCaseInterface {
+        return  object: SetDownloadOnlyWithWifiUseCaseInterface {
+            override suspend fun execute(
+                active: Boolean,
+                listener: SetDownloadOnlyWithWifiUseCaseInterface.SetDownloadOnlyWithWifiModelListener
+            ) {
+                setDownloadOnlyWithWifiUseCase.execute(active, object:SetDownloadOnlyWithWifiUseCase.SetDownloadOnlyWithWifiListener {
+                    override fun onSuccess() {
+                        listener.onSuccess()
+                    }
+                })
+            }
+
+        }
+    }
+
+    fun getFilmListUseCase():GetFilmListUseCaseInterface {
+        return mapGetFilmListUseCase(GetFilmListUseCase(domainFactory.filmListRepository))
+    }
+
+    private fun mapGetFilmListUseCase(
+        getFilmListUseCase: GetFilmListUseCase
+    ) : GetFilmListUseCaseInterface {
+        return object: GetFilmListUseCaseInterface {
+            override suspend fun execute(
+                listener: GetFilmListUseCaseInterface.GetFilmListUseCaseModelListener
+            ) {
+                return getFilmListUseCase.execute(object:GetFilmListUseCase.GetFilmListUseCaseListener {
+                    override fun onSuccess(films: List<FilmData>) {
+                        listener.onSuccess(films.map { it.toFilmRowData() })
+                    }
+                })
+            }
         }
     }
 

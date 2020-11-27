@@ -1,9 +1,9 @@
 package com.jaa.library.domain.useCases
 
-import com.jaa.library.domain.repository.SettingsRepository
+import com.jaa.library.domain.repository.PreferenceManagerRepository
 
 class ToggleBooleanPreferenceUseCase(
-    private val settingsRepository: SettingsRepository
+    private val preferenceManagerRepository: PreferenceManagerRepository
 ) {
 
     interface ToggleBooleanPreferenceListener {
@@ -11,7 +11,7 @@ class ToggleBooleanPreferenceUseCase(
     }
 
     suspend fun execute(key:String, listener:ToggleBooleanPreferenceListener) {
-        settingsRepository.saveBooleanPreference(key, !settingsRepository.getBooleanPreference(key))
+        preferenceManagerRepository.saveBooleanPreference(key, !preferenceManagerRepository.getBooleanPreference(key))
         listener.onSuccess()
     }
 

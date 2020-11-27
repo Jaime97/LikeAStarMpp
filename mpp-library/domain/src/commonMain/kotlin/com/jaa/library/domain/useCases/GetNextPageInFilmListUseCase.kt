@@ -10,14 +10,21 @@ class GetNextPageInFilmListUseCase(
 ) {
     
     private var offset = 0
+    private var gettingList = false
 
     interface GetNextPageInFilmListListener {
         fun onSuccess(films: List<FilmData>)
     }
 
-    suspend fun execute(listener:GetNextPageInFilmListListener) {
-        val films = filmListRepository.getFilmListWithPage(offset, DATA_SOURCE_ROW_LIMIT, DATA_SOURCE_ROW_TITLE)
-        offset += DATA_SOURCE_ROW_LIMIT
-        listener.onSuccess(films)
+    suspend fun execute(wifiActive:Boolean, listener:GetNextPageInFilmListListener) {
+        if (!gettingList) {
+            gettingList = true
+            val filmList = filmListRepository.getFilmListWithPage(offset, DATA_SOURCE_ROW_LIMIT, DATA_SOURCE_ROW_TITLE, wifiActive)
+            if (filmList.isNotEmpty()) {
+                offset += DATA_SOURCE_ROW_LIMIT
+                listener.onSuccess(filmList)
+            }
+            gettingList = false
+        }
     }
 }

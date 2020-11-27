@@ -4,7 +4,7 @@ import com.jaa.library.domain.dataSource.memory.FilmMemoryStorage
 import com.jaa.library.domain.dataSource.storage.FilmDatabase
 import dev.icerock.moko.network.generated.models.FilmData
 
-interface LocalDatabaseRepository {
+interface LocalDatabaseManagerRepository {
     val filmDatabase: FilmDatabase
     val filmMemoryStorage: FilmMemoryStorage
 
@@ -15,9 +15,7 @@ interface LocalDatabaseRepository {
     }
 
     fun synchronizeLocalDataSources() {
-        if(filmMemoryStorage.getFilmList().isEmpty()) {
-            filmMemoryStorage.saveFilmList(filmDatabase.getFilmList())
-        }
+        filmMemoryStorage.saveFilmList(filmDatabase.getFilmListWithLocalOffset(0, filmMemoryStorage.getFilmList().size))
     }
 
     fun getFilm(title:String): FilmData {
