@@ -22,6 +22,7 @@ buildscript {
         plugin(Deps.Plugins.mokoUnits)
         plugin(Deps.Plugins.kotlinSerialization)
         plugin(Deps.Plugins.sqlDelight)
+        plugin(Deps.Plugins.sqlDelight)
     }
 }
 

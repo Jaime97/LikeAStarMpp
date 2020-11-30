@@ -67,7 +67,8 @@ class FilmDetailActivity :
     override fun openMapWithLocation(location: String, suffix: StringDesc) {
         val intent = Intent(
             Intent.ACTION_VIEW,
-            Uri.parse("http://maps.google.co.in/maps?q=$location" + suffix.toString(this))
+
+            Uri.parse("http://maps.google.com/maps?saddr=s&daddr=$location" + suffix.toString(this))
         )
         startActivity(intent)
     }
