@@ -1,34 +1,95 @@
-/*
- * Copyright 2019 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
- */
 
-import Foundation
+
 import UIKit
 import MultiPlatformLibrary
 import MultiPlatformLibraryMvvm
-import SkyFloatingLabelTextField
+import CoreTelephony
 
 class FilmListViewController: UIViewController {
     
+    @IBOutlet var filmTableView: UITableView!
+
+    @IBOutlet var searchTextField: UITextField!
+    @IBOutlet var tabBar: UITabBar!
+    
+    private var dataSource: TableUnitsSource!
     private var viewModel: FilmListViewModel!
+    private var searchTextChangedListener: ((String) -> Void)!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.viewModel = AppComponent.factory.filmListFactory.createFilmListViewModel(eventsDispatcher: EventsDispatcher(listener: self), getNextPageInFilmListUseCase: AppComponent.factory.getNextPageInFilmListUseCase(), changeFavouriteStateUseCase: AppComponent.factory.changeFavouriteStateUseCase(), filterByTitleUseCase: AppComponent.factory.filterByTitleUseCase(), filterByFavouriteUseCase: AppComponent.factory.filterByFavouriteUseCase(), getBooleanPreferenceUseCase: AppComponent.factory.getBooleanPreferenceUseCaseForList(), setDownloadOnlyWithWifiUseCase: AppComponent.factory.setDownloadOnlyWithWifiUseCase(), getFilmListUseCase: AppComponent.factory.getFilmListUseCase())
         
-        viewModel = AppComponent.factory.filmListFactory.createFilmListViewModel(eventsDispatcher: EventsDispatcher(listener: self))
-
+        self.dataSource = TableUnitsSourceKt.default(for: self.filmTableView)
+        
+        self.viewModel.state.data().addObserver { [weak self] itemsObject in
+            guard let items = itemsObject as? [TableUnitItem] else { return }
+            
+            self?.dataSource.unitItems = items
+            self?.filmTableView.reloadData()
+        }
+        self.viewModel.onViewCreated()
     }
     
-    @IBAction func onSubmitPressed() {
-        viewModel.onSubmitPressed()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.viewModel.onViewPresented()
+    }
+    
+    @IBAction func settingsButtonTapped(_ sender: Any) {
+        self.viewModel.onSettingsButtonPressed()
+    }
+    
+    @objc func searchTextFieldDidChange(_ textField: UITextField) {
+        self.searchTextChangedListener(self.searchTextField.text ?? "")
     }
     
     deinit {
         // clean viewmodel to stop all coroutines immediately
-        viewModel.onCleared()
+        self.viewModel.onCleared()
     }
+
 }
 
 extension FilmListViewController: FilmListViewModelEventsListener {
+    func addOnEndOfListReachedListener(listener: @escaping () -> Void) {
+        
+    }
+    
+    func addOnTabLayoutChangedListener(listener: @escaping (KotlinInt) -> Void) {
+        
+    }
+    
+    func addTabToTabLayout(tabText: StringDesc, position: Int32) {
+        
+    }
+    
+    func isWifiActive() -> Bool {
+        var isWifiActive = false
+        if let reachability = Reachability.forInternetConnection() {
+            reachability.startNotifier()
+            let status = reachability.currentReachabilityStatus()
+            if status == .init(1) {
+                // .ReachableViaWiFi
+                isWifiActive = true
+
+            }
+        }
+        return isWifiActive
+    }
+    
+    func presentFilmDetailView(data: [String : String]) {
+        
+    }
+    
+    func presentSettingsView() {
+        
+    }
+    
+    func setOnSearchBarTextChangedListener(listener: @escaping (String) -> Void) {
+        self.searchTextChangedListener = listener
+        self.searchTextField.addTarget(self, action: #selector(searchTextFieldDidChange(_:)), for: .editingChanged)
+    }
+    
 
 }

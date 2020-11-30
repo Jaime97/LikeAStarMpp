@@ -21,8 +21,8 @@ class MainApplication : Application() {
             filmTableDataFactory = FilmTableDataFactory(),
             settingsTableDataFactory = SettingsTableDataFactory(),
             baseFilmUrl = "https://data.sfgov.org",
-            baseFilmImageUrl = "https://www.omdbapi.com",
-            sqlDriver = AndroidSqliteDriver(FilmSqlDatabase.Schema, applicationContext, "FilmSqlDatabase.db")
+            baseFilmImageUrl = "https://www.omdbapi.com"
+            //sqlDriver = AndroidSqliteDriver(FilmSqlDatabase.Schema, applicationContext, "FilmSqlDatabase.db")
         )
     }
 }

@@ -11,9 +11,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        
         AppComponent.factory = SharedFactory(
-            antilog: DebugAntilog(defaultTag: "MPP")
+            antilog: DebugAntilog(defaultTag: "MPP"),
+            baseFilmUrl: "https://data.sfgov.org",
+            baseFilmImageUrl: "https://www.omdbapi.com",
+            filmTableDataFactory: FilmTableDataFactory(),
+            settingsTableDataFactory: SettingsTableDataFactory()
         )
         return true
     }

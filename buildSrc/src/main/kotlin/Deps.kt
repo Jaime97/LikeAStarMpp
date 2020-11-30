@@ -80,6 +80,11 @@ object Deps {
     }
 
     object Libs {
+        object IOS {
+            const val sqlDelightDriver =
+                "com.squareup.sqldelight:native-driver:$sqlDelightVersion"
+        }
+
         object Android {
             const val appCompat =
                 "androidx.appcompat:appcompat:$androidAppCompatVersion"
@@ -123,6 +128,8 @@ object Deps {
                 "io.ktor:ktor-client-core:$ktorClientVersion"
             const val ktorClientLogging =
                 "io.ktor:ktor-client-logging:$ktorClientVersion"
+            const val sqlDelight =
+                "com.squareup.sqldelight:runtime:$sqlDelightVersion"
             val mokoResources =
                 "dev.icerock.moko:resources:$mokoResourcesVersion".mpl
             val mokoParcelize =
