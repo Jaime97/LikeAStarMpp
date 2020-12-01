@@ -35,11 +35,11 @@ class SettingsRowTableViewCell: UITableViewCell, Fillable {
 
 extension SettingsRowTableViewCell: Reusable {
     static func reusableIdentifier() -> String {
-        return "SettingsRow"
+        return "SettingsRowTableViewCell"
     }
     
     static func xibName() -> String {
-        return "SettingsRow"
+        return "SettingsRowTableViewCell"
     }
     
     static func bundle() -> Bundle {

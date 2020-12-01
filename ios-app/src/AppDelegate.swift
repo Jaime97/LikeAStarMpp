@@ -16,7 +16,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             baseFilmUrl: "https://data.sfgov.org",
             baseFilmImageUrl: "https://www.omdbapi.com",
             filmTableDataFactory: FilmTableDataFactory(),
-            settingsTableDataFactory: SettingsTableDataFactory()
+            settingsTableDataFactory: SettingsTableDataFactory(),
+            databaseDriverFactory: DatabaseDriverFactory()
         )
         return true
     }

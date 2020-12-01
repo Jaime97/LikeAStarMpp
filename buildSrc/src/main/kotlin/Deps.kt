@@ -17,9 +17,9 @@ object Deps {
     private const val testExtJunitVersion = "1.1.1"
 
     private const val kotlinxSerializationVersion = "1.0.0-RC"
-    private const val coroutinesVersion = "1.3.9-native-mt"
+    private const val coroutinesVersion = "1.3.9-native-mt-2"
     private const val ktorClientVersion = "1.4.0"
-    private const val sqlDelightVersion = "1.4.3"
+    private const val sqlDelightVersion = "1.4.4"
 
     private const val detektVersion = "1.12.0"
 
@@ -128,8 +128,6 @@ object Deps {
                 "io.ktor:ktor-client-core:$ktorClientVersion"
             const val ktorClientLogging =
                 "io.ktor:ktor-client-logging:$ktorClientVersion"
-            const val sqlDelight =
-                "com.squareup.sqldelight:runtime:$sqlDelightVersion"
             val mokoResources =
                 "dev.icerock.moko:resources:$mokoResourcesVersion".mpl
             val mokoParcelize =
@@ -146,6 +144,11 @@ object Deps {
                 "com.russhwolf:multiplatform-settings-no-arg:$multiplatformSettingsVersion".mpl
             val napier =
                 "com.github.aakira:napier:$napierVersion".mpl
+            val sqlDelight = MultiPlatformLibrary(
+                common = "com.squareup.sqldelight:runtime:$sqlDelightVersion",
+                android = "com.squareup.sqldelight:android-driver:$sqlDelightVersion",
+                ios = "com.squareup.sqldelight:native-driver:$sqlDelightVersion"
+            )
 
             object Tests {
                 const val kotlinTest =

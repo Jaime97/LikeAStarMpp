@@ -16,6 +16,7 @@ class FilmListRowTableViewCell: UITableViewCell, Fillable {
     typealias DataType = CellModel
     
     struct CellModel {
+        let id: Int64
         let filmData: FilmRowData
         let listener: FilmTableDataFactoryInterfaceListRowTappedListener
     }
@@ -39,11 +40,11 @@ class FilmListRowTableViewCell: UITableViewCell, Fillable {
 
 extension FilmListRowTableViewCell: Reusable {
     static func reusableIdentifier() -> String {
-        return "FilmListRow"
+        return "FilmListRowTableViewCell"
     }
     
     static func xibName() -> String {
-        return "FilmListRow"
+        return "FilmListRowTableViewCell"
     }
     
     static func bundle() -> Bundle {

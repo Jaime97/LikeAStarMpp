@@ -175,6 +175,7 @@ class FilmListViewModel(
     private fun getNextPageInFilmList() {
         eventsDispatcher.dispatchEvent {
             viewModelScope.launch {
+                @Suppress("TooGenericExceptionCaught") // ktor on ios fail with Throwable when no network
                 try {
                     getNextPageInFilmListUseCase.execute(isWifiActive(), object :
                         GetNextPageInFilmListUseCaseInterface.GetNextPageInFilmListModelListener {

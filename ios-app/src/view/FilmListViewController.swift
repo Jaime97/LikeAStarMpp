@@ -15,6 +15,7 @@ class FilmListViewController: UIViewController {
     private var dataSource: TableUnitsSource!
     private var viewModel: FilmListViewModel!
     private var searchTextChangedListener: ((String) -> Void)!
+    private var endOfTableReachedListener: (() -> Void)!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +28,7 @@ class FilmListViewController: UIViewController {
             
             self?.dataSource.unitItems = items
             self?.filmTableView.reloadData()
+            self?.filmTableView.reloadInputViews()
         }
         self.viewModel.onViewCreated()
     }
@@ -44,24 +46,30 @@ class FilmListViewController: UIViewController {
         self.searchTextChangedListener(self.searchTextField.text ?? "")
     }
     
+    @objc func onTableRefresh() {
+        endOfTableReachedListener()
+    }
+    
     deinit {
         // clean viewmodel to stop all coroutines immediately
         self.viewModel.onCleared()
     }
-
 }
 
 extension FilmListViewController: FilmListViewModelEventsListener {
     func addOnEndOfListReachedListener(listener: @escaping () -> Void) {
-        
+        endOfTableReachedListener = listener
     }
     
     func addOnTabLayoutChangedListener(listener: @escaping (KotlinInt) -> Void) {
-        
     }
     
     func addTabToTabLayout(tabText: StringDesc, position: Int32) {
+        var items = self.tabBar.items ?? [UITabBarItem]()
+        let item = UITabBarItem(title: tabText.localized(), image: nil, tag: Int(position))
+        items.append(UITabBarItem(title: tabText.localized(), image: nil, tag: Int(position)))
         
+        self.tabBar.setItems(items, animated: true)
     }
     
     func isWifiActive() -> Bool {
@@ -90,6 +98,5 @@ extension FilmListViewController: FilmListViewModelEventsListener {
         self.searchTextChangedListener = listener
         self.searchTextField.addTarget(self, action: #selector(searchTextFieldDidChange(_:)), for: .editingChanged)
     }
-    
 
 }

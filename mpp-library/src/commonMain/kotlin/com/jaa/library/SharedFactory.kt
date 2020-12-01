@@ -9,6 +9,7 @@ import com.github.aakira.napier.Napier
 import com.jaa.library.constants.DOWNLOAD_AUTOMATICALLY_SETTING_KEY
 import com.jaa.library.constants.ONLY_WIFI_SETTING_KEY
 import com.jaa.library.constants.SELECTED_FILM_TITLE_KEY
+import com.jaa.library.domain.di.DatabaseDriverFactory
 import com.jaa.library.domain.di.DomainFactory
 import com.jaa.library.domain.useCases.*
 import com.jaa.library.feature.filmDetail.di.FilmDetailFactory
@@ -36,13 +37,13 @@ class SharedFactory(
     baseFilmUrl: String,
     baseFilmImageUrl: String,
     filmTableDataFactory: FilmTableDataFactoryInterface,
-    settingsTableDataFactory: SettingsTableDataFactoryInterface
-    //sqlDriver: SqlDriver
+    settingsTableDataFactory: SettingsTableDataFactoryInterface,
+    databaseDriverFactory: DatabaseDriverFactory
 ) {
     private val domainFactory = DomainFactory(
         baseFilmUrl = baseFilmUrl,
-        baseFilmImageUrl = baseFilmImageUrl
-        //sqlDriver = sqlDriver
+        baseFilmImageUrl = baseFilmImageUrl,
+        databaseDriverFactory = databaseDriverFactory
     )
 
     val filmListFactory = FilmListFactory(
