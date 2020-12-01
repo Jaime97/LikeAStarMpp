@@ -5,15 +5,19 @@ import MultiPlatformLibrary
 import MultiPlatformLibraryMvvm
 
 
-class FilmListRowTableViewCell: UITableViewCell, Fillable {
-    
-    @IBOutlet var titleLabel: UILabel!
-    @IBOutlet var directorLabel: UILabel!
-    @IBOutlet var favouriteButton: UIButton!
-    @IBOutlet var visitedImage: UIImageView!
-    var listener:FilmTableDataFactoryInterfaceListRowTappedListener!
+class FilmTableViewCell: UITableViewCell, Fillable {
     
     typealias DataType = CellModel
+    
+    
+    @IBOutlet var titleLabel: UILabel!
+    
+    @IBOutlet var directorLabel: UILabel!
+    
+    @IBOutlet var favouriteButton: UIButton!
+    
+    @IBOutlet var visitedImage: UIImageView!
+    var listener:FilmTableDataFactoryInterfaceListRowTappedListener!
     
     struct CellModel {
         let id: Int64
@@ -29,6 +33,9 @@ class FilmListRowTableViewCell: UITableViewCell, Fillable {
         self.visitedImage.alpha = data.filmData.visited ? 1.0:0.0
     }
     
+    func update(_ data: FilmTableViewCell.CellModel) {        
+    }
+    
     @IBAction func onFavouriteButtonTapped(_ sender: Any) {
         self.listener.onFavouriteButtonTapped(title: self.titleLabel.text ?? "")
     }
@@ -38,13 +45,13 @@ class FilmListRowTableViewCell: UITableViewCell, Fillable {
     }
 }
 
-extension FilmListRowTableViewCell: Reusable {
+extension FilmTableViewCell: Reusable {
     static func reusableIdentifier() -> String {
-        return "FilmListRowTableViewCell"
+        return "FilmTableViewCell"
     }
     
     static func xibName() -> String {
-        return "FilmListRowTableViewCell"
+        return "FilmTableViewCell"
     }
     
     static func bundle() -> Bundle {

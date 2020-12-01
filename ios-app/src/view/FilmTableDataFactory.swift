@@ -7,8 +7,8 @@ import UIKit
 class FilmTableDataFactory: FilmTableDataFactoryInterface {
 
     func createFilmRow(id: Int64, film: FilmRowData, listener: FilmTableDataFactoryInterfaceListRowTappedListener) -> TableUnitItem {
-        return UITableViewCellUnit<FilmListRowTableViewCell>(
-            data: FilmListRowTableViewCell.CellModel(
+        return UITableViewCellUnit<FilmTableViewCell>(
+            data: FilmTableViewCell.CellModel(
                 id: id,
                 filmData: film,
                 listener: listener

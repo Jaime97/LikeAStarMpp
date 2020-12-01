@@ -3,7 +3,7 @@ import MultiPlatformLibraryUnits
 import MultiPlatformLibrary
 import MultiPlatformLibraryMvvm
 
-class SettingsRowTableViewCell: UITableViewCell, Fillable {
+class SettingsTableViewCell: UITableViewCell, Fillable {
     
     @IBOutlet var descriptionLabel: UILabel!
     
@@ -33,13 +33,13 @@ class SettingsRowTableViewCell: UITableViewCell, Fillable {
     }
 }
 
-extension SettingsRowTableViewCell: Reusable {
+extension SettingsTableViewCell: Reusable {
     static func reusableIdentifier() -> String {
-        return "SettingsRowTableViewCell"
+        return "SettingsTableViewCell"
     }
     
     static func xibName() -> String {
-        return "SettingsRowTableViewCell"
+        return "SettingsTableViewCell"
     }
     
     static func bundle() -> Bundle {

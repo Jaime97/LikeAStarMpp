@@ -7,8 +7,8 @@ import MultiPlatformLibraryMvvm
 class SettingsTableDataFactory: SettingsTableDataFactoryInterface {
     
     func createSettingsRow(itemId: Int64, setting: SettingsRowData, listener: SettingsTableDataFactoryInterfaceOnchangeActiveStateListener) -> TableUnitItem {
-        return UITableViewCellUnit<SettingsRowTableViewCell>(
-            data: SettingsRowTableViewCell.CellModel(
+        return UITableViewCellUnit<SettingsTableViewCell>(
+            data: SettingsTableViewCell.CellModel(
                 settingData: setting,
                 listener: listener
             ),
