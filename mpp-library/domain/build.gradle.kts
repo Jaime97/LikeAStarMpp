@@ -55,21 +55,6 @@ sqldelight {
     linkSqlite = false
 }
 
-kotlin {
-    val onPhone = System.getenv("SDK_NAME")?.startsWith("iphoneos") ?: false
-    if (onPhone) iosArm64("ios")
-    else iosX64("ios")
-
-//optional if you want to mark sqldelight as resource folder
-    sourceSets {
-        val commonMain by getting {
-            resources.srcDir("src/commonMain/sqldelight")
-        }
-    }
-}
-
-
-
 openApiGenerate {
     inputSpec.set(file("src/openapi.yml").path)
     generatorName.set("kotlin-ktor-client")

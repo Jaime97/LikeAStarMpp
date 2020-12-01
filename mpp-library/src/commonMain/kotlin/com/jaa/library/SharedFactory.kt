@@ -36,13 +36,13 @@ class SharedFactory(
     baseFilmUrl: String,
     baseFilmImageUrl: String,
     filmTableDataFactory: FilmTableDataFactoryInterface,
-    settingsTableDataFactory: SettingsTableDataFactoryInterface,
-    sqlDriver: SqlDriver
+    settingsTableDataFactory: SettingsTableDataFactoryInterface
+    //sqlDriver: SqlDriver
 ) {
     private val domainFactory = DomainFactory(
         baseFilmUrl = baseFilmUrl,
-        baseFilmImageUrl = baseFilmImageUrl,
-        sqlDriver = sqlDriver
+        baseFilmImageUrl = baseFilmImageUrl
+        //sqlDriver = sqlDriver
     )
 
     val filmListFactory = FilmListFactory(

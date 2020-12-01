@@ -26,8 +26,8 @@ import kotlinx.serialization.json.Json
 
 class DomainFactory(
     private val baseFilmUrl: String,
-    private val baseFilmImageUrl:String,
-    private val sqlDriver: SqlDriver
+    private val baseFilmImageUrl:String
+    //private val sqlDriver: SqlDriver
 ) {
     private val json: Json by lazy {
         Json {
@@ -75,12 +75,12 @@ class DomainFactory(
         FilmImageService(filmImageApi)
     }
 
-    private val filmSqlDatabase: FilmSqlDatabase by lazy {
+    /*private val filmSqlDatabase: FilmSqlDatabase by lazy {
         FilmSqlDatabase(sqlDriver)
-    }
+    }*/
 
     private val filmDatabase: FilmDatabase by lazy {
-        FilmDatabase(filmSqlDatabase)
+        FilmDatabase(null)
     }
 
     private val settings: Settings by lazy {

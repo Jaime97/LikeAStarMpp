@@ -5,23 +5,26 @@ import com.jaa.library.domain.storage.ListOffsetMapper
 import dev.icerock.moko.network.generated.models.FilmData
 
 class FilmDatabase(
-    private val filmSqlDatabase: FilmSqlDatabase
+    private val filmSqlDatabase: FilmSqlDatabase?
 ) {
 
     fun getFilmListWithLocalOffset(offset: Int, limit: Int): List<FilmData> {
-        return filmSqlDatabase.filmSqlDatabaseQueries.selectFilmsWithOffset(offset.toLong(), limit.toLong()).executeAsList().map { it.toFilmData() }
+        //return filmSqlDatabase.filmSqlDatabaseQueries.selectFilmsWithOffset(offset.toLong(), limit.toLong()).executeAsList().map { it.toFilmData() }
+        return emptyList()
     }
 
-    fun getFilmListWithOnlineOffset(offset: Int, limit: Int): List<FilmData> {
+    fun getFilmListWithOnlineOffset(offset: Int, limit: Int): List<FilmData> {/*
         val listOfOffsets = filmSqlDatabase.filmSqlDatabaseQueries.selectListOffsetMapperWithOffset(limit.toLong(), offset.toLong()).executeAsList()
         return if(listOfOffsets.isNotEmpty()) {
             filmSqlDatabase.filmSqlDatabaseQueries.selectFilmsWithOffset(listOfOffsets.last().local_offset, listOfOffsets[0].local_offset).executeAsList().map { it.toFilmData() }
         } else {
             emptyList()
         }
+        */
+        return emptyList()
     }
 
-    fun saveFilmList(films: List<FilmData>) {
+    fun saveFilmList(films: List<FilmData>) {/*
         if(films.isNotEmpty()) {
             val maxOfflineOffset = filmSqlDatabase.filmSqlDatabaseQueries.selectMaxOfflineOffset().executeAsOne()
             for ((currentOfflineOffset, film) in films.withIndex()) {
@@ -31,11 +34,11 @@ class FilmDatabase(
                 }
                 filmSqlDatabase.filmSqlDatabaseQueries.insertFilm(film.toFilmDb())
             }
-        }
+        }*/
     }
 
     fun updateFilm(film: FilmData) {
-        filmSqlDatabase.filmSqlDatabaseQueries.insertFilm(film.toFilmDb())
+        //filmSqlDatabase.filmSqlDatabaseQueries.insertFilm(film.toFilmDb())
     }
 
     private fun FilmDb.toFilmData() : FilmData {
