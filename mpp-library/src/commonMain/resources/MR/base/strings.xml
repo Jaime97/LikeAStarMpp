@@ -21,4 +21,7 @@
     <string name="only_wifi_desc">The list download will be made only with wifi connection</string>
     <string name="download_automatically">Automatically update list</string>
     <string name="download_automatically_desc">The list will be automatically updated every minute</string>
+    <string name="ok">Ok</string>
+    <string name="permission_denied_title">Permission error</string>
+    <string name="permission_denied_desc">The app can't show a route to the location without the location permissions</string>
 </resources>

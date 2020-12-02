@@ -28,7 +28,7 @@ object Deps {
     private const val mokoMvvmVersion = "0.8.0"
     private const val mokoNetworkVersion = "0.8.0"
     private const val mokoUnitsVersion = "0.4.1"
-    private const val mokoPermissionsVersion = "0.6.0"
+    private const val mokoPermissionsVersion = "0.7.0"
     private const val multiplatformSettingsVersion = "0.6.3"
 
     private const val napierVersion = "1.4.1"

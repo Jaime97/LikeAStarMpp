@@ -11,7 +11,12 @@ import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcherOwner
 import dev.icerock.moko.mvvm.livedata.*
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import dev.icerock.moko.permissions.DeniedAlwaysException
+import dev.icerock.moko.permissions.DeniedException
+import dev.icerock.moko.permissions.Permission
+import dev.icerock.moko.permissions.PermissionsController
 import dev.icerock.moko.resources.StringResource
+import dev.icerock.moko.resources.desc.Resource
 import dev.icerock.moko.resources.desc.StringDesc
 import dev.icerock.moko.resources.desc.desc
 import kotlinx.coroutines.launch
@@ -22,7 +27,8 @@ class FilmDetailViewModel(
     private val changeVisitedStateUseCase: ChangeVisitedStateUseCaseInterface,
     private val getFilmImageUseCase: GetFilmImageUseCaseInterface,
     private val constants: Constants,
-    private val strings: Strings
+    private val strings: Strings,
+    val permissionsController: PermissionsController
 ) : ViewModel(), EventsDispatcherOwner<FilmDetailViewModel.EventsListener> {
 
     private val _state: MutableLiveData<State<FilmDetail, Throwable>> =
@@ -70,10 +76,8 @@ class FilmDetailViewModel(
     }
 
     fun onLocationsButtonTapped() {
-        eventsDispatcher.dispatchEvent {
-            showListInDialog(strings.selectLocation.desc(), splittedLocations, ) {
-                openMapWithLocation(splittedLocations[it], strings.sanFranciscoLocationSpec.desc())
-            }
+        viewModelScope.launch {
+            requestPermission(Permission.LOCATION)
         }
     }
 
@@ -91,17 +95,80 @@ class FilmDetailViewModel(
         }
     }
 
+    // Get common resources from iOS
+
+    fun getSeeLocationsString(): StringDesc {
+        return StringDesc.Resource(strings.seeLocations)
+    }
+
+    fun getVisitedButtonString(): StringDesc {
+        return StringDesc.Resource(strings.visitedButton)
+    }
+
+    fun getStarringByString(): StringDesc {
+        return StringDesc.Resource(strings.starringBy)
+    }
+
+    fun getDirectedByString(): StringDesc {
+        return StringDesc.Resource(strings.directedBy)
+    }
+
+    fun getProducedByString(): StringDesc {
+        return StringDesc.Resource(strings.producedBy)
+    }
+
+    fun getUnvisitedButtonString(): StringDesc {
+        return StringDesc.Resource(strings.unvisitedButton)
+    }
+
+    private fun requestPermission(permission: Permission) {
+        viewModelScope.launch {
+            try {
+                // Calls suspend function in a coroutine to request some permission.
+                permissionsController.providePermission(permission)
+                // If there are no exceptions, permission has been granted successfully.
+                eventsDispatcher.dispatchEvent {
+                    showListInDialog(strings.selectLocation.desc(), splittedLocations, ) { locations ->
+                        geUserLocation { lat, long ->
+                            openMapWithLocation(Pair(lat, long), splittedLocations[locations], strings.sanFranciscoLocationSpec.desc())
+                        }
+                    }
+
+                }
+            } catch (deniedAlwaysException: DeniedAlwaysException) {
+                eventsDispatcher.dispatchEvent {
+                    showAlert(strings.permissionErrorTitle.desc(), strings.permissionErrorDesc.desc(), strings.ok.desc())
+                }
+            } catch (deniedException: DeniedException) {
+                eventsDispatcher.dispatchEvent {
+                    showAlert(strings.permissionErrorTitle.desc(), strings.permissionErrorDesc.desc(), strings.ok.desc())
+                }
+            }
+        }
+    }
+
     interface EventsListener {
         fun getEntryData(key:String): String?
         fun loadFilmImage(url:String)
         fun showListInDialog(title:StringDesc, elementList:Array<String>, onRowTappedListener:(position:Int) -> Unit)
-        fun openMapWithLocation(location:String, suffix:StringDesc)
+        fun openMapWithLocation(originCoordinates: Pair<Double, Double>, destinyLocation:String, suffix:StringDesc)
+        fun showAlert(title:StringDesc, description:StringDesc, buttonTitle:StringDesc)
+        fun geUserLocation(onSuccessListener:(latitude: Double, longitude: Double) -> Unit)
     }
 
     interface Strings {
         val unknownError: StringResource
-        val selectLocation:StringResource
-        val sanFranciscoLocationSpec:StringResource
+        val selectLocation: StringResource
+        val sanFranciscoLocationSpec: StringResource
+        val seeLocations: StringResource
+        val visitedButton: StringResource
+        val unvisitedButton: StringResource
+        val starringBy: StringResource
+        val producedBy: StringResource
+        val directedBy: StringResource
+        val permissionErrorTitle: StringResource
+        val permissionErrorDesc: StringResource
+        val ok: StringResource
     }
 
     interface Constants {

@@ -65,6 +65,15 @@ class SharedFactory(
             override val unknownError: StringResource = MR.strings.unknown_error
             override val selectLocation: StringResource = MR.strings.select_location
             override val sanFranciscoLocationSpec: StringResource = MR.strings.san_francisco_location_spec
+            override val seeLocations: StringResource = MR.strings.see_locations
+            override val visitedButton: StringResource = MR.strings.visited
+            override val unvisitedButton: StringResource = MR.strings.unvisited
+            override val starringBy: StringResource = MR.strings.starring
+            override val producedBy: StringResource = MR.strings.produced
+            override val directedBy: StringResource = MR.strings.directed
+            override val permissionErrorTitle: StringResource = MR.strings.permission_denied_title
+            override val permissionErrorDesc: StringResource = MR.strings.permission_denied_desc
+            override val ok: StringResource = MR.strings.ok
         },
         constants = object : FilmDetailViewModel.Constants {
             override val selectedFilmTitleKey: String = SELECTED_FILM_TITLE_KEY
