@@ -22,6 +22,8 @@ class FilmDetailViewController: UIViewController {
     
     @IBOutlet var visitedButton: UIButton!
     
+    var receivedData: [String : String]?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.viewModel = AppComponent.factory.filmDetailFactory.createFilmDetailViewModel(eventsDispatcher: EventsDispatcher(listener: self), getFilmDetailUseCase: AppComponent.factory.getFilmDetailUseCase(), changeVisitedStateUseCase: AppComponent.factory.changeVisitedStateUseCase(), getFilmImageUseCase: AppComponent.factory.getFilmImageUseCase())
@@ -43,7 +45,7 @@ class FilmDetailViewController: UIViewController {
 
 extension FilmDetailViewController: FilmDetailViewModelEventsListener {
     func getEntryData(key: String) -> String? {
-        return ""
+        return receivedData?[key] ?? ""
     }
     
     func loadFilmImage(url: String) {
