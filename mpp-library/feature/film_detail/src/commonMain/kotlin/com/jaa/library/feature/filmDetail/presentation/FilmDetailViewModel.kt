@@ -45,7 +45,7 @@ class FilmDetailViewModel(
 
     fun onViewCreated() {
         state.addObserver {
-            splittedLocations = if(it.isSuccess())state.value.dataValue()!!.locations.split(";").toTypedArray() else emptyArray()
+            splittedLocations = if(it.isSuccess())state.value.dataValue()!!.locations.split(";").filter { location -> location != "null" }.toTypedArray() else emptyArray()
         }
         eventsDispatcher.dispatchEvent {
             val currentFilmTitle = getEntryData(constants.selectedFilmTitleKey)
@@ -76,9 +76,15 @@ class FilmDetailViewModel(
     }
 
     fun onLocationsButtonTapped() {
-        viewModelScope.launch {
+
+        if(splittedLocations.isNotEmpty()) {
             requestPermission(Permission.LOCATION)
+        } else {
+            eventsDispatcher.dispatchEvent {
+                showAlert()
+            }
         }
+
     }
 
     fun onChangeVisitedStateButtonTapped() {
@@ -127,14 +133,7 @@ class FilmDetailViewModel(
                 // Calls suspend function in a coroutine to request some permission.
                 permissionsController.providePermission(permission)
                 // If there are no exceptions, permission has been granted successfully.
-                eventsDispatcher.dispatchEvent {
-                    showListInDialog(strings.selectLocation.desc(), splittedLocations, ) { locations ->
-                        geUserLocation { lat, long ->
-                            openMapWithLocation(Pair(lat, long), splittedLocations[locations], strings.sanFranciscoLocationSpec.desc())
-                        }
-                    }
-
-                }
+                showLocations()
             } catch (deniedAlwaysException: DeniedAlwaysException) {
                 eventsDispatcher.dispatchEvent {
                     showAlert(strings.permissionErrorTitle.desc(), strings.permissionErrorDesc.desc(), strings.ok.desc())
@@ -142,6 +141,20 @@ class FilmDetailViewModel(
             } catch (deniedException: DeniedException) {
                 eventsDispatcher.dispatchEvent {
                     showAlert(strings.permissionErrorTitle.desc(), strings.permissionErrorDesc.desc(), strings.ok.desc())
+                }
+            }
+        }
+    }
+
+    private fun showLocations() {
+        eventsDispatcher.dispatchEvent {
+            showListInDialog(strings.selectLocation.desc(), splittedLocations) { position ->
+                geUserLocation { lat, long ->
+                    openMapWithLocation(
+                        Pair(lat, long),
+                        splittedLocations[position],
+                        strings.sanFranciscoLocationSpec.desc()
+                    )
                 }
             }
         }

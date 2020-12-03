@@ -134,7 +134,7 @@ class FilmListViewModel(
     private fun getAutomaticallyDownloadJob(active:Boolean):Job {
         return viewModelScope.launch {
             while(active) {
-                delay(30 * 1000)
+                delay(10 * 1000)
                 updateFilmList()
             }
         }
