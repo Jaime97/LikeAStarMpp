@@ -64,6 +64,11 @@ class FilmListViewController: UIViewController, UITabBarDelegate {
     @objc func searchTextFieldDidChange(_ textField: UITextField) {
         self.searchTextChangedListener(self.searchTextField.text ?? "")
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.viewModel.onViewWillDisappear()
+        super.viewWillDisappear(animated)
+    }
 
 }
 

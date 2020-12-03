@@ -14,6 +14,8 @@ import dev.icerock.moko.resources.desc.Resource
 import dev.icerock.moko.resources.desc.StringDesc
 import dev.icerock.moko.resources.desc.desc
 import dev.icerock.moko.units.TableUnitItem
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class FilmListViewModel(
@@ -35,6 +37,8 @@ class FilmListViewModel(
     }
 
     private var currentTabSelected = 0
+
+    private var automaticallyDownloadJob: Job? = null
 
     private val _state: MutableLiveData<State<List<FilmRowData>, Throwable>> =
         MutableLiveData(initialValue = State.Loading())
@@ -77,6 +81,10 @@ class FilmListViewModel(
         }
     }
 
+    fun onViewWillDisappear() {
+        automaticallyDownloadJob?.cancel(null)
+    }
+
     fun getSearchString(): StringDesc {
         return StringDesc.Resource(strings.search)
     }
@@ -115,7 +123,21 @@ class FilmListViewModel(
     }
 
     private fun downloadAutomatically(active:Boolean) {
+        if(active) {
+            automaticallyDownloadJob = automaticallyDownloadJob ?: getAutomaticallyDownloadJob(active)
+            automaticallyDownloadJob!!.start()
+        } else {
+            automaticallyDownloadJob?.cancel(null)
+        }
+    }
 
+    private fun getAutomaticallyDownloadJob(active:Boolean):Job {
+        return viewModelScope.launch {
+            while(active) {
+                delay(30 * 1000)
+                updateFilmList()
+            }
+        }
     }
 
     private fun downloadOnlyWithWifi(active:Boolean) {
