@@ -24,7 +24,7 @@
             </objects>
             <point key="canvasLocation" x="-5946" y="-1482"/>
         </scene>
-        <!--Film List View Controller-->
+        <!--Film list-->
         <scene sceneID="heM-ap-51W">
             <objects>
                 <viewController id="tpQ-LY-4wm" customClass="FilmListViewController" customModule="LikeAStarApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -101,7 +101,7 @@
                             <constraint firstAttribute="trailing" secondItem="aqB-aV-zsg" secondAttribute="trailing" constant="5" id="yfG-wU-1Dn"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="YM4-PP-xCI"/>
+                    <navigationItem key="navigationItem" title="Film list" id="YM4-PP-xCI"/>
                     <connections>
                         <outlet property="filmTableView" destination="FSI-9h-8O8" id="0qT-Rx-P6q"/>
                         <outlet property="searchTextField" destination="prh-jt-qCr" id="KpM-SC-H5A"/>
