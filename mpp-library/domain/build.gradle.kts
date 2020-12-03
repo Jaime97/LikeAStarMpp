@@ -21,15 +21,14 @@ dependencies {
     commonMainImplementation(Deps.Libs.MultiPlatform.mokoNetwork.common)
     commonMainImplementation(Deps.Libs.MultiPlatform.napier.common)
     commonMainImplementation(Deps.Libs.MultiPlatform.multiplatformSettings.common)
+    mppLibrary(Deps.Libs.MultiPlatform.sqlDelight)
 }
 
 sqldelight {
     database("FilmSqlDatabase") {
         packageName = "com.jaa.library.domain.dataSource.storage"
     }
-    linkSqlite = false
 }
-
 
 openApiGenerate {
     inputSpec.set(file("src/openapi.yml").path)

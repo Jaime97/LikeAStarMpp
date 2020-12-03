@@ -121,4 +121,9 @@ class FilmListActivity :
             }
         })
     }
+
+    override fun onStop() {
+        viewModel.onViewWillDisappear()
+        super.onStop()
+    }
 }

@@ -14,6 +14,8 @@ import dev.icerock.moko.resources.desc.Resource
 import dev.icerock.moko.resources.desc.StringDesc
 import dev.icerock.moko.resources.desc.desc
 import dev.icerock.moko.units.TableUnitItem
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class FilmListViewModel(
@@ -35,6 +37,8 @@ class FilmListViewModel(
     }
 
     private var currentTabSelected = 0
+
+    private var automaticallyDownloadJob: Job? = null
 
     private val _state: MutableLiveData<State<List<FilmRowData>, Throwable>> =
         MutableLiveData(initialValue = State.Loading())
@@ -77,6 +81,14 @@ class FilmListViewModel(
         }
     }
 
+    fun onViewWillDisappear() {
+        automaticallyDownloadJob?.cancel(null)
+    }
+
+    fun getSearchString(): StringDesc {
+        return StringDesc.Resource(strings.search)
+    }
+
     private fun prepareView() {
         eventsDispatcher.dispatchEvent {
             setOnSearchBarTextChangedListener {
@@ -111,7 +123,21 @@ class FilmListViewModel(
     }
 
     private fun downloadAutomatically(active:Boolean) {
+        if(active) {
+            automaticallyDownloadJob = automaticallyDownloadJob ?: getAutomaticallyDownloadJob(active)
+            automaticallyDownloadJob!!.start()
+        } else {
+            automaticallyDownloadJob?.cancel(null)
+        }
+    }
 
+    private fun getAutomaticallyDownloadJob(active:Boolean):Job {
+        return viewModelScope.launch {
+            while(active) {
+                delay(10 * 1000)
+                updateFilmList()
+            }
+        }
     }
 
     private fun downloadOnlyWithWifi(active:Boolean) {
@@ -175,6 +201,7 @@ class FilmListViewModel(
     private fun getNextPageInFilmList() {
         eventsDispatcher.dispatchEvent {
             viewModelScope.launch {
+                @Suppress("TooGenericExceptionCaught") // ktor on ios fail with Throwable when no network
                 try {
                     getNextPageInFilmListUseCase.execute(isWifiActive(), object :
                         GetNextPageInFilmListUseCaseInterface.GetNextPageInFilmListModelListener {
@@ -216,6 +243,7 @@ class FilmListViewModel(
         val allElements: StringResource
         val favourites: StringResource
         val unknownError: StringResource
+        val search: StringResource
     }
 
     interface Constants {

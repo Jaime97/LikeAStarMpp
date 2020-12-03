@@ -6,6 +6,7 @@ import com.jaa.library.feature.filmDetail.useCase.ChangeVisitedStateUseCaseInter
 import com.jaa.library.feature.filmDetail.useCase.GetFilmDetailUseCaseInterface
 import com.jaa.library.feature.filmDetail.useCase.GetFilmImageUseCaseInterface
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
+import dev.icerock.moko.permissions.PermissionsController
 
 class FilmDetailFactory(
     private val strings: FilmDetailViewModel.Strings,
@@ -15,13 +16,15 @@ class FilmDetailFactory(
         eventsDispatcher: EventsDispatcher<FilmDetailViewModel.EventsListener>,
         getFilmDetailUseCase: GetFilmDetailUseCaseInterface,
         changeVisitedStateUseCase: ChangeVisitedStateUseCaseInterface,
-        getFilmImageUseCase: GetFilmImageUseCaseInterface
+        getFilmImageUseCase: GetFilmImageUseCaseInterface,
+        permissionsController: PermissionsController
     ) = FilmDetailViewModel(
         eventsDispatcher = eventsDispatcher,
         getFilmDetailUseCase = getFilmDetailUseCase,
         changeVisitedStateUseCase = changeVisitedStateUseCase,
         getFilmImageUseCase = getFilmImageUseCase,
         constants = constants,
-        strings = strings
+        strings = strings,
+        permissionsController = permissionsController
     )
 }

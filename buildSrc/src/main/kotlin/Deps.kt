@@ -17,9 +17,9 @@ object Deps {
     private const val testExtJunitVersion = "1.1.1"
 
     private const val kotlinxSerializationVersion = "1.0.0-RC"
-    private const val coroutinesVersion = "1.3.9-native-mt"
+    private const val coroutinesVersion = "1.3.9-native-mt-2"
     private const val ktorClientVersion = "1.4.0"
-    private const val sqlDelightVersion = "1.4.3"
+    private const val sqlDelightVersion = "1.4.4"
 
     private const val detektVersion = "1.12.0"
 
@@ -28,7 +28,7 @@ object Deps {
     private const val mokoMvvmVersion = "0.8.0"
     private const val mokoNetworkVersion = "0.8.0"
     private const val mokoUnitsVersion = "0.4.1"
-    private const val mokoPermissionsVersion = "0.6.0"
+    private const val mokoPermissionsVersion = "0.7.0"
     private const val multiplatformSettingsVersion = "0.6.3"
 
     private const val napierVersion = "1.4.1"
@@ -80,6 +80,11 @@ object Deps {
     }
 
     object Libs {
+        object IOS {
+            const val sqlDelightDriver =
+                "com.squareup.sqldelight:native-driver:$sqlDelightVersion"
+        }
+
         object Android {
             const val appCompat =
                 "androidx.appcompat:appcompat:$androidAppCompatVersion"
@@ -139,6 +144,11 @@ object Deps {
                 "com.russhwolf:multiplatform-settings-no-arg:$multiplatformSettingsVersion".mpl
             val napier =
                 "com.github.aakira:napier:$napierVersion".mpl
+            val sqlDelight = MultiPlatformLibrary(
+                common = "com.squareup.sqldelight:runtime:$sqlDelightVersion",
+                android = "com.squareup.sqldelight:android-driver:$sqlDelightVersion",
+                ios = "com.squareup.sqldelight:native-driver:$sqlDelightVersion"
+            )
 
             object Tests {
                 const val kotlinTest =

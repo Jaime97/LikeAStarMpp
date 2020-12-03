@@ -26,7 +26,7 @@
             android:id="@+id/titleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{setting.title}"
+            android:text="@{setting.titleText}"
             android:textSize="16sp"
             android:layout_alignParentTop="true"
             android:layout_marginStart="16dp"
@@ -43,7 +43,7 @@
             android:layout_marginEnd="70dp"
             android:lines="2"
             android:maxLines="2"
-            android:text="@{setting.description}"
+            android:text="@{setting.descriptionText}"
             android:textSize="14sp"/>
 
         <CheckBox android:id="@+id/settingCheckbox"

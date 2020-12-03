@@ -10,6 +10,7 @@ buildscript {
     repositories {
         jcenter()
         google()
+        mavenCentral()
 
         maven { url = uri("https://dl.bintray.com/kotlin/kotlin") }
         maven { url = uri("https://kotlin.bintray.com/kotlinx") }
@@ -57,6 +58,7 @@ allprojects {
             }
         }
     }
+
 }
 
 tasks.register("clean", Delete::class).configure {

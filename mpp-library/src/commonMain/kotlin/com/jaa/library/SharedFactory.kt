@@ -9,6 +9,7 @@ import com.github.aakira.napier.Napier
 import com.jaa.library.constants.DOWNLOAD_AUTOMATICALLY_SETTING_KEY
 import com.jaa.library.constants.ONLY_WIFI_SETTING_KEY
 import com.jaa.library.constants.SELECTED_FILM_TITLE_KEY
+import com.jaa.library.domain.di.DatabaseDriverFactory
 import com.jaa.library.domain.di.DomainFactory
 import com.jaa.library.domain.useCases.*
 import com.jaa.library.feature.filmDetail.di.FilmDetailFactory
@@ -37,12 +38,12 @@ class SharedFactory(
     baseFilmImageUrl: String,
     filmTableDataFactory: FilmTableDataFactoryInterface,
     settingsTableDataFactory: SettingsTableDataFactoryInterface,
-    sqlDriver: SqlDriver
+    databaseDriverFactory: DatabaseDriverFactory
 ) {
     private val domainFactory = DomainFactory(
         baseFilmUrl = baseFilmUrl,
         baseFilmImageUrl = baseFilmImageUrl,
-        sqlDriver = sqlDriver
+        databaseDriverFactory = databaseDriverFactory
     )
 
     val filmListFactory = FilmListFactory(
@@ -51,6 +52,7 @@ class SharedFactory(
             override val allElements: StringResource = MR.strings.all_elements
             override val favourites: StringResource = MR.strings.favourites
             override val unknownError: StringResource = MR.strings.unknown_error
+            override val search: StringResource = MR.strings.search
         },
         constants = object : FilmListViewModel.Constants {
             override val selectedFilmTitleKey: String = SELECTED_FILM_TITLE_KEY
@@ -64,6 +66,17 @@ class SharedFactory(
             override val unknownError: StringResource = MR.strings.unknown_error
             override val selectLocation: StringResource = MR.strings.select_location
             override val sanFranciscoLocationSpec: StringResource = MR.strings.san_francisco_location_spec
+            override val seeLocations: StringResource = MR.strings.see_locations
+            override val visitedButton: StringResource = MR.strings.visited
+            override val unvisitedButton: StringResource = MR.strings.unvisited
+            override val starringBy: StringResource = MR.strings.starring
+            override val producedBy: StringResource = MR.strings.produced
+            override val directedBy: StringResource = MR.strings.directed
+            override val permissionErrorTitle: StringResource = MR.strings.permission_denied_title
+            override val permissionErrorDesc: StringResource = MR.strings.permission_denied_desc
+            override val ok: StringResource = MR.strings.ok
+            override val noLocationError: StringResource = MR.strings.no_locations
+            override val noLocationErrorDesc: StringResource = MR.strings.no_locations_desc
         },
         constants = object : FilmDetailViewModel.Constants {
             override val selectedFilmTitleKey: String = SELECTED_FILM_TITLE_KEY

@@ -15,6 +15,7 @@ dependencies {
 
     commonMainImplementation(Deps.Libs.MultiPlatform.mokoMvvm.common)
     commonMainImplementation(Deps.Libs.MultiPlatform.mokoResources.common)
+    commonMainApi(Deps.Libs.MultiPlatform.mokoPermissions.common)
 
     commonMainImplementation(Deps.Libs.MultiPlatform.napier.common)
 }

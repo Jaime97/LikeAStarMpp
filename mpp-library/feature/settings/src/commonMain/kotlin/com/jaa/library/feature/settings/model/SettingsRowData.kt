@@ -1,8 +1,8 @@
 package com.jaa.library.feature.settings.model
 
 data class SettingsRowData(
-    val title:String,
+    val titleText:String,
     val key:String,
-    val description:String,
+    val descriptionText:String,
     val active:Boolean
 )
