@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -34,7 +35,7 @@
                     </label>
                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wbq-yR-bvX">
                         <rect key="frame" x="302" y="19.5" width="51" height="31"/>
-                        <color key="onTintColor" red="1" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="onTintColor" name="buttonColor"/>
                         <connections>
                             <action selector="onSwitchChanged:" destination="KGk-i7-Jjw" eventType="valueChanged" id="3pN-qE-8PU"/>
                         </connections>
@@ -61,4 +62,9 @@
             <point key="canvasLocation" x="177.536231884058" y="162.05357142857142"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <namedColor name="buttonColor">
+            <color red="1" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>
