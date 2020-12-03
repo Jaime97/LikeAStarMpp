@@ -3,6 +3,7 @@ package com.jaa.library.domain.di
 
 import com.github.aakira.napier.Napier
 import com.jaa.library.domain.dataSource.memory.FilmMemoryStorage
+import com.jaa.library.domain.dataSource.service.ExceptionSerializer
 import com.jaa.library.domain.dataSource.service.FilmImageService
 import com.jaa.library.domain.repository.FilmListRepository
 import com.jaa.library.domain.dataSource.service.FilmService
@@ -41,7 +42,7 @@ class DomainFactory(
                 exceptionFactory = HttpExceptionFactory(
                     defaultParser = ErrorExceptionParser(json),
                     customParsers = mapOf(
-                        HttpStatusCode.UnprocessableEntity.value to ValidationExceptionParser(json)
+                        HttpStatusCode.BadRequest.value to ExceptionSerializer(json)
                     )
                 )
             }
