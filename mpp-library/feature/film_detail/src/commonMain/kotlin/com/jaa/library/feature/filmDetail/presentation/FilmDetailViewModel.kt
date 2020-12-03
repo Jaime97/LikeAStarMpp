@@ -81,7 +81,7 @@ class FilmDetailViewModel(
             requestPermission(Permission.LOCATION)
         } else {
             eventsDispatcher.dispatchEvent {
-                showAlert()
+                showAlert(strings.noLocationError.desc(), strings.noLocationErrorDesc.desc(), strings.ok.desc())
             }
         }
 
@@ -182,6 +182,8 @@ class FilmDetailViewModel(
         val permissionErrorTitle: StringResource
         val permissionErrorDesc: StringResource
         val ok: StringResource
+        val noLocationError: StringResource
+        val noLocationErrorDesc: StringResource
     }
 
     interface Constants {

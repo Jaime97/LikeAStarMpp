@@ -24,4 +24,6 @@
     <string name="ok">Ok</string>
     <string name="permission_denied_title">Permission error</string>
     <string name="permission_denied_desc">The app cannot show a route to the location without the location permissions</string>
+    <string name="no_locations">No location available</string>
+    <string name="no_locations_desc">This film does not have any location available</string>
 </resources>

@@ -75,6 +75,8 @@ class SharedFactory(
             override val permissionErrorTitle: StringResource = MR.strings.permission_denied_title
             override val permissionErrorDesc: StringResource = MR.strings.permission_denied_desc
             override val ok: StringResource = MR.strings.ok
+            override val noLocationError: StringResource = MR.strings.no_locations
+            override val noLocationErrorDesc: StringResource = MR.strings.no_locations_desc
         },
         constants = object : FilmDetailViewModel.Constants {
             override val selectedFilmTitleKey: String = SELECTED_FILM_TITLE_KEY
