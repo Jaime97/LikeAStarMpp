@@ -52,6 +52,7 @@ class SharedFactory(
             override val allElements: StringResource = MR.strings.all_elements
             override val favourites: StringResource = MR.strings.favourites
             override val unknownError: StringResource = MR.strings.unknown_error
+            override val search: StringResource = MR.strings.search
         },
         constants = object : FilmListViewModel.Constants {
             override val selectedFilmTitleKey: String = SELECTED_FILM_TITLE_KEY

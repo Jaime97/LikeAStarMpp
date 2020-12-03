@@ -23,11 +23,6 @@ class SettingsViewController: UIViewController {
         }
         self.viewModel.onViewCreated()
     }
-    
-    deinit {
-        // clean viewmodel to stop all coroutines immediately
-        self.viewModel.onCleared()
-    }
 
 }
 extension SettingsViewController: SettingsViewModelEventsListener {

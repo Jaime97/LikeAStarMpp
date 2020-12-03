@@ -51,11 +51,6 @@ class FilmDetailViewController: UIViewController {
     @IBAction func visitedButtonTapped(_ sender: Any) {
         self.viewModel.onChangeVisitedStateButtonTapped()
     }
-    
-    deinit {
-        // clean viewmodel to stop all coroutines immediately
-        self.viewModel.onCleared()
-    }
 }
 
 extension FilmDetailViewController: FilmDetailViewModelEventsListener {

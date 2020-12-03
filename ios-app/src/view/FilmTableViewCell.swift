@@ -29,11 +29,9 @@ class FilmTableViewCell: UITableViewCell, Fillable {
         self.listener = data.listener
         self.titleLabel.text = data.filmData.title
         self.directorLabel.text = data.filmData.director
-        self.favouriteButton.imageView?.image = data.filmData.favourite ? UIImage(named: "star_selected"):UIImage(named: "star_unselected")
+        self.favouriteButton.setImage(data.filmData.favourite ? UIImage(named: "star_selected"):UIImage(named: "star_unselected"), for: .normal)
+        self.favouriteButton.imageView?.setNeedsLayout()
         self.visitedImage.alpha = data.filmData.visited ? 1.0:0.0
-    }
-    
-    func update(_ data: FilmTableViewCell.CellModel) {        
     }
     
     @IBAction func onFavouriteButtonTapped(_ sender: Any) {

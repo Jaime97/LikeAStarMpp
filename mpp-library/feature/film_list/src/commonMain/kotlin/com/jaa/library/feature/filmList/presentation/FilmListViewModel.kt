@@ -77,6 +77,10 @@ class FilmListViewModel(
         }
     }
 
+    fun getSearchString(): StringDesc {
+        return StringDesc.Resource(strings.search)
+    }
+
     private fun prepareView() {
         eventsDispatcher.dispatchEvent {
             setOnSearchBarTextChangedListener {
@@ -217,6 +221,7 @@ class FilmListViewModel(
         val allElements: StringResource
         val favourites: StringResource
         val unknownError: StringResource
+        val search: StringResource
     }
 
     interface Constants {

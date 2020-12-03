@@ -18,6 +18,7 @@ class FilmListViewController: UIViewController, UITabBarDelegate {
     private var endOfTableReachedListener: (() -> Void)!
     private var tabChangedListener: ((KotlinInt) -> Void)?
     private var dataToSendToDetail: [String : String]?
+    private var currentNumberOfCells: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,13 +27,13 @@ class FilmListViewController: UIViewController, UITabBarDelegate {
         self.dataSource = TableUnitsSourceKt.default(for: self.filmTableView)
         
         self.viewModel.state.data().addObserver { [weak self] itemsObject in
-            guard let items = itemsObject as? [TableUnitItem] else { return }
-            
+            let items = ((itemsObject as? [TableUnitItem]) != nil) ? itemsObject as! [TableUnitItem] : [TableUnitItem]()
+            self?.currentNumberOfCells = items.count
             self?.dataSource.unitItems = items
             self?.filmTableView.reloadData()
-            self?.filmTableView.reloadInputViews()
         }
         
+        self.searchTextField.placeholder = self.viewModel.getSearchString().localized()
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 14)!], for: .normal)
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 14)!], for: .selected)
         self.tabBar.delegate = self
@@ -63,20 +64,13 @@ class FilmListViewController: UIViewController, UITabBarDelegate {
     @objc func searchTextFieldDidChange(_ textField: UITextField) {
         self.searchTextChangedListener(self.searchTextField.text ?? "")
     }
-    
-    @objc func onTableRefresh() {
-        endOfTableReachedListener()
-    }
-    
-    deinit {
-        // clean viewmodel to stop all coroutines immediately
-        self.viewModel.onCleared()
-    }
+
 }
 
 extension FilmListViewController: FilmListViewModelEventsListener {
     func addOnEndOfListReachedListener(listener: @escaping () -> Void) {
-        endOfTableReachedListener = listener
+        self.filmTableView.delegate = self
+        self.endOfTableReachedListener = listener
     }
     
     func addOnTabLayoutChangedListener(listener: @escaping (KotlinInt) -> Void) {
@@ -121,5 +115,14 @@ extension FilmListViewController: FilmListViewModelEventsListener {
         self.searchTextChangedListener = listener
         self.searchTextField.addTarget(self, action: #selector(searchTextFieldDidChange(_:)), for: .editingChanged)
     }
+}
 
+extension FilmListViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row + 1 == self.currentNumberOfCells {
+            self.endOfTableReachedListener?()
+        }
+    }
+    
 }
