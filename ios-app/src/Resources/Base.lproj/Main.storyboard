@@ -67,7 +67,7 @@
                                     <constraint firstAttribute="height" constant="25" id="o2K-2e-aZ0"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aqB-aV-zsg">
                                 <rect key="frame" x="345" y="103" width="25" height="25"/>

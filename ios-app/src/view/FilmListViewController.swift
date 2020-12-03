@@ -36,6 +36,8 @@ class FilmListViewController: UIViewController, UITabBarDelegate {
         self.searchTextField.placeholder = self.viewModel.getSearchString().localized()
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 14)!], for: .normal)
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 14)!], for: .selected)
+        
+        self.searchTextField.delegate = self
         self.tabBar.delegate = self
         self.viewModel.onViewCreated()
     }
@@ -69,7 +71,7 @@ class FilmListViewController: UIViewController, UITabBarDelegate {
         self.viewModel.onViewWillDisappear()
         super.viewWillDisappear(animated)
     }
-
+    
 }
 
 extension FilmListViewController: FilmListViewModelEventsListener {
@@ -129,5 +131,11 @@ extension FilmListViewController: UITableViewDelegate {
             self.endOfTableReachedListener?()
         }
     }
-    
+}
+
+extension FilmListViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
 }

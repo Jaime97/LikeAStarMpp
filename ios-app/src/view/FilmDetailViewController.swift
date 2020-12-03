@@ -28,7 +28,6 @@ class FilmDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.viewModel = AppComponent.factory.filmDetailFactory.createFilmDetailViewModel(eventsDispatcher: EventsDispatcher(listener: self), getFilmDetailUseCase: AppComponent.factory.getFilmDetailUseCase(), changeVisitedStateUseCase: AppComponent.factory.changeVisitedStateUseCase(), getFilmImageUseCase: AppComponent.factory.getFilmImageUseCase(), permissionsController: PermissionsPermissionsController())
-        // Do any additional setup after loading the view.
         self.locationsButton.setTitle(self.viewModel.getSeeLocationsString().localized(), for: .normal)
         
         self.viewModel.state.data().addObserver { [weak self] itemObject in
