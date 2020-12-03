@@ -114,7 +114,7 @@ extension FilmListViewController: FilmListViewModelEventsListener {
     }
     
     func presentSettingsView() {
-        
+        performSegue(withIdentifier: "showSettings", sender: nil)
     }
     
     func setOnSearchBarTextChangedListener(listener: @escaping (String) -> Void) {

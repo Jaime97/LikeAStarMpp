@@ -26,6 +26,7 @@ class SettingsTableViewCell: UITableViewCell, Fillable {
         self.listener = data.listener
         self.titleLabel.text = data.settingData.titleText
         self.descriptionLabel.text = data.settingData.descriptionText
+        self.settingSwitch.setOn(data.settingData.active, animated: false)
     }
     
     @IBAction func onSwitchChanged(_ sender: Any) {

@@ -107,6 +107,7 @@
                         <outlet property="searchTextField" destination="prh-jt-qCr" id="KpM-SC-H5A"/>
                         <outlet property="tabBar" destination="D2K-IS-Oqx" id="ElD-2q-XNc"/>
                         <segue destination="T0y-A6-m11" kind="show" identifier="showDetail" id="dbT-PO-vxn"/>
+                        <segue destination="O49-Db-7WM" kind="show" identifier="showSettings" id="1sf-aN-kWz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eQs-JZ-rVh" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -247,6 +248,40 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6SU-Rd-iYh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-4326" y="-1482"/>
+        </scene>
+        <!--Settings View Controller-->
+        <scene sceneID="iEx-H6-QIa">
+            <objects>
+                <viewController id="O49-Db-7WM" customClass="SettingsViewController" customModule="LikeAStarApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="5ok-Df-Dih"/>
+                        <viewControllerLayoutGuide type="bottom" id="bWu-Zc-Jmo"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="pyS-Jt-gAX">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="70" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="cVE-db-sdn">
+                                <rect key="frame" x="0.0" y="44" width="375" height="623"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="cVE-db-sdn" firstAttribute="leading" secondItem="pyS-Jt-gAX" secondAttribute="leading" id="Jdy-mO-1Zc"/>
+                            <constraint firstAttribute="bottom" secondItem="cVE-db-sdn" secondAttribute="bottom" id="hm1-0k-YNc"/>
+                            <constraint firstAttribute="trailing" secondItem="cVE-db-sdn" secondAttribute="trailing" id="nJc-jN-69O"/>
+                            <constraint firstItem="cVE-db-sdn" firstAttribute="top" secondItem="5ok-Df-Dih" secondAttribute="bottom" id="zFk-8v-DEL"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="rpY-bC-s9k"/>
+                    <connections>
+                        <outlet property="settingsTableView" destination="cVE-db-sdn" id="9YQ-Q5-c4i"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ADS-Q6-Kfk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-5034" y="-755"/>
         </scene>
     </scenes>
     <resources>
