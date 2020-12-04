@@ -19,7 +19,7 @@ class ExceptionSerializer(private val json: Json) : HttpExceptionFactory.HttpExc
         try {
             val responseString = responseBody ?: return null
             val badResponse: BadResponse = json.decodeFromString(BadResponse.serializer(), responseString)
-            return ErrorException(request, response, badResponse.errorCode?.toInt()?:400, badResponse.message)
+            return ErrorException(request, response, 400, badResponse.message)
         } catch (e: Exception) {
             return null
         }

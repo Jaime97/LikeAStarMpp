@@ -31,7 +31,7 @@ class FilmListRepository(
     // Returns the list with the new page if it was not empty, an empty list otherwise
     internal suspend fun getFilmListWithPage(offset:Int, limit:Int, order:String, wifiActive:Boolean, listener: OnGetListListener){
         try {
-            if(synchronizePagesInDataSources(-1, limit, order, wifiActive)) {
+            if(synchronizePagesInDataSources(offset, limit, order, wifiActive)) {
                 listener.onSuccess(filterCurrentListWithFavouriteAndTitle())
             } else {
                 listener.onSuccess(emptyList())
