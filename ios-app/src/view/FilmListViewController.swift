@@ -12,6 +12,8 @@ class FilmListViewController: UIViewController, UITabBarDelegate {
     @IBOutlet var searchTextField: UITextField!
     @IBOutlet var tabBar: UITabBar!
     
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    
     private var dataSource: TableUnitsSource!
     private var viewModel: FilmListViewModel!
     private var searchTextChangedListener: ((String) -> Void)!
@@ -26,6 +28,8 @@ class FilmListViewController: UIViewController, UITabBarDelegate {
         self.viewModel = AppComponent.factory.filmListFactory.createFilmListViewModel(eventsDispatcher: EventsDispatcher(listener: self), getNextPageInFilmListUseCase: AppComponent.factory.getNextPageInFilmListUseCase(), changeFavouriteStateUseCase: AppComponent.factory.changeFavouriteStateUseCase(), filterByTitleUseCase: AppComponent.factory.filterByTitleUseCase(), filterByFavouriteUseCase: AppComponent.factory.filterByFavouriteUseCase(), getBooleanPreferenceUseCase: AppComponent.factory.getBooleanPreferenceUseCaseForList(), setDownloadOnlyWithWifiUseCase: AppComponent.factory.setDownloadOnlyWithWifiUseCase(), getFilmListUseCase: AppComponent.factory.getFilmListUseCase())
         
         self.dataSource = TableUnitsSourceKt.default(for: self.filmTableView)
+        
+        self.activityIndicator.bindVisibility(liveData: self.viewModel.state.isLoadingState())
         
         self.viewModel.state.data().addObserver { [weak self] itemsObject in
             let items = ((itemsObject as? [TableUnitItem]) != nil) ? itemsObject as! [TableUnitItem] : [TableUnitItem]()

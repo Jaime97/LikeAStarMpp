@@ -80,18 +80,24 @@
                                     <action selector="settingsButtonTapped:" destination="tpQ-LY-4wm" eventType="touchUpInside" id="0Li-t3-pys"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="Po3-XN-4jQ">
+                                <rect key="frame" x="169" y="143" width="37" height="37"/>
+                                <color key="color" name="white"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="FSI-9h-8O8" firstAttribute="top" secondItem="prh-jt-qCr" secondAttribute="bottom" constant="15" id="1Va-8K-a5h"/>
                             <constraint firstItem="Ba9-2V-dd9" firstAttribute="top" secondItem="FSI-9h-8O8" secondAttribute="bottom" id="1vQ-BL-jPH"/>
                             <constraint firstItem="D2K-IS-Oqx" firstAttribute="top" secondItem="MKQ-Qk-EWk" secondAttribute="bottom" id="2l6-aP-uwo"/>
+                            <constraint firstItem="Po3-XN-4jQ" firstAttribute="top" secondItem="prh-jt-qCr" secondAttribute="bottom" constant="15" id="B7g-cO-UmA"/>
                             <constraint firstItem="aqB-aV-zsg" firstAttribute="top" secondItem="D2K-IS-Oqx" secondAttribute="bottom" constant="10" id="EiD-kO-csj"/>
                             <constraint firstItem="aqB-aV-zsg" firstAttribute="leading" secondItem="prh-jt-qCr" secondAttribute="trailing" constant="15" id="H7S-7r-drC"/>
                             <constraint firstItem="TEn-Bz-USz" firstAttribute="top" secondItem="8bE-ud-soL" secondAttribute="topMargin" id="J2H-a5-at0"/>
                             <constraint firstItem="FSI-9h-8O8" firstAttribute="leading" secondItem="8bE-ud-soL" secondAttribute="leading" constant="5" id="KGN-D9-pCw"/>
                             <constraint firstAttribute="bottomMargin" secondItem="TEn-Bz-USz" secondAttribute="bottom" id="S80-D2-h9s"/>
                             <constraint firstItem="TEn-Bz-USz" firstAttribute="leading" secondItem="8bE-ud-soL" secondAttribute="leading" id="VIw-QJ-qel"/>
+                            <constraint firstItem="Po3-XN-4jQ" firstAttribute="centerX" secondItem="8bE-ud-soL" secondAttribute="centerX" id="cBC-3B-Rbq"/>
                             <constraint firstItem="D2K-IS-Oqx" firstAttribute="leading" secondItem="8bE-ud-soL" secondAttribute="leading" id="dK1-W8-YHs"/>
                             <constraint firstAttribute="trailing" secondItem="TEn-Bz-USz" secondAttribute="trailing" id="jUj-RV-aRw"/>
                             <constraint firstAttribute="trailing" secondItem="FSI-9h-8O8" secondAttribute="trailing" constant="5" id="kYl-Cg-nkw"/>
@@ -103,6 +109,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Film list" id="YM4-PP-xCI"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="Po3-XN-4jQ" id="MIk-N0-0vR"/>
                         <outlet property="filmTableView" destination="FSI-9h-8O8" id="0qT-Rx-P6q"/>
                         <outlet property="searchTextField" destination="prh-jt-qCr" id="KpM-SC-H5A"/>
                         <outlet property="tabBar" destination="D2K-IS-Oqx" id="ElD-2q-XNc"/>
