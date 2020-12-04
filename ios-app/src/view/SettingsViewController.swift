@@ -8,6 +8,8 @@ class SettingsViewController: UIViewController {
     @IBOutlet var settingsTableView: UITableView!
     private var dataSource: TableUnitsSource!
     private var viewModel: SettingsViewModel!
+    
+    lazy var messageManager = MessageManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +30,7 @@ class SettingsViewController: UIViewController {
 extension SettingsViewController: SettingsViewModelEventsListener {
     
     func getStringFromResource(resource: ResourceStringDesc) -> String {
-        return resource.localized()
+        return messageManager.getStringFromResource(resource: resource)
     }
     
 }

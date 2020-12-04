@@ -25,6 +25,8 @@ class FilmDetailViewController: UIViewController {
     
     var receivedData: [String : String]?
     
+    lazy var messageManager = MessageManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.viewModel = AppComponent.factory.filmDetailFactory.createFilmDetailViewModel(eventsDispatcher: EventsDispatcher(listener: self), getFilmDetailUseCase: AppComponent.factory.getFilmDetailUseCase(), changeVisitedStateUseCase: AppComponent.factory.changeVisitedStateUseCase(), getFilmImageUseCase: AppComponent.factory.getFilmImageUseCase(), permissionsController: PermissionsPermissionsController())
@@ -53,10 +55,22 @@ class FilmDetailViewController: UIViewController {
 }
 
 extension FilmDetailViewController: FilmDetailViewModelEventsListener {
-    func geUserLocation(onSuccessListener: @escaping (KotlinDouble, KotlinDouble) -> Void) {
+    
+    func getStringFromResource(resource: ResourceStringDesc) -> String {
+        return messageManager.getStringFromResource(resource: resource)
+    }
+    
+    func showErrorMessage(text: String) {
+        return messageManager.showErrorMessage(text: text, viewController: self)
+    }
+    
+    func geUserLocation(onSuccessListener: @escaping (KotlinDouble, KotlinDouble) -> Void, onErrorListener: @escaping () -> Void) {
         let locationManager = CLLocationManager()
-        let currentLoc: CLLocation! = locationManager.location
+        if let currentLoc: CLLocation = locationManager.location {
         onSuccessListener(KotlinDouble(value: currentLoc.coordinate.latitude),  KotlinDouble(value: currentLoc.coordinate.longitude))
+        } else {
+            onErrorListener()
+        }
     }
     
     func openMapWithLocation(originCoordinates: KotlinPair<KotlinDouble, KotlinDouble>, destinyLocation: String, suffix: StringDesc) {
@@ -67,9 +81,7 @@ extension FilmDetailViewController: FilmDetailViewModelEventsListener {
     }
     
     func showAlert(title: StringDesc, description: StringDesc, buttonTitle: StringDesc) {
-        let alert = UIAlertController(title:title.localized(), message: description.localized(), preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: buttonTitle.localized(), style: .default, handler: nil))
-        self.present(alert, animated: true)
+        messageManager.showAlert(title: title, description: description, buttonTitle: buttonTitle, viewController: self)
     }
     
     func getEntryData(key: String) -> String? {

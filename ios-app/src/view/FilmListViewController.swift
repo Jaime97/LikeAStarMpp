@@ -19,6 +19,7 @@ class FilmListViewController: UIViewController, UITabBarDelegate {
     private var tabChangedListener: ((KotlinInt) -> Void)?
     private var dataToSendToDetail: [String : String]?
     private var currentNumberOfCells: Int = 0
+    lazy var messageManager = MessageManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,16 +77,11 @@ class FilmListViewController: UIViewController, UITabBarDelegate {
 
 extension FilmListViewController: FilmListViewModelEventsListener {
     func getStringFromResource(resource: ResourceStringDesc) -> String {
-        return resource.localized()
+        return messageManager.getStringFromResource(resource: resource)
     }
     
     func showErrorMessage(text: String) {
-        let alertDisapperTimeInSeconds = 2.0
-        let alert = UIAlertController(title: nil, message: text, preferredStyle: .actionSheet)
-        self.present(alert, animated: true)
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + alertDisapperTimeInSeconds) {
-          alert.dismiss(animated: true)
-        }
+        messageManager.showErrorMessage(text: text, viewController: self)
     }
     
     func addOnEndOfListReachedListener(listener: @escaping () -> Void) {
