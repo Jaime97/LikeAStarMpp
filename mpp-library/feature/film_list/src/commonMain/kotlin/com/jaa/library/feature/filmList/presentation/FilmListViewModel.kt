@@ -84,6 +84,7 @@ class FilmListViewModel(
 
     fun onViewWillDisappear() {
         automaticallyDownloadJob?.cancel(null)
+        automaticallyDownloadJob = null
     }
 
     fun getSearchString(): StringDesc {
@@ -129,14 +130,15 @@ class FilmListViewModel(
             automaticallyDownloadJob!!.start()
         } else {
             automaticallyDownloadJob?.cancel(null)
+            automaticallyDownloadJob = null
         }
     }
 
     private fun getAutomaticallyDownloadJob(active:Boolean):Job {
         return viewModelScope.launch {
             while(active) {
-                delay(10 * 1000)
-                updateFilmList()
+                delay(60 * 1000)
+                getNextPageInFilmList()
             }
         }
     }
