@@ -1,10 +1,10 @@
 package com.jaa.likeastarappmpp.view
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import com.jaa.library.feature.filmDetail.presentation.FilmDetailViewModel
 import com.jaa.likeastarappmpp.AppComponent
