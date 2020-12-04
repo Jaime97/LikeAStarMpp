@@ -149,13 +149,15 @@ class FilmDetailViewModel(
     private fun showLocations() {
         eventsDispatcher.dispatchEvent {
             showListInDialog(strings.selectLocation.desc(), splittedLocations) { position ->
-                geUserLocation { lat, long ->
+                geUserLocation(onSuccessListener = { lat, long ->
                     openMapWithLocation(
                         Pair(lat, long),
                         splittedLocations[position],
                         strings.sanFranciscoLocationSpec.desc()
                     )
-                }
+                }, onErrorListener = {
+                    showAlert(strings.userLocationError.desc(), strings.userLocationErrorDesc.desc(), strings.ok.desc())
+                })
             }
         }
     }
@@ -166,7 +168,7 @@ class FilmDetailViewModel(
         fun showListInDialog(title:StringDesc, elementList:Array<String>, onRowTappedListener:(position:Int) -> Unit)
         fun openMapWithLocation(originCoordinates: Pair<Double, Double>, destinyLocation:String, suffix:StringDesc)
         fun showAlert(title:StringDesc, description:StringDesc, buttonTitle:StringDesc)
-        fun geUserLocation(onSuccessListener:(latitude: Double, longitude: Double) -> Unit)
+        fun geUserLocation(onSuccessListener:(latitude: Double, longitude: Double) -> Unit, onErrorListener: () -> Unit)
     }
 
     interface Strings {
@@ -184,6 +186,8 @@ class FilmDetailViewModel(
         val ok: StringResource
         val noLocationError: StringResource
         val noLocationErrorDesc: StringResource
+        val userLocationError: StringResource
+        val userLocationErrorDesc: StringResource
     }
 
     interface Constants {

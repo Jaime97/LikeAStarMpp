@@ -77,6 +77,8 @@ class SharedFactory(
             override val ok: StringResource = MR.strings.ok
             override val noLocationError: StringResource = MR.strings.no_locations
             override val noLocationErrorDesc: StringResource = MR.strings.no_locations_desc
+            override val userLocationError: StringResource = MR.strings.user_location_error
+            override val userLocationErrorDesc: StringResource = MR.strings.user_location_error_desc
         },
         constants = object : FilmDetailViewModel.Constants {
             override val selectedFilmTitleKey: String = SELECTED_FILM_TITLE_KEY

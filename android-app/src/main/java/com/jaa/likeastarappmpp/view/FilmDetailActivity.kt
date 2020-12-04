@@ -91,12 +91,14 @@ class FilmDetailActivity :
         builder.show()
     }
 
-    override fun geUserLocation(onSuccessListener:(latitude: Double, longitude: Double) -> Unit) {
-        AppLocationProvider().getLocation(this, object : AppLocationProvider.LocationCallBack {
+    override fun geUserLocation(onSuccessListener:(latitude: Double, longitude: Double) -> Unit, onErrorListener: () -> Unit) {
+        if(!AppLocationProvider().getLocation(this, object : AppLocationProvider.LocationCallBack {
             override fun locationResult(location: Location?) {
                 onSuccessListener(location!!.latitude, location.longitude)
             }
-        })
+        })) {
+            onErrorListener()
+        }
     }
 
 }
