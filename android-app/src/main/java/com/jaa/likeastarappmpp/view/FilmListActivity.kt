@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.AbsListView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
@@ -17,6 +18,7 @@ import com.jaa.likeastarappmpp.databinding.ActivityFilmListBinding
 import dev.icerock.moko.mvvm.MvvmEventsActivity
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
+import dev.icerock.moko.resources.desc.ResourceStringDesc
 import dev.icerock.moko.resources.desc.StringDesc
 
 
@@ -120,6 +122,14 @@ class FilmListActivity :
                 // Without functionality
             }
         })
+    }
+
+    override fun getStringFromResource(resource: ResourceStringDesc): String {
+        return resource.toString(this)
+    }
+
+    override fun showErrorMessage(text: String) {
+        Toast.makeText(applicationContext,text,Toast.LENGTH_SHORT).show()
     }
 
     override fun onStop() {

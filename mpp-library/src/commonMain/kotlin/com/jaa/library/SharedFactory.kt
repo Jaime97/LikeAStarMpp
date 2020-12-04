@@ -115,6 +115,10 @@ class SharedFactory(
                     override fun onSuccess(films: List<FilmData>) {
                         listener.onSuccess(films.map { it.toFilmRowData() })
                     }
+
+                    override fun onError(e: Exception) {
+                        listener.onError(e)
+                    }
                 })
             }
         }

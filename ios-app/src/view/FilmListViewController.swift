@@ -75,6 +75,19 @@ class FilmListViewController: UIViewController, UITabBarDelegate {
 }
 
 extension FilmListViewController: FilmListViewModelEventsListener {
+    func getStringFromResource(resource: ResourceStringDesc) -> String {
+        return resource.localized()
+    }
+    
+    func showErrorMessage(text: String) {
+        let alertDisapperTimeInSeconds = 2.0
+        let alert = UIAlertController(title: nil, message: text, preferredStyle: .actionSheet)
+        self.present(alert, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + alertDisapperTimeInSeconds) {
+          alert.dismiss(animated: true)
+        }
+    }
+    
     func addOnEndOfListReachedListener(listener: @escaping () -> Void) {
         self.filmTableView.delegate = self
         self.endOfTableReachedListener = listener

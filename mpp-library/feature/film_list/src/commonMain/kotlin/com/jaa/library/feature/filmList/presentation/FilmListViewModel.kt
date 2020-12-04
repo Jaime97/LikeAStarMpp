@@ -11,6 +11,7 @@ import dev.icerock.moko.mvvm.livedata.*
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import dev.icerock.moko.resources.StringResource
 import dev.icerock.moko.resources.desc.Resource
+import dev.icerock.moko.resources.desc.ResourceStringDesc
 import dev.icerock.moko.resources.desc.StringDesc
 import dev.icerock.moko.resources.desc.desc
 import dev.icerock.moko.units.TableUnitItem
@@ -208,6 +209,10 @@ class FilmListViewModel(
                         override fun onSuccess(films: List<FilmRowData>) {
                             _state.value = films.asState()
                         }
+
+                        override fun onError(e: Exception) {
+                            showErrorMessage(e.message?:getStringFromResource(strings.unknownError.desc()))
+                        }
                     })
                 } catch (error: Throwable) {
                     _state.value = State.Error(error)
@@ -237,6 +242,8 @@ class FilmListViewModel(
         fun presentFilmDetailView(data:Map<String, String>)
         fun presentSettingsView()
         fun isWifiActive():Boolean
+        fun getStringFromResource(resource: ResourceStringDesc) : String
+        fun showErrorMessage(text: String)
     }
 
     interface Strings {
