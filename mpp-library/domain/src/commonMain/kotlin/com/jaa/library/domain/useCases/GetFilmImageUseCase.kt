@@ -7,7 +7,7 @@ class GetFilmImageUseCase(
 ) {
     interface GetFilmImageListener {
         fun onSuccess(imageUrl: String)
-        fun onError()
+        fun onError(e: Exception?)
     }
 
     suspend fun execute(title:String, listener:GetFilmImageListener) {
@@ -16,8 +16,8 @@ class GetFilmImageUseCase(
                 listener.onSuccess(imageUrl)
             }
 
-            override fun onError() {
-                listener.onError()
+            override fun onError(e: Exception?) {
+                listener.onError(e)
             }
 
         })

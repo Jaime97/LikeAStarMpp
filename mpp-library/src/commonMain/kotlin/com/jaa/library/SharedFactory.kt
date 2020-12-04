@@ -79,6 +79,7 @@ class SharedFactory(
             override val noLocationErrorDesc: StringResource = MR.strings.no_locations_desc
             override val userLocationError: StringResource = MR.strings.user_location_error
             override val userLocationErrorDesc: StringResource = MR.strings.user_location_error_desc
+            override val filmImageError: StringResource = MR.strings.film_image_error
         },
         constants = object : FilmDetailViewModel.Constants {
             override val selectedFilmTitleKey: String = SELECTED_FILM_TITLE_KEY
@@ -249,8 +250,8 @@ class SharedFactory(
                         listener.onSuccess(imageUrl = imageUrl)
                     }
 
-                    override fun onError() {
-                        listener.onError()
+                    override fun onError(e: Exception?) {
+                        listener.onError(e)
                     }
                 })
             }

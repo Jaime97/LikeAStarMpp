@@ -15,6 +15,7 @@ import com.jaa.likeastarappmpp.AppComponent
 import com.jaa.likeastarappmpp.R
 import com.jaa.likeastarappmpp.connectivity.ConnectionChecker
 import com.jaa.likeastarappmpp.databinding.ActivityFilmListBinding
+import com.jaa.likeastarappmpp.message.MessageManager
 import dev.icerock.moko.mvvm.MvvmEventsActivity
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
@@ -29,6 +30,10 @@ class FilmListActivity :
     override val layoutId: Int = R.layout.activity_film_list
     override val viewModelClass: Class<FilmListViewModel> = FilmListViewModel::class.java
     override val viewModelVariableId: Int = com.jaa.likeastarappmpp.BR.viewModel
+
+    private val messageManager: MessageManager by lazy {
+        MessageManager(this)
+    }
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
         AppComponent.factory.filmListFactory.createFilmListViewModel(
@@ -125,11 +130,11 @@ class FilmListActivity :
     }
 
     override fun getStringFromResource(resource: ResourceStringDesc): String {
-        return resource.toString(this)
+        return messageManager.getStringFromResource(resource)
     }
 
     override fun showErrorMessage(text: String) {
-        Toast.makeText(applicationContext,text,Toast.LENGTH_SHORT).show()
+        messageManager.showErrorMessage(text)
     }
 
     override fun onStop() {

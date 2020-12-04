@@ -11,11 +11,13 @@ import com.jaa.likeastarappmpp.AppComponent
 import com.jaa.likeastarappmpp.R
 import com.jaa.likeastarappmpp.databinding.ActivityFilmDetailBinding
 import com.jaa.likeastarappmpp.location.AppLocationProvider
+import com.jaa.likeastarappmpp.message.MessageManager
 import com.squareup.picasso.Picasso
 import dev.icerock.moko.mvvm.MvvmEventsActivity
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 import dev.icerock.moko.permissions.PermissionsController
+import dev.icerock.moko.resources.desc.ResourceStringDesc
 import dev.icerock.moko.resources.desc.StringDesc
 
 
@@ -26,6 +28,10 @@ class FilmDetailActivity :
     override val layoutId: Int = R.layout.activity_film_detail
     override val viewModelClass: Class<FilmDetailViewModel> = FilmDetailViewModel::class.java
     override val viewModelVariableId: Int = com.jaa.likeastarappmpp.BR.viewModel
+
+    private val messageManager:MessageManager by lazy {
+        MessageManager(this)
+    }
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
         AppComponent.factory.filmDetailFactory.createFilmDetailViewModel(
@@ -84,11 +90,7 @@ class FilmDetailActivity :
     }
 
     override fun showAlert(title: StringDesc, description: StringDesc, buttonTitle: StringDesc) {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(title.toString(this))
-        builder.setMessage(description.toString(this))
-        builder.setPositiveButton(buttonTitle.toString(this), null)
-        builder.show()
+        messageManager.showAlert(title, description, buttonTitle)
     }
 
     override fun geUserLocation(onSuccessListener:(latitude: Double, longitude: Double) -> Unit, onErrorListener: () -> Unit) {
@@ -99,6 +101,14 @@ class FilmDetailActivity :
         })) {
             onErrorListener()
         }
+    }
+
+    override fun getStringFromResource(resource: ResourceStringDesc): String {
+        return messageManager.getStringFromResource(resource)
+    }
+
+    override fun showErrorMessage(text: String) {
+        messageManager.showErrorMessage(text)
     }
 
 }
