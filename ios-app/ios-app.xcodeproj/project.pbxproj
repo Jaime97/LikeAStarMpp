@@ -12,6 +12,7 @@
 		2337EB6F257123BA006987AC /* FilmListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2337EB6E257123BA006987AC /* FilmListViewController.swift */; };
 		2337EB7425712BA7006987AC /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 2337EB7225712BA6006987AC /* Reachability.m */; };
 		2352041F2576AD46002FA492 /* FilmTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2352041D2576AD46002FA492 /* FilmTableViewCell.xib */; };
+		237722BE257AA01800EB6003 /* MessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237722BD257AA01800EB6003 /* MessageManager.swift */; };
 		23DA9E8F257412B2008934AF /* FilmTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DA9E8D257412B2008934AF /* FilmTableViewCell.swift */; };
 		23DA9E922574205F008934AF /* FilmTableDataFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DA9E912574205F008934AF /* FilmTableDataFactory.swift */; };
 		23E3715F257503EA00364291 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E3715D257503EA00364291 /* SettingsTableViewCell.swift */; };
@@ -33,6 +34,7 @@
 		2337EB7225712BA6006987AC /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		2337EB7325712BA7006987AC /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		2352041D2576AD46002FA492 /* FilmTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilmTableViewCell.xib; sourceTree = "<group>"; };
+		237722BD257AA01800EB6003 /* MessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageManager.swift; sourceTree = "<group>"; };
 		23DA9E8D257412B2008934AF /* FilmTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FilmTableViewCell.swift; path = src/view/FilmTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		23DA9E912574205F008934AF /* FilmTableDataFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FilmTableDataFactory.swift; path = src/view/FilmTableDataFactory.swift; sourceTree = SOURCE_ROOT; };
 		23E3715D257503EA00364291 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsTableViewCell.swift; path = src/view/SettingsTableViewCell.swift; sourceTree = SOURCE_ROOT; };
@@ -88,6 +90,14 @@
 			path = reachability;
 			sourceTree = "<group>";
 		};
+		237722BC257A9FEF00EB6003 /* message */ = {
+			isa = PBXGroup;
+			children = (
+				237722BD257AA01800EB6003 /* MessageManager.swift */,
+			);
+			path = message;
+			sourceTree = "<group>";
+		};
 		287627F61F319065007FA12B = {
 			isa = PBXGroup;
 			children = (
@@ -137,6 +147,7 @@
 		45F47910219463C7003D25FA /* src */ = {
 			isa = PBXGroup;
 			children = (
+				237722BC257A9FEF00EB6003 /* message */,
 				2337EB7025712B94006987AC /* reachability */,
 				451D7B1C235845E500095112 /* units */,
 				451D7B1B235845D400095112 /* view */,
@@ -301,6 +312,7 @@
 				23DA9E8F257412B2008934AF /* FilmTableViewCell.swift in Sources */,
 				451D7B1A235845B100095112 /* AppComponent.swift in Sources */,
 				23DA9E922574205F008934AF /* FilmTableDataFactory.swift in Sources */,
+				237722BE257AA01800EB6003 /* MessageManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

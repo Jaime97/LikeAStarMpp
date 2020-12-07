@@ -11,7 +11,7 @@ import kotlinx.serialization.SerialName
  * @param error A string describing the error
  */
 @Serializable
-data class FilmImageBadRequest (
+data class FilmImageBadResponse (
     /* A boolean indicating success or error */
     @SerialName("Response")
     val response: String? = null,

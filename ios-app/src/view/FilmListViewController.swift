@@ -12,6 +12,8 @@ class FilmListViewController: UIViewController, UITabBarDelegate {
     @IBOutlet var searchTextField: UITextField!
     @IBOutlet var tabBar: UITabBar!
     
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    
     private var dataSource: TableUnitsSource!
     private var viewModel: FilmListViewModel!
     private var searchTextChangedListener: ((String) -> Void)!
@@ -19,12 +21,15 @@ class FilmListViewController: UIViewController, UITabBarDelegate {
     private var tabChangedListener: ((KotlinInt) -> Void)?
     private var dataToSendToDetail: [String : String]?
     private var currentNumberOfCells: Int = 0
+    lazy var messageManager = MessageManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.viewModel = AppComponent.factory.filmListFactory.createFilmListViewModel(eventsDispatcher: EventsDispatcher(listener: self), getNextPageInFilmListUseCase: AppComponent.factory.getNextPageInFilmListUseCase(), changeFavouriteStateUseCase: AppComponent.factory.changeFavouriteStateUseCase(), filterByTitleUseCase: AppComponent.factory.filterByTitleUseCase(), filterByFavouriteUseCase: AppComponent.factory.filterByFavouriteUseCase(), getBooleanPreferenceUseCase: AppComponent.factory.getBooleanPreferenceUseCaseForList(), setDownloadOnlyWithWifiUseCase: AppComponent.factory.setDownloadOnlyWithWifiUseCase(), getFilmListUseCase: AppComponent.factory.getFilmListUseCase())
         
         self.dataSource = TableUnitsSourceKt.default(for: self.filmTableView)
+        
+        self.activityIndicator.bindVisibility(liveData: self.viewModel.state.isLoadingState())
         
         self.viewModel.state.data().addObserver { [weak self] itemsObject in
             let items = ((itemsObject as? [TableUnitItem]) != nil) ? itemsObject as! [TableUnitItem] : [TableUnitItem]()
@@ -75,6 +80,14 @@ class FilmListViewController: UIViewController, UITabBarDelegate {
 }
 
 extension FilmListViewController: FilmListViewModelEventsListener {
+    func getStringFromResource(resource: ResourceStringDesc) -> String {
+        return messageManager.getStringFromResource(resource: resource)
+    }
+    
+    func showErrorMessage(text: String) {
+        messageManager.showErrorMessage(text: text, viewController: self)
+    }
+    
     func addOnEndOfListReachedListener(listener: @escaping () -> Void) {
         self.filmTableView.delegate = self
         self.endOfTableReachedListener = listener

@@ -41,7 +41,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BadResponse'
+                $ref: '#/components/schemas/FilmBadResponse'
 
       servers:
         - url: 'https://data.sfgov.org'
@@ -107,14 +107,15 @@ components:
           description: Total number of locations for this title
       required:
         - title
-    BadResponse:
+    FilmBadResponse:
       properties:
+        code:
+          description: Code for the error
+          type: string
+        error:
+          description: If there is an error
+          type: boolean
         message:
           description: A description of the error
           type: string
           example: Invalid SoQL query
-        errorCode:
-          type: string
-          example: query.soql.invalid
-        data:
-          type: string

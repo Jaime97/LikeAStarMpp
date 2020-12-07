@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.AbsListView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
@@ -14,9 +15,11 @@ import com.jaa.likeastarappmpp.AppComponent
 import com.jaa.likeastarappmpp.R
 import com.jaa.likeastarappmpp.connectivity.ConnectionChecker
 import com.jaa.likeastarappmpp.databinding.ActivityFilmListBinding
+import com.jaa.likeastarappmpp.message.MessageManager
 import dev.icerock.moko.mvvm.MvvmEventsActivity
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
+import dev.icerock.moko.resources.desc.ResourceStringDesc
 import dev.icerock.moko.resources.desc.StringDesc
 
 
@@ -27,6 +30,10 @@ class FilmListActivity :
     override val layoutId: Int = R.layout.activity_film_list
     override val viewModelClass: Class<FilmListViewModel> = FilmListViewModel::class.java
     override val viewModelVariableId: Int = com.jaa.likeastarappmpp.BR.viewModel
+
+    private val messageManager: MessageManager by lazy {
+        MessageManager(this)
+    }
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
         AppComponent.factory.filmListFactory.createFilmListViewModel(
@@ -120,6 +127,14 @@ class FilmListActivity :
                 // Without functionality
             }
         })
+    }
+
+    override fun getStringFromResource(resource: ResourceStringDesc): String {
+        return messageManager.getStringFromResource(resource)
+    }
+
+    override fun showErrorMessage(text: String) {
+        messageManager.showErrorMessage(text)
     }
 
     override fun onStop() {

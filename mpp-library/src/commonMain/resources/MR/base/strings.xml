@@ -26,4 +26,7 @@
     <string name="permission_denied_desc">The app cannot show a route to the location without the location permissions</string>
     <string name="no_locations">No location available</string>
     <string name="no_locations_desc">This film does not have any location available</string>
+    <string name="user_location_error">Location error</string>
+    <string name="user_location_error_desc">There has been an error in obtaining the location. Try activating the GPS or allowing access to your location via the network.</string>
+    <string name="film_image_error">Could not get film poster image</string>
 </resources>

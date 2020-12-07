@@ -3,10 +3,12 @@ package com.jaa.library.domain.di
 
 import com.github.aakira.napier.Napier
 import com.jaa.library.domain.dataSource.memory.FilmMemoryStorage
+import com.jaa.library.domain.dataSource.service.exceptions.FilmExceptionSerializer
 import com.jaa.library.domain.dataSource.service.FilmImageService
 import com.jaa.library.domain.repository.FilmListRepository
 import com.jaa.library.domain.dataSource.service.FilmService
 import com.jaa.library.domain.dataSource.service.api.FilmImageApi
+import com.jaa.library.domain.dataSource.service.exceptions.FilmImageExceptionSerializer
 import com.jaa.library.domain.dataSource.storage.FilmDatabase
 import com.jaa.library.domain.dataSource.storage.FilmSqlDatabase
 import com.jaa.library.domain.preferences.PreferenceManager
@@ -16,7 +18,6 @@ import com.russhwolf.settings.Settings
 import com.squareup.sqldelight.db.SqlDriver
 import dev.icerock.moko.network.exceptionfactory.HttpExceptionFactory
 import dev.icerock.moko.network.exceptionfactory.parser.ErrorExceptionParser
-import dev.icerock.moko.network.exceptionfactory.parser.ValidationExceptionParser
 import dev.icerock.moko.network.features.ExceptionFeature
 import dev.icerock.moko.network.generated.apis.FilmApi
 import io.ktor.client.*
@@ -35,13 +36,37 @@ class DomainFactory(
         }
     }
 
-    private val httpClient: HttpClient by lazy {
+    private val filmHttpClient: HttpClient by lazy {
         HttpClient {
             install(ExceptionFeature) {
                 exceptionFactory = HttpExceptionFactory(
                     defaultParser = ErrorExceptionParser(json),
                     customParsers = mapOf(
-                        HttpStatusCode.UnprocessableEntity.value to ValidationExceptionParser(json)
+                        HttpStatusCode.BadRequest.value to FilmExceptionSerializer(json)
+                    )
+                )
+            }
+            install(Logging) {
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        Napier.d(message = message)
+                    }
+                }
+                level = LogLevel.ALL
+            }
+
+            // disable standard BadResponseStatus - exceptionfactory do it for us
+            expectSuccess = false
+        }
+    }
+
+    private val filmImageHttpClient: HttpClient by lazy {
+        HttpClient {
+            install(ExceptionFeature) {
+                exceptionFactory = HttpExceptionFactory(
+                    defaultParser = ErrorExceptionParser(json),
+                    customParsers = mapOf(
+                        HttpStatusCode.BadRequest.value to FilmImageExceptionSerializer(json)
                     )
                 )
             }
@@ -60,7 +85,7 @@ class DomainFactory(
     }
 
     private val filmApi: FilmApi by lazy {
-        FilmApi(baseFilmUrl, httpClient, json)
+        FilmApi(baseFilmUrl, filmHttpClient, json)
     }
 
     private val filmService: FilmService by lazy {
@@ -68,7 +93,7 @@ class DomainFactory(
     }
 
     private val filmImageApi: FilmImageApi by lazy {
-        FilmImageApi(baseFilmImageUrl, httpClient, json)
+        FilmImageApi(baseFilmImageUrl, filmImageHttpClient, json)
     }
 
     private val filmImageService: FilmImageService by lazy {

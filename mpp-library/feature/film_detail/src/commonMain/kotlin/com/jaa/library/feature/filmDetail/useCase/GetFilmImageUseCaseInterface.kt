@@ -4,7 +4,7 @@ interface GetFilmImageUseCaseInterface {
 
     interface GetFilmImageModelListener {
         fun onSuccess(imageUrl: String)
-        fun onError()
+        fun onError(e: Exception?)
     }
 
     suspend fun execute(title:String, listener:GetFilmImageModelListener)

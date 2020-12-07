@@ -29,11 +29,16 @@ class FilmListRepository(
     }
 
     // Returns the list with the new page if it was not empty, an empty list otherwise
-    internal suspend fun getFilmListWithPage(offset:Int, limit:Int, order:String, wifiActive:Boolean):List<FilmData> {
-        return if(synchronizePagesInDataSources(offset, limit, order, wifiActive)) {
-            filterCurrentListWithFavouriteAndTitle()
-        } else {
-            emptyList()
+    internal suspend fun getFilmListWithPage(offset:Int, limit:Int, order:String, wifiActive:Boolean, listener: OnGetListListener){
+        try {
+            if(synchronizePagesInDataSources(offset, limit, order, wifiActive)) {
+                listener.onSuccess(filterCurrentListWithFavouriteAndTitle())
+            } else {
+                listener.onSuccess(emptyList())
+            }
+
+        } catch (e:Exception) {
+            listener.onError(e)
         }
     }
 
@@ -80,6 +85,11 @@ class FilmListRepository(
                 visited = false, favourite = false, numberOfLocations = (filmData.numberOfLocations?:1 + (acc.numberOfLocations?:1)))
             }
         }.sortedBy { it.title }
+    }
+
+    interface OnGetListListener {
+        fun onSuccess(films: List<FilmData>)
+        fun onError(e:Exception)
     }
 
 }

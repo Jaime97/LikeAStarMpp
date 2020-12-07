@@ -11,6 +11,7 @@ import dev.icerock.moko.mvvm.livedata.*
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import dev.icerock.moko.resources.StringResource
 import dev.icerock.moko.resources.desc.Resource
+import dev.icerock.moko.resources.desc.ResourceStringDesc
 import dev.icerock.moko.resources.desc.StringDesc
 import dev.icerock.moko.resources.desc.desc
 import dev.icerock.moko.units.TableUnitItem
@@ -83,6 +84,7 @@ class FilmListViewModel(
 
     fun onViewWillDisappear() {
         automaticallyDownloadJob?.cancel(null)
+        automaticallyDownloadJob = null
     }
 
     fun getSearchString(): StringDesc {
@@ -128,14 +130,15 @@ class FilmListViewModel(
             automaticallyDownloadJob!!.start()
         } else {
             automaticallyDownloadJob?.cancel(null)
+            automaticallyDownloadJob = null
         }
     }
 
     private fun getAutomaticallyDownloadJob(active:Boolean):Job {
         return viewModelScope.launch {
             while(active) {
-                delay(10 * 1000)
-                updateFilmList()
+                delay(60 * 1000)
+                getNextPageInFilmList()
             }
         }
     }
@@ -208,6 +211,10 @@ class FilmListViewModel(
                         override fun onSuccess(films: List<FilmRowData>) {
                             _state.value = films.asState()
                         }
+
+                        override fun onError(e: Exception) {
+                            showErrorMessage(e.message?:getStringFromResource(strings.unknownError.desc()))
+                        }
                     })
                 } catch (error: Throwable) {
                     _state.value = State.Error(error)
@@ -237,6 +244,8 @@ class FilmListViewModel(
         fun presentFilmDetailView(data:Map<String, String>)
         fun presentSettingsView()
         fun isWifiActive():Boolean
+        fun getStringFromResource(resource: ResourceStringDesc) : String
+        fun showErrorMessage(text: String)
     }
 
     interface Strings {

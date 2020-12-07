@@ -17,6 +17,7 @@ import dev.icerock.moko.permissions.Permission
 import dev.icerock.moko.permissions.PermissionsController
 import dev.icerock.moko.resources.StringResource
 import dev.icerock.moko.resources.desc.Resource
+import dev.icerock.moko.resources.desc.ResourceStringDesc
 import dev.icerock.moko.resources.desc.StringDesc
 import dev.icerock.moko.resources.desc.desc
 import kotlinx.coroutines.launch
@@ -62,10 +63,10 @@ class FilmDetailViewModel(
                                             loadFilmImage(imageUrl)
                                         }
 
-                                        override fun onError() {
+                                        override fun onError(e: Exception?) {
                                             // Can't load image, leave placeholder
+                                            showErrorMessage(e?.message?:getStringFromResource(strings.filmImageError.desc()))
                                         }
-
                                     })
                                 }
                             }
@@ -149,13 +150,15 @@ class FilmDetailViewModel(
     private fun showLocations() {
         eventsDispatcher.dispatchEvent {
             showListInDialog(strings.selectLocation.desc(), splittedLocations) { position ->
-                geUserLocation { lat, long ->
+                geUserLocation(onSuccessListener = { lat, long ->
                     openMapWithLocation(
                         Pair(lat, long),
                         splittedLocations[position],
                         strings.sanFranciscoLocationSpec.desc()
                     )
-                }
+                }, onErrorListener = {
+                    showAlert(strings.userLocationError.desc(), strings.userLocationErrorDesc.desc(), strings.ok.desc())
+                })
             }
         }
     }
@@ -166,7 +169,9 @@ class FilmDetailViewModel(
         fun showListInDialog(title:StringDesc, elementList:Array<String>, onRowTappedListener:(position:Int) -> Unit)
         fun openMapWithLocation(originCoordinates: Pair<Double, Double>, destinyLocation:String, suffix:StringDesc)
         fun showAlert(title:StringDesc, description:StringDesc, buttonTitle:StringDesc)
-        fun geUserLocation(onSuccessListener:(latitude: Double, longitude: Double) -> Unit)
+        fun geUserLocation(onSuccessListener:(latitude: Double, longitude: Double) -> Unit, onErrorListener: () -> Unit)
+        fun getStringFromResource(resource: ResourceStringDesc) : String
+        fun showErrorMessage(text: String)
     }
 
     interface Strings {
@@ -184,6 +189,9 @@ class FilmDetailViewModel(
         val ok: StringResource
         val noLocationError: StringResource
         val noLocationErrorDesc: StringResource
+        val userLocationError: StringResource
+        val userLocationErrorDesc: StringResource
+        val filmImageError: StringResource
     }
 
     interface Constants {
