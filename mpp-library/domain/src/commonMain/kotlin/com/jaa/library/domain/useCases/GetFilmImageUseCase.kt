@@ -1,9 +1,9 @@
 package com.jaa.library.domain.useCases
 
-import com.jaa.library.domain.repository.FilmDetailRepository
+import com.jaa.library.domain.repository.filmDetail.FilmDetailRepositoryInterface
 
 class GetFilmImageUseCase(
-    private val filmDetailRepository : FilmDetailRepository
+    private val filmDetailRepository : FilmDetailRepositoryInterface
 ) {
     interface GetFilmImageListener {
         fun onSuccess(imageUrl: String)

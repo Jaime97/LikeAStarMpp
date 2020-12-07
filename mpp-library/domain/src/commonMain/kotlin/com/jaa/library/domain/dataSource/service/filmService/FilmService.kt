@@ -1,4 +1,4 @@
-package com.jaa.library.domain.dataSource.service
+package com.jaa.library.domain.dataSource.service.filmService
 
 import dev.icerock.moko.network.generated.apis.FilmApi
 import dev.icerock.moko.network.generated.models.FilmData
@@ -6,9 +6,9 @@ import dev.icerock.moko.network.generated.models.FilmData
 
 class FilmService internal constructor(
     val filmApi: FilmApi
-) {
+) : FilmServiceInterface {
 
-    suspend fun getFilmListWithOffset(offset: Int, limit: Int, order: String): List<FilmData> {
+    override suspend fun getFilmListWithOffset(offset: Int, limit: Int, order: String): List<FilmData> {
         return filmApi.resourceWwmuGmzcJsonGet(offset.toString(), limit.toString(), order)
     }
 

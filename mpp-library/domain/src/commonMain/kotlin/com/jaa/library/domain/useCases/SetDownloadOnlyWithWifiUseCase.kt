@@ -1,9 +1,9 @@
 package com.jaa.library.domain.useCases
 
-import com.jaa.library.domain.repository.FilmListRepository
+import com.jaa.library.domain.repository.filmList.FilmListRepositoryInterface
 
 class SetDownloadOnlyWithWifiUseCase (
-    private val filmListRepository : FilmListRepository
+    private val filmListRepository : FilmListRepositoryInterface
 ) {
     interface SetDownloadOnlyWithWifiListener {
         fun onSuccess()

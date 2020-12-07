@@ -6,13 +6,13 @@ import dev.icerock.moko.network.generated.models.FilmData
 
 class FilmDatabase(
     private val filmSqlDatabase: FilmSqlDatabase
-) {
+) : FilmDatabaseInterface {
 
-    fun getFilmListWithLocalOffset(offset: Int, limit: Int): List<FilmData> {
+    override fun getFilmListWithLocalOffset(offset: Int, limit: Int): List<FilmData> {
         return filmSqlDatabase.filmSqlDatabaseQueries.selectFilmsWithOffset(offset.toLong(), limit.toLong()).executeAsList().map { it.toFilmData() }
     }
 
-    fun getFilmListWithOnlineOffset(offset: Int, limit: Int): List<FilmData> {
+    override fun getFilmListWithOnlineOffset(offset: Int, limit: Int): List<FilmData> {
         val listOfOffsets = filmSqlDatabase.filmSqlDatabaseQueries.selectListOffsetMapperWithOffset(limit.toLong(), offset.toLong()).executeAsList()
         return if(listOfOffsets.isNotEmpty()) {
             filmSqlDatabase.filmSqlDatabaseQueries.selectFilmsWithOffset(listOfOffsets.last().local_offset, listOfOffsets[0].local_offset).executeAsList().map { it.toFilmData() }
@@ -21,7 +21,7 @@ class FilmDatabase(
         }
     }
 
-    fun saveFilmList(films: List<FilmData>) {
+    override fun saveFilmList(films: List<FilmData>) {
         if(films.isNotEmpty()) {
             val maxOfflineOffset = filmSqlDatabase.filmSqlDatabaseQueries.selectMaxOfflineOffset().executeAsOne()
             for ((currentOfflineOffset, film) in films.withIndex()) {
@@ -34,7 +34,7 @@ class FilmDatabase(
         }
     }
 
-    fun updateFilm(film: FilmData) {
+    override fun updateFilm(film: FilmData) {
         filmSqlDatabase.filmSqlDatabaseQueries.insertFilm(film.toFilmDb())
     }
 

@@ -1,12 +1,12 @@
 package com.jaa.library.domain.repository
 
-import com.jaa.library.domain.dataSource.memory.FilmMemoryStorage
-import com.jaa.library.domain.dataSource.storage.FilmDatabase
+import com.jaa.library.domain.dataSource.memory.FilmMemoryStorageInterface
+import com.jaa.library.domain.dataSource.storage.FilmDatabaseInterface
 import dev.icerock.moko.network.generated.models.FilmData
 
 interface LocalDatabaseManagerRepository {
-    val filmDatabase: FilmDatabase
-    val filmMemoryStorage: FilmMemoryStorage
+    val filmDatabase: FilmDatabaseInterface
+    val filmMemoryStorage: FilmMemoryStorageInterface
 
     fun updateFilm(film: FilmData) {
         synchronizeLocalDataSources()

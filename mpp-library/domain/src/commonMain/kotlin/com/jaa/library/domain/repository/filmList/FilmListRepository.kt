@@ -1,35 +1,30 @@
 
-package com.jaa.library.domain.repository
+package com.jaa.library.domain.repository.filmList
 
-import com.jaa.library.domain.dataSource.memory.FilmMemoryStorage
-import com.jaa.library.domain.dataSource.service.FilmService
-import com.jaa.library.domain.dataSource.storage.FilmDatabase
-import com.jaa.library.domain.preferences.PreferenceManager
+import com.jaa.library.domain.dataSource.memory.FilmMemoryStorageInterface
+import com.jaa.library.domain.dataSource.service.filmService.FilmServiceInterface
+import com.jaa.library.domain.dataSource.storage.FilmDatabaseInterface
+import com.jaa.library.domain.preferences.PreferenceManagerInterface
 import dev.icerock.moko.network.generated.models.FilmData
 
 class FilmListRepository(
-    val filmService: FilmService,
-    override val filmDatabase: FilmDatabase,
-    override val filmMemoryStorage: FilmMemoryStorage,
-    override val preferenceManager: PreferenceManager
-) : LocalDatabaseManagerRepository, PreferenceManagerRepository {
-
-    companion object {
-        const val DATA_SOURCE_ROW_TITLE = "title"
-        const val DATA_SOURCE_ROW_LIMIT = 80
-    }
+    val filmService: FilmServiceInterface,
+    override val filmDatabase: FilmDatabaseInterface,
+    override val filmMemoryStorage: FilmMemoryStorageInterface,
+    override val preferenceManager: PreferenceManagerInterface
+) : FilmListRepositoryInterface {
 
     private var favouriteFilter:Boolean = false
     private var titleFilter:String = ""
     private var downloadOnlyWithWifi = false
 
-    internal fun getFilmList():List<FilmData> {
+    override fun getFilmList():List<FilmData> {
         synchronizeLocalDataSources()
         return filterCurrentListWithFavouriteAndTitle()
     }
 
     // Returns the list with the new page if it was not empty, an empty list otherwise
-    internal suspend fun getFilmListWithPage(offset:Int, limit:Int, order:String, wifiActive:Boolean, listener: OnGetListListener){
+    override suspend fun getFilmListWithPage(offset:Int, limit:Int, order:String, wifiActive:Boolean, listener: FilmListRepositoryInterface.OnGetListListener){
         try {
             if(synchronizePagesInDataSources(offset, limit, order, wifiActive)) {
                 listener.onSuccess(filterCurrentListWithFavouriteAndTitle())
@@ -42,15 +37,15 @@ class FilmListRepository(
         }
     }
 
-    internal fun changeFavouriteFilterState(filter:Boolean) {
+    override fun changeFavouriteFilterState(filter:Boolean) {
         favouriteFilter = filter
     }
 
-    internal fun changeTitleFilter(filter:String) {
+    override fun changeTitleFilter(filter:String) {
         titleFilter = filter
     }
 
-    internal fun setDownloadOnlyWithWifi(active:Boolean) {
+    override fun setDownloadOnlyWithWifi(active:Boolean) {
         downloadOnlyWithWifi = active
     }
 
@@ -85,11 +80,6 @@ class FilmListRepository(
                 visited = false, favourite = false, numberOfLocations = (filmData.numberOfLocations?:1 + (acc.numberOfLocations?:1)))
             }
         }.sortedBy { it.title }
-    }
-
-    interface OnGetListListener {
-        fun onSuccess(films: List<FilmData>)
-        fun onError(e:Exception)
     }
 
 }

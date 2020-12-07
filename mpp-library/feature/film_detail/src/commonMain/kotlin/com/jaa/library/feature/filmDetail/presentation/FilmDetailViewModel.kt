@@ -131,7 +131,7 @@ class FilmDetailViewModel(
     private fun requestPermission(permission: Permission) {
         viewModelScope.launch {
             try {
-                // Calls suspend function in a coroutine to request some permission.
+                // Calls suspend function in a com.jaa.library.domain.coroutine to request some permission.
                 permissionsController.providePermission(permission)
                 // If there are no exceptions, permission has been granted successfully.
                 showLocations()

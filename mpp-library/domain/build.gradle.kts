@@ -22,6 +22,10 @@ dependencies {
     commonMainImplementation(Deps.Libs.MultiPlatform.napier.common)
     commonMainImplementation(Deps.Libs.MultiPlatform.multiplatformSettings.common)
     mppLibrary(Deps.Libs.MultiPlatform.sqlDelight)
+
+    commonTestImplementation(Deps.Libs.MultiPlatform.mokoMvvm.common)
+    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTest)
+    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTestAnnotations)
 }
 
 sqldelight {

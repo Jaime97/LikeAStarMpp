@@ -1,9 +1,9 @@
 package com.jaa.library.domain.repository
 
-import com.jaa.library.domain.preferences.PreferenceManager
+import com.jaa.library.domain.preferences.PreferenceManagerInterface
 
 interface PreferenceManagerRepository {
-    val preferenceManager: PreferenceManager
+    val preferenceManager: PreferenceManagerInterface
 
     fun saveBooleanPreference(key:String, value:Boolean) {
         preferenceManager.putBoolean(key, value)

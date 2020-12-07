@@ -80,10 +80,6 @@ object Deps {
     }
 
     object Libs {
-        object IOS {
-            const val sqlDelightDriver =
-                "com.squareup.sqldelight:native-driver:$sqlDelightVersion"
-        }
 
         object Android {
             const val appCompat =
