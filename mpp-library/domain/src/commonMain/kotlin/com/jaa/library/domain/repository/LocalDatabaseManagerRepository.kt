@@ -18,8 +18,8 @@ interface LocalDatabaseManagerRepository {
         filmMemoryStorage.saveFilmList(filmDatabase.getFilmListWithLocalOffset(0, filmMemoryStorage.getFilmList().size))
     }
 
-    fun getFilm(title:String): FilmData {
-        return filmMemoryStorage.getFilmList().first { it.title == title }
+    fun getFilm(title:String): FilmData? {
+        return try {filmMemoryStorage.getFilmList().first { it.title == title }} catch (e:NoSuchElementException) { null }
     }
 
 }

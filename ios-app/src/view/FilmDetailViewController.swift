@@ -56,6 +56,10 @@ class FilmDetailViewController: UIViewController {
 
 extension FilmDetailViewController: FilmDetailViewModelEventsListener {
     
+    func goBackToPreviousScreen() {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     func getStringFromResource(resource: ResourceStringDesc) -> String {
         return messageManager.getStringFromResource(resource: resource)
     }
@@ -80,8 +84,8 @@ extension FilmDetailViewController: FilmDetailViewModelEventsListener {
         UIApplication.shared.open(URL(string:urlString.replacingOccurrences(of: " ", with: "+").folding(options: .diacriticInsensitive, locale: .current))!, options:[:], completionHandler: nil)
     }
     
-    func showAlert(title: StringDesc, description: StringDesc, buttonTitle: StringDesc) {
-        messageManager.showAlert(title: title, description: description, buttonTitle: buttonTitle, viewController: self)
+    func showAlert(title: StringDesc, description: StringDesc, buttonTitle: StringDesc, onButtonPressed: (() -> Void)? = nil) {
+        messageManager.showAlert(title: title, description: description, buttonTitle: buttonTitle, viewController: self, onButtonPressed: onButtonPressed)
     }
     
     func getEntryData(key: String) -> String? {

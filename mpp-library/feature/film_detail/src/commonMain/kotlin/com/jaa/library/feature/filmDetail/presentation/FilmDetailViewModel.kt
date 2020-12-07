@@ -70,6 +70,12 @@ class FilmDetailViewModel(
                                     })
                                 }
                             }
+
+                            override fun onError() {
+                                showAlert(strings.error.desc(), strings.filmDetailNotFound.desc(), strings.ok.desc()) {
+                                    goBackToPreviousScreen()
+                                }
+                            }
                         })
                 }
             }
@@ -82,7 +88,7 @@ class FilmDetailViewModel(
             requestPermission(Permission.LOCATION)
         } else {
             eventsDispatcher.dispatchEvent {
-                showAlert(strings.noLocationError.desc(), strings.noLocationErrorDesc.desc(), strings.ok.desc())
+                showAlert(strings.noLocationError.desc(), strings.noLocationErrorDesc.desc(), strings.ok.desc(), null)
             }
         }
 
@@ -96,6 +102,12 @@ class FilmDetailViewModel(
                     object : ChangeVisitedStateUseCaseInterface.ChangeVisitedStateModelListener {
                         override fun onSuccess(filmUpdated: FilmDetail) {
                             _state.value = filmUpdated.asState()
+                        }
+
+                        override fun onError() {
+                            eventsDispatcher.dispatchEvent {
+                                showErrorMessage(getStringFromResource(strings.errorChangingVisitedState.desc()))
+                            }
                         }
                     })
             }
@@ -137,11 +149,11 @@ class FilmDetailViewModel(
                 showLocations()
             } catch (deniedAlwaysException: DeniedAlwaysException) {
                 eventsDispatcher.dispatchEvent {
-                    showAlert(strings.permissionErrorTitle.desc(), strings.permissionErrorDesc.desc(), strings.ok.desc())
+                    showAlert(strings.permissionErrorTitle.desc(), strings.permissionErrorDesc.desc(), strings.ok.desc(), null)
                 }
             } catch (deniedException: DeniedException) {
                 eventsDispatcher.dispatchEvent {
-                    showAlert(strings.permissionErrorTitle.desc(), strings.permissionErrorDesc.desc(), strings.ok.desc())
+                    showAlert(strings.permissionErrorTitle.desc(), strings.permissionErrorDesc.desc(), strings.ok.desc(), null)
                 }
             }
         }
@@ -157,7 +169,7 @@ class FilmDetailViewModel(
                         strings.sanFranciscoLocationSpec.desc()
                     )
                 }, onErrorListener = {
-                    showAlert(strings.userLocationError.desc(), strings.userLocationErrorDesc.desc(), strings.ok.desc())
+                    showAlert(strings.userLocationError.desc(), strings.userLocationErrorDesc.desc(), strings.ok.desc(), null)
                 })
             }
         }
@@ -168,10 +180,11 @@ class FilmDetailViewModel(
         fun loadFilmImage(url:String)
         fun showListInDialog(title:StringDesc, elementList:Array<String>, onRowTappedListener:(position:Int) -> Unit)
         fun openMapWithLocation(originCoordinates: Pair<Double, Double>, destinyLocation:String, suffix:StringDesc)
-        fun showAlert(title:StringDesc, description:StringDesc, buttonTitle:StringDesc)
+        fun showAlert(title:StringDesc, description:StringDesc, buttonTitle:StringDesc, onButtonPressed:(() -> Unit)?)
         fun geUserLocation(onSuccessListener:(latitude: Double, longitude: Double) -> Unit, onErrorListener: () -> Unit)
         fun getStringFromResource(resource: ResourceStringDesc) : String
         fun showErrorMessage(text: String)
+        fun goBackToPreviousScreen()
     }
 
     interface Strings {
@@ -192,6 +205,9 @@ class FilmDetailViewModel(
         val userLocationError: StringResource
         val userLocationErrorDesc: StringResource
         val filmImageError: StringResource
+        val error: StringResource
+        val filmDetailNotFound: StringResource
+        val errorChangingVisitedState: StringResource
     }
 
     interface Constants {

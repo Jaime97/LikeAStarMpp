@@ -8,9 +8,15 @@ class GetFilmDetailUseCase(
 ) {
     interface GetFilmDetailListener {
         fun onSuccess(film: FilmData)
+        fun onError()
     }
 
     suspend fun execute(title:String, listener:GetFilmDetailListener) {
-        listener.onSuccess(filmDetailRepository.getFilm(title))
+        val film = filmDetailRepository.getFilm(title)
+        if(film != null) {
+            listener.onSuccess(film)
+        } else {
+            listener.onError()
+        }
     }
 }

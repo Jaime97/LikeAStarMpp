@@ -6,6 +6,7 @@ interface ChangeVisitedStateUseCaseInterface {
 
     interface ChangeVisitedStateModelListener {
         fun onSuccess(filmUpdated:FilmDetail)
+        fun onError()
     }
 
     suspend fun execute(filmTitle:String, listener:ChangeVisitedStateModelListener)

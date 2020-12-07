@@ -53,6 +53,7 @@ class SharedFactory(
             override val favourites: StringResource = MR.strings.favourites
             override val unknownError: StringResource = MR.strings.unknown_error
             override val search: StringResource = MR.strings.search
+            override val changeFavouriteStateError: StringResource = MR.strings.error_changing_favourite
         },
         constants = object : FilmListViewModel.Constants {
             override val selectedFilmTitleKey: String = SELECTED_FILM_TITLE_KEY
@@ -80,6 +81,9 @@ class SharedFactory(
             override val userLocationError: StringResource = MR.strings.user_location_error
             override val userLocationErrorDesc: StringResource = MR.strings.user_location_error_desc
             override val filmImageError: StringResource = MR.strings.film_image_error
+            override val error: StringResource = MR.strings.error
+            override val filmDetailNotFound: StringResource = MR.strings.film_detail_not_found
+            override val errorChangingVisitedState: StringResource = MR.strings.error_changing_favourite
         },
         constants = object : FilmDetailViewModel.Constants {
             override val selectedFilmTitleKey: String = SELECTED_FILM_TITLE_KEY
@@ -142,6 +146,10 @@ class SharedFactory(
                 changeFavouriteStateUseCase.execute(title, object:ChangeFavouriteStateUseCase.ChangeFavouriteStateListener {
                     override fun onSuccess(filmsUpdated: List<FilmData>) {
                         listener.onSuccess(filmsUpdated.map { it.toFilmRowData() })
+                    }
+
+                    override fun onError() {
+                        listener.onError()
                     }
                 })
             }
@@ -207,6 +215,10 @@ class SharedFactory(
                     override fun onSuccess(film: FilmData) {
                         listener.onSuccess(film = film.toFilmDetail())
                     }
+
+                    override fun onError() {
+                        listener.onError()
+                    }
                 })
             }
         }
@@ -227,6 +239,10 @@ class SharedFactory(
                 changeVisitedStateUseCase.execute(filmTitle, object:ChangeVisitedStateUseCase.ChangeVisitedStateListener {
                     override fun onSuccess(filmUpdated: FilmData) {
                         listener.onSuccess(filmUpdated = filmUpdated.toFilmDetail())
+                    }
+
+                    override fun onError() {
+                        listener.onError()
                     }
                 })
             }

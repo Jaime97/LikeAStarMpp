@@ -29,4 +29,8 @@
     <string name="user_location_error">Location error</string>
     <string name="user_location_error_desc">There has been an error in obtaining the location. Try activating the GPS or allowing access to your location via the network.</string>
     <string name="film_image_error">Could not get film poster image</string>
+    <string name="error">Error</string>
+    <string name="film_detail_not_found">Film detail data not found, please try again later.</string>
+    <string name="error_changing_favourite">Error changing film favourite state</string>
+    <string name="error_changing_visited">Error changing film visited state</string>
 </resources>

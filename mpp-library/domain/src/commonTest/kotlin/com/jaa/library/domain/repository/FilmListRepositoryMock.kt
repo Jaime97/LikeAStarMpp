@@ -21,8 +21,8 @@ class FilmListRepositoryMock(
         return filmList
     }
 
-    override fun getFilm(title: String): FilmData {
-        return filmList.first { it.title == title }
+    override fun getFilm(title: String): FilmData? {
+        return try {filmList.first { it.title == title }} catch (e:NoSuchElementException) { null }
     }
 
     override fun updateFilm(film: FilmData) {

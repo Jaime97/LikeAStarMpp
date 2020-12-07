@@ -89,8 +89,8 @@ class FilmDetailActivity :
         startActivity(intent)
     }
 
-    override fun showAlert(title: StringDesc, description: StringDesc, buttonTitle: StringDesc) {
-        messageManager.showAlert(title, description, buttonTitle)
+    override fun showAlert(title: StringDesc, description: StringDesc, buttonTitle: StringDesc, onButtonPressed: (() -> Unit)?) {
+        messageManager.showAlert(title, description, buttonTitle, onButtonPressed)
     }
 
     override fun geUserLocation(onSuccessListener:(latitude: Double, longitude: Double) -> Unit, onErrorListener: () -> Unit) {
@@ -109,6 +109,10 @@ class FilmDetailActivity :
 
     override fun showErrorMessage(text: String) {
         messageManager.showErrorMessage(text)
+    }
+
+    override fun goBackToPreviousScreen() {
+        goBackToPreviousScreen()
     }
 
 }

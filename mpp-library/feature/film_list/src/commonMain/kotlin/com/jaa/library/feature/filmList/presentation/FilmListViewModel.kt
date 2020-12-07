@@ -183,6 +183,12 @@ class FilmListViewModel(
                 override fun onSuccess(filmsUpdated: List<FilmRowData>) {
                     _state.value = filmsUpdated.asState()
                 }
+
+                override fun onError() {
+                    eventsDispatcher.dispatchEvent {
+                        showErrorMessage(getStringFromResource(strings.changeFavouriteStateError.desc()))
+                    }
+                }
             })
         }
     }
@@ -253,6 +259,7 @@ class FilmListViewModel(
         val favourites: StringResource
         val unknownError: StringResource
         val search: StringResource
+        val changeFavouriteStateError: StringResource
     }
 
     interface Constants {

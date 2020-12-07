@@ -13,9 +13,11 @@ class MessageManager {
         }
     }
     
-    func showAlert(title: StringDesc, description: StringDesc, buttonTitle: StringDesc, viewController : UIViewController) {
+    func showAlert(title: StringDesc, description: StringDesc, buttonTitle: StringDesc, viewController : UIViewController, onButtonPressed: (() -> Void)? = nil) {
         let alert = UIAlertController(title:title.localized(), message: description.localized(), preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: buttonTitle.localized(), style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: buttonTitle.localized(), style: .default, handler: { alertAction in
+            onButtonPressed?()
+        }))
         viewController.present(alert, animated: true)
     }
     
