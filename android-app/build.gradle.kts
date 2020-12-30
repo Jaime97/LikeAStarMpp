@@ -7,6 +7,7 @@ plugins {
     plugin(Deps.Plugins.kotlinAndroid)
     plugin(Deps.Plugins.kotlinKapt)
     plugin(Deps.Plugins.mokoUnits)
+    plugin(Deps.Plugins.kotlinAndroidExtensions)
 }
 
 android {
@@ -52,7 +53,7 @@ dependencies {
     implementation(Deps.Libs.Android.material)
     implementation(Deps.Libs.Android.recyclerView)
     implementation(Deps.Libs.Android.swipeRefreshLayout)
-
+    implementation(Deps.Libs.Android.picasso)
     implementation(project(":mpp-library"))
 }
 

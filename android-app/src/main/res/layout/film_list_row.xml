@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <import type="android.view.View"/>
+
+        <variable
+            name="film"
+            type="com.jaa.library.feature.filmList.model.FilmRowData" />
+
+        <variable
+            name="listener"
+            type="com.jaa.library.feature.filmList.presentation.FilmTableDataFactoryInterface.ListRowTappedListener" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:onClick="@{() -> listener.onRowTapped(film.title)}"
+        android:background="@drawable/film_list_row_background">
+
+        <ImageView
+            android:id="@+id/filmImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/film"
+            android:contentDescription="@string/film_img_content_desc" />
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{film.title}"
+            android:textSize="16sp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="70dp"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@+id/filmImage"
+            android:lines="2"
+            android:maxLines="2"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/directorTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/titleTextView"
+            android:layout_below="@id/titleTextView"
+            android:layout_marginEnd="70dp"
+            android:text="@{film.director}"
+            android:textSize="14sp"/>
+
+        <ImageButton
+            android:id="@+id/favouriteButton"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:onClick="@{() -> listener.onFavouriteButtonTapped(film.title)}"
+            android:background="@{film.favourite ? @drawable/star_selected :@drawable/star_unselected}"
+            android:contentDescription="@string/favourite_btn_content_desc" />
+
+        <ImageView
+            android:id="@+id/visitedImage"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="0dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="15dp"
+            android:layout_below="@id/favouriteButton"
+            android:visibility="@{film.visited ? View.VISIBLE : View.GONE}"
+            android:background="@drawable/check"
+            android:contentDescription="@string/visited_img_content_desc" />
+
+    </RelativeLayout>
+
+</layout>

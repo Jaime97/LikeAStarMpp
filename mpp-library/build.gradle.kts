@@ -15,11 +15,14 @@ val mppLibs = listOf(
     Deps.Libs.MultiPlatform.mokoParcelize,
     Deps.Libs.MultiPlatform.mokoResources,
     Deps.Libs.MultiPlatform.mokoMvvm,
+    Deps.Libs.MultiPlatform.multiplatformSettings,
     Deps.Libs.MultiPlatform.mokoUnits
 )
 val mppModules = listOf(
     Deps.Modules.domain,
-    Deps.Modules.Feature.film_list
+    Deps.Modules.Feature.film_list,
+    Deps.Modules.Feature.film_detail,
+    Deps.Modules.Feature.settings
 )
 
 dependencies {
@@ -41,4 +44,11 @@ multiplatformResources {
 framework {
     mppModules.forEach { export(it) }
     mppLibs.forEach { export(it) }
+}
+
+// https://github.com/cashapp/sqldelight/issues/1442
+kotlin.targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
+    binaries.all {
+        linkerOpts.add("-lsqlite3")
+    }
 }

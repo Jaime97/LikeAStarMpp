@@ -9,6 +9,7 @@ object Deps {
     private const val materialVersion = "1.2.1"
     private const val recyclerViewVersion = "1.1.0"
     private const val swipeRefreshLayoutVersion = "1.1.0"
+    private const val picassoVersion = "2.71828"
     private const val lifecycleVersion = "2.2.0"
     private const val androidAppCompatVersion = "1.1.0"
     private const val espressoCoreVersion = "3.2.0"
@@ -16,8 +17,9 @@ object Deps {
     private const val testExtJunitVersion = "1.1.1"
 
     private const val kotlinxSerializationVersion = "1.0.0-RC"
-    private const val coroutinesVersion = "1.3.9-native-mt"
+    private const val coroutinesVersion = "1.3.9-native-mt-2"
     private const val ktorClientVersion = "1.4.0"
+    private const val sqlDelightVersion = "1.4.4"
 
     private const val detektVersion = "1.12.0"
 
@@ -26,14 +28,15 @@ object Deps {
     private const val mokoMvvmVersion = "0.8.0"
     private const val mokoNetworkVersion = "0.8.0"
     private const val mokoUnitsVersion = "0.4.1"
-    private const val mokoPermissionsVersion = "0.6.0"
+    private const val mokoPermissionsVersion = "0.7.0"
+    private const val multiplatformSettingsVersion = "0.6.3"
 
     private const val napierVersion = "1.4.1"
 
     object Android {
         const val compileSdk = 29
         const val targetSdk = 29
-        const val minSdk = 16
+        const val minSdk = 21
     }
 
     object Plugins {
@@ -50,6 +53,9 @@ object Deps {
             id = "org.jetbrains.kotlin.plugin.serialization",
             module = "org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion"
         )
+        val sqlDelight = GradlePlugin(
+            id = "com.squareup.sqldelight",
+            module = "com.squareup.sqldelight:gradle-plugin:$sqlDelightVersion")
 
         val mobileMultiplatform = GradlePlugin(id = "dev.icerock.mobile.multiplatform")
         val iosFramework = GradlePlugin(id = "dev.icerock.mobile.multiplatform.ios-framework")
@@ -74,6 +80,7 @@ object Deps {
     }
 
     object Libs {
+
         object Android {
             const val appCompat =
                 "androidx.appcompat:appcompat:$androidAppCompatVersion"
@@ -83,6 +90,10 @@ object Deps {
                 "androidx.recyclerview:recyclerview:$recyclerViewVersion"
             const val swipeRefreshLayout =
                 "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshLayoutVersion"
+            const val sqlDelightDriver =
+                "com.squareup.sqldelight:android-driver:$sqlDelightVersion"
+            const val picasso =
+                "com.squareup.picasso:picasso:$picassoVersion"
             val lifecycle =
                 "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
 
@@ -125,8 +136,15 @@ object Deps {
                 "dev.icerock.moko:permissions:$mokoPermissionsVersion".mpl
             val mokoUnits =
                 "dev.icerock.moko:units:$mokoUnitsVersion".mpl
+            val multiplatformSettings =
+                "com.russhwolf:multiplatform-settings-no-arg:$multiplatformSettingsVersion".mpl
             val napier =
                 "com.github.aakira:napier:$napierVersion".mpl
+            val sqlDelight = MultiPlatformLibrary(
+                common = "com.squareup.sqldelight:runtime:$sqlDelightVersion",
+                android = "com.squareup.sqldelight:android-driver:$sqlDelightVersion",
+                ios = "com.squareup.sqldelight:native-driver:$sqlDelightVersion"
+            )
 
             object Tests {
                 const val kotlinTest =
@@ -151,6 +169,14 @@ object Deps {
         object Feature {
             val film_list = MultiPlatformModule(
                 name = ":mpp-library:feature:film_list",
+                exported = true
+            )
+            val film_detail = MultiPlatformModule(
+                name = ":mpp-library:feature:film_detail",
+                exported = true
+            )
+            val settings = MultiPlatformModule(
+                name = ":mpp-library:feature:settings",
                 exported = true
             )
         }
