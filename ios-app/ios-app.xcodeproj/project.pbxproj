@@ -380,6 +380,7 @@
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_OBJC_BRIDGING_HEADER = "src/reachability/ios-app-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Debug;
 		};
@@ -402,6 +403,7 @@
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_OBJC_BRIDGING_HEADER = "src/reachability/ios-app-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Release;
 		};

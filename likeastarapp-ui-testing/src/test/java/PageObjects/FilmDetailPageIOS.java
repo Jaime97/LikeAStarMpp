@@ -13,7 +13,7 @@ public class FilmDetailPageIOS implements FilmDetailPage {
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
     }
 
-    @FindBy(xpath = "//XCUIElementTypeApplication[@name=\"Contacts\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeStaticText[1]")
+    @FindBy(id = "titleLabel")
     private MobileElement contactName;
 
     public void assertFilmName(String expectedName) {

@@ -13,11 +13,17 @@ public class FilmListPageIOS implements FilmListPage {
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
     }
 
-    @FindBy(xpath = "//XCUIElementTypeSearchField[@name=\"Search for contact\"]")
+    @FindBy(id = "searchField")
     private MobileElement searchField;
 
-    @FindBy(xpath = "//XCUIElementTypeOther[@name=\"Search results\"]/XCUIElementTypeCell/XCUIElementTypeStaticText")
+    @FindBy(id = "cellTitle")
     private MobileElement firstSearchResultName;
+
+    @FindBy(id = "favouriteButton")
+    private MobileElement firstSearchFavouriteButton;
+
+    @FindBy(id = "Favourites")
+    private MobileElement favouriteTab;
 
     public void search(String name) {
         searchField.click();
@@ -34,12 +40,12 @@ public class FilmListPageIOS implements FilmListPage {
 
     @Override
     public void clickFavouriteButton() {
-
+        firstSearchFavouriteButton.click();
     }
 
     @Override
     public void clickFavouriteTab() {
-
+        favouriteTab.click();
     }
 
 }

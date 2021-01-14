@@ -101,6 +101,8 @@ extension FilmListViewController: FilmListViewModelEventsListener {
         var items = self.tabBar.items ?? [UITabBarItem]()
         let item = UITabBarItem(title: tabText.localized(), image: nil, tag: Int(position))
         item.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: -16)
+        item.isAccessibilityElement = true
+        item.accessibilityIdentifier = tabText.localized()
         items.append(item)
         
         self.tabBar.setItems(items, animated: true)

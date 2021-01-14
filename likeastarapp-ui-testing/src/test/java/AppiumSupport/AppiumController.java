@@ -17,7 +17,7 @@ public class AppiumController {
         IOS
     }
 
-    public static OS executionOS = OS.ANDROID;
+    public static OS executionOS = OS.IOS;
 
 
     public static AppiumController instance = new AppiumController();
@@ -44,13 +44,19 @@ public class AppiumController {
                 driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
                 break;
             case IOS:
-                /*classpathRoot = new File(System.getProperty("user.dir"));
-                appDir = new File(classpathRoot, "/app/iOS/");
-                app = new File(appDir, "ContactsSimulator.app");*/
+                projectDir = new File(System.getProperty("user.dir"));
+                app = new File(projectDir.getParent(), "/ios-app/LikeAStarApp.app");
+
                 capabilities.setCapability("platformName", "ios");
-                capabilities.setCapability("deviceName", "iPhone 7");
-                capabilities.setCapability("app", "app.getAbsolutePath()");
+                capabilities.setCapability("deviceName", "iPhone 8");
+                capabilities.setCapability("app", app.getAbsolutePath());
                 capabilities.setCapability("automationName", "XCUITest");
+                capabilities.setCapability("wdaStartupRetries", "4");
+                capabilities.setCapability("iosInstallPause", "8000");
+                capabilities.setCapability("wdaStartupRetryInterval", "20000");
+                capabilities.setCapability("showXcodeLog", "true");
+
+
                 driver = new IOSDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
                 break;
         }
